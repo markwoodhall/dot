@@ -1,0 +1,1060 @@
+#+TITLE:  System Config
+#+AUTHOR: Mark Woodhall
+#+PROPERTY: header-args :mkdirp yes
+
+* Xorg
+
+** xinit
+
+xinitrc starts awesome as well as doing some keyring init
+
+Because of how early these files are needed, they are probably still checked into source control, even though
+they are generated from this file.
+
+#+begin_src bash :tangle ~/.xinitrc :shebang #!/bin/bash
+if [ -d /etc/X11/xinit/xinitrc.d ] ; then
+ for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
+  [ -x "$f" ] && . "$f"
+ done
+ unset f
+fi
+exec awesome
+eval $(/usr/bin/gnome-keyring-daemon --start --components=pgpg,kcs11,secrets,ssh)
+
+export GNOME_KEYRING_CONTROL GNOME_KEYRING_PID GPG_AGENT_INFO SSH_AUTH_SOCK
+source /etc/X11/xinit/xinitrc.d/50-systemd-user.sh
+#+end_src
+
+* Readline
+  
+  Set vi editing mode for readline
+
+#+begin_src bash :tangle ~/.inputrc
+set editing-mode vi
+#+end_src
+
+* Awesome
+
+Awesome is configured using fennel, but we need to bootstrap it with a lua file.
+
+This also relies on the fennel module in the same directory.
+
+#+begin_src lua :tangle ~/.config/awesome/rc.lua :mkdirp yes
+local fennel = require("./fennel").install()
+fennel.path = fennel.path .. ";.config/awesome/?.fnl"
+require("config")
+#+end_src
+
+* ZSH
+
+** profile
+
+#+begin_src bash :tangle ~/.zprofile
+if [ -z "$DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ]; then
+  exec startx
+fi
+#+end_src
+
+** env
+
+*** Home dir and PATH
+
+#+begin_src bash :tangle ~/.zshenv
+homedir=~
+eval homedir=$homedir
+# If you come from bash you might have to change your $PATH.
+export PATH=$HOME/bin:/usr/local/bin:/home/markwoodhall/.local/share/gem/ruby/3.0.0/bin:/home/markwoodhall/.cargo/bin:$HOME/.emacs.d/bin/:/usr/share/idea/bin/:/home/markwoodhall/.luarocks:$PATH
+export EVENT_NOKQUEUE=1
+#+end_src
+
+*** Aliases
+
+#+begin_src bash :tangle ~/.zshenv
+alias ls='ls -lGfh'
+alias l='ls'
+alias cd='cd -P'
+alias c='cd -P'
+alias mkdir='mkdir -p'
+alias cat='ccat'
+
+alias v='nvim'
+alias vi='nvim'
+alias vmi='nvim'
+alias vim='nvim'
+alias cl='clear'
+alias clean='clear'
+
+alias tmx='tmux'
+alias tmxns='tmx new -s'
+alias tmxls='tmx list-sessions'
+alias tmxrw='tmx rename-window'
+alias tmxd='tmx detach'
+alias tmxa='tmx attach -t'
+alias tmxs='tmx switch -t'
+alias tmxk='tmx kill-session -t'
+#+end_src
+
+*** Setup
+
+#+begin_src bash :tangle ~/.zshenv
+set -o vi
+set editing-mode vi
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+export SHELL=zsh
+export EDITOR='nvim'
+
+export ANDROID_HOME=/opt/android-sdk
+export NODE_ENV="development"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+ssh-add -A &> /dev/null
+
+SSH_ENV="$HOME/.ssh/environment"
+function start_agent {
+   echo "Initialising new SSH agent..."
+   /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+   echo succeeded
+   chmod 600 "${SSH_ENV}"
+   . "${SSH_ENV}" > /dev/null
+   /usr/bin/ssh-add -t 999999  ~/.ssh/id_rsa;
+}
+
+if [ -f "${SSH_ENV}" ]; then
+   . "${SSH_ENV}" > /dev/null
+   ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+      start_agent;
+   }
+else
+   start_agent;
+fi 
+
+# fh - repeat history
+runcmd (){ perl -e 'ioctl STDOUT, 0x5412, $_ for split //, <>' ; }
+
+fh() {
+  ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -re 's/^\s*[0-9]+\s*//' | runcmd
+}
+
+# fhe - repeat history edit
+writecmd (){ perl -e 'ioctl STDOUT, 0x5412, $_ for split //, do{ chomp($_ = <>); $_ }' ; }
+
+fhe() {
+  ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -re 's/^\s*[0-9]+\s*//' | writecmd
+}
+
+fzfp() {
+fzf --preview '[[ $(file --mime {}) =~ binary ]] && 
+                 echo {} is a binary file ||
+                 (bat --style=numbers --color=always {} ||
+                  highlight -O ansi -l {} ||
+                  coderay {} ||
+                  rouify {} ||
+                  cat {}) 2> /dev/null | head -500'
+}
+#+end_src
+
+*** Pyenv
+
+#+begin_src bash :tangle ~/.zshenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+#+end_src
+
+*** Chrome
+
+Set chrome executable, its useful for things like headless chrome during testing.
+#+begin_src bash :tangle ~/.zshenv
+export CHROME_EXECUTABLE=google-chrome-stable
+#+end_src
+
+** RC
+
+#+begin_src bash :tangle ~/.zshrc
+homedir=~
+eval homedir=$homedir
+# If you come from bash you might have to change your $PATH.
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+export EVENT_NOKQUEUE=1
+
+# Path to your oh-my-zsh installation.
+export ZSH=~/.oh-my-zsh
+DEFAULT_USER="markwoodhall"
+
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-zsh is loaded.
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="refined"
+SHARE_HISTORY="false"
+
+plugins=(archlinux git postgres tmux lein npm zsh-autosuggestions mercurial aws docker docker-compose terraform)
+
+source $ZSH/oh-my-zsh.sh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source /usr/share/fzf/key-bindings.zsh
+source ~/.zshenv
+source /usr/share/nvm/init-nvm.sh
+
+# added by pipsi (https://github.com/mitsuhiko/pipsi)
+export PATH="/home/markwoodhall/.local/bin:$PATH"
+eval "$(pyenv init --path)"
+
+vterm_printf() {
+    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ]); then
+        # Tell tmux to pass the escape sequences through
+        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
+    elif [ "${TERM%%-*}" = "screen" ]; then
+        # GNU screen (screen, screen-256color, screen-256color-bce)
+        printf "\eP\e]%s\007\e\\" "$1"
+    else
+        printf "\e]%s\e\\" "$1"
+    fi
+}
+
+if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
+    alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
+fi
+
+#+end_src
+
+* TMUX
+
+** Config
+
+#+begin_src bash :tangle ~/.tmux.conf
+set -g default-terminal "tmux"
+set -g base-index 1
+set -g pane-base-index 1
+set -g set-titles on
+set -g status-keys vi
+set -s escape-time 0
+set -g set-clipboard on
+set -g history-limit 50000
+set -g mode-keys vi
+
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+bind H split-window -h
+bind V split-window -v
+
+bind -T copy-mode-vi y send-keys -X copy-pipe 'xclip -in -selection clipboard'
+
+set -g status-position top
+set -g status-justify "left"
+set -g status "on"
+set -g message-command-style bg="#1E1E2E",fg="#a7adba"
+set -g status-left-length "100"
+set -g pane-active-border-style bg="#1E1E2E",fg="#11111B"
+set -g status-style bg="#1E1E2E"
+set -g pane-border-style bg="#1E1E2E",fg="#11111B"
+set -g message-style bg="#1E1E2E",fg="#a7adba"
+set -g status-right-length "100"
+setw -g window-status-activity-style bg="#1E1E2E",fg="#65737e"
+setw -g window-status-separator ""
+set -g status-left ""
+set -g status-right ""
+setw -g window-status-format "#[nobold,nounderscore,noitalics]#[default] #I #W #[nobold,nounderscore,noitalics]"
+setw -g window-status-current-format "#[nobold,nounderscore,noitalics]#[] #I #W #[nobold,nounderscore,noitalics]"
+set -g window-status-current-style bg="#89b4FA",fg="#24273A"
+setw -g window-status-style bg="#24273A",fg="#a7adba"
+set-option -g automatic-rename off
+
+set -g @plugin 'tmux-plugins/tpm'
+run '~/.tmux/plugins/tpm/tpm'
+#+end_src
+
+Theming
+
+* Picom
+
+#+begin_src bash :tangle ~/.config/picom/picom.conf :mkdirp yes
+corner-radius = 6.0;
+#################################
+#             Shadows           #
+#################################
+
+
+# Enabled client-side shadows on windows. Note desktop windows 
+# (windows with '_NET_WM_WINDOW_TYPE_DESKTOP') never get shadow, 
+# unless explicitly requested using the wintypes option.
+#
+# shadow = false
+shadow = true;
+
+# The blur radius for shadows, in pixels. (defaults to 12)
+# shadow-radius = 12
+shadow-radius = 12;
+
+# The opacity of shadows. (0.0 - 1.0, defaults to 0.75)
+# shadow-opacity = .75
+
+# The left offset for shadows, in pixels. (defaults to -15)
+# shadow-offset-x = -15
+shadow-offset-x = -6;
+
+# The top offset for shadows, in pixels. (defaults to -15)
+# shadow-offset-y = -15
+shadow-offset-y = -6;
+
+# Avoid drawing shadows on dock/panel windows. This option is deprecated,
+# you should use the *wintypes* option in your config file instead.
+#
+# no-dock-shadow = false
+
+# Don't draw shadows on drag-and-drop windows. This option is deprecated, 
+# you should use the *wintypes* option in your config file instead.
+#
+# no-dnd-shadow = false
+
+# Red color value of shadow (0.0 - 1.0, defaults to 0).
+# shadow-red = 0
+
+# Green color value of shadow (0.0 - 1.0, defaults to 0).
+# shadow-green = 0
+
+# Blue color value of shadow (0.0 - 1.0, defaults to 0).
+# shadow-blue = 0
+
+# Do not paint shadows on shaped windows. Note shaped windows 
+# here means windows setting its shape through X Shape extension. 
+# Those using ARGB background is beyond our control. 
+# Deprecated, use 
+#   shadow-exclude = 'bounding_shaped'
+# or 
+#   shadow-exclude = 'bounding_shaped && !rounded_corners'
+# instead.
+#
+# shadow-ignore-shaped = ''
+
+# Specify a list of conditions of windows that should have no shadow.
+#
+# examples:
+#   shadow-exclude = "n:e:Notification";
+#
+# shadow-exclude = []
+shadow-exclude = [
+  "name = 'Notification'",
+  "class_g = 'Conky'",
+  "class_g ?= 'Notify-osd'",
+  "class_g = 'Cairo-clock'",
+  "_GTK_FRAME_EXTENTS@:c"
+];
+
+# Specify a X geometry that describes the region in which shadow should not
+# be painted in, such as a dock window region. Use 
+#    shadow-exclude-reg = "x10+0+0"
+# for example, if the 10 pixels on the bottom of the screen should not have shadows painted on.
+#
+# shadow-exclude-reg = "" 
+
+# Crop shadow of a window fully on a particular Xinerama screen to the screen.
+# xinerama-shadow-crop = false
+
+
+#################################
+#           Fading              #
+#################################
+
+
+# Fade windows in/out when opening/closing and when opacity changes,
+#  unless no-fading-openclose is used.
+# fading = false
+fading = false
+
+# Opacity change between steps while fading in. (0.01 - 1.0, defaults to 0.028)
+# fade-in-step = 0.028
+fade-in-step = 0.03;
+
+# Opacity change between steps while fading out. (0.01 - 1.0, defaults to 0.03)
+# fade-out-step = 0.03
+fade-out-step = 0.03;
+
+# The time between steps in fade step, in milliseconds. (> 0, defaults to 10)
+# fade-delta = 10
+
+# Specify a list of conditions of windows that should not be faded.
+# fade-exclude = []
+
+# Do not fade on window open/close.
+# no-fading-openclose = false
+
+# Do not fade destroyed ARGB windows with WM frame. Workaround of bugs in Openbox, Fluxbox, etc.
+# no-fading-destroyed-argb = false
+
+
+#################################
+#   Transparency / Opacity      #
+#################################
+
+
+# Opacity of inactive windows. (0.1 - 1.0, defaults to 1.0)
+# inactive-opacity = 1
+inactive-opacity = 1;
+
+# Opacity of window titlebars and borders. (0.1 - 1.0, disabled by default)
+# frame-opacity = 1.0
+frame-opacity = 1;
+
+# Default opacity for dropdown menus and popup menus. (0.0 - 1.0, defaults to 1.0)
+# menu-opacity = 1.0
+
+# Let inactive opacity set by -i override the '_NET_WM_OPACITY' values of windows.
+# inactive-opacity-override = true
+inactive-opacity-override = true;
+
+# Default opacity for active windows. (0.0 - 1.0, defaults to 1.0)
+active-opacity = 1 
+
+# Dim inactive windows. (0.0 - 1.0, defaults to 0.0)
+# inactive-dim = 0.0
+
+# Specify a list of conditions of windows that should always be considered focused.
+# focus-exclude = []
+#focus-exclude = [ "class_g = 'Termite'" ];
+
+# Use fixed inactive dim value, instead of adjusting according to window opacity.
+# inactive-dim-fixed = 1.0
+
+# Specify a list of opacity rules, in the format `PERCENT:PATTERN`, 
+# like `50:name *= "Firefox"`. picom-trans is recommended over this. 
+# Note we don't make any guarantee about possible conflicts with other 
+# programs that set '_NET_WM_WINDOW_OPACITY' on frame or client windows.
+# example:
+#    opacity-rule = [ "80:class_g = 'URxvt'" ];
+
+
+#################################
+#     Background-Blurring       #
+#################################
+
+
+# Parameters for background blurring, see the *BLUR* section for more information.
+# blur-method = 
+# blur-size = 12
+#
+# blur-deviation = false
+
+# Blur background of semi-transparent / ARGB windows. 
+# Bad in performance, with driver-dependent behavior. 
+# The name of the switch may change without prior notifications.
+#
+# blur-background = false
+
+# Blur background of windows when the window frame is not opaque. 
+# Implies:
+#    blur-background 
+# Bad in performance, with driver-dependent behavior. The name may change.
+#
+# blur-background-frame = false
+
+
+# Use fixed blur strength rather than adjusting according to window opacity.
+# blur-background-fixed = false
+
+
+# Specify the blur convolution kernel, with the following format:
+# example:
+#   blur-kern = "5,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1";
+#
+# blur-kern = ''
+blur-kern = "3x3box";
+
+# Exclude conditions for background blur.
+# blur-background-exclude = []
+blur-background-exclude = [
+  "window_type = 'dock'",
+  "window_type = 'desktop'",
+  "_GTK_FRAME_EXTENTS@:c"
+];
+
+#################################
+#       General Settings        #
+#################################
+
+# Daemonize process. Fork to background after initialization. Causes issues with certain (badly-written) drivers.
+# daemon = false
+
+# Specify the backend to use: `xrender`, `glx`, or `xr_glx_hybrid`.
+# `xrender` is the default one.
+#
+# backend = 'glx'
+backend = "xrender";
+
+# Enable/disable VSync.
+# vsync = false
+vsync = true
+
+# Enable remote control via D-Bus. See the *D-BUS API* section below for more details.
+# dbus = false
+
+# Try to detect WM windows (a non-override-redirect window with no 
+# child that has 'WM_STATE') and mark them as active.
+#
+# mark-wmwin-focused = false
+mark-wmwin-focused = true;
+
+# Mark override-redirect windows that doesn't have a child window with 'WM_STATE' focused.
+# mark-ovredir-focused = false
+mark-ovredir-focused = true;
+
+# Try to detect windows with rounded corners and don't consider them 
+# shaped windows. The accuracy is not very high, unfortunately.
+#
+# detect-rounded-corners = false
+detect-rounded-corners = true;
+
+# Detect '_NET_WM_OPACITY' on client windows, useful for window managers
+# not passing '_NET_WM_OPACITY' of client windows to frame windows.
+#
+# detect-client-opacity = false
+detect-client-opacity = true;
+
+# Specify refresh rate of the screen. If not specified or 0, picom will 
+# try detecting this with X RandR extension.
+#
+# refresh-rate = 60
+refresh-rate = 60
+
+# Limit picom to repaint at most once every 1 / 'refresh_rate' second to 
+# boost performance. This should not be used with 
+#   vsync drm/opengl/opengl-oml
+# as they essentially does sw-opti's job already, 
+# unless you wish to specify a lower refresh rate than the actual value.
+#
+# sw-opti = 
+
+# Use EWMH '_NET_ACTIVE_WINDOW' to determine currently focused window, 
+# rather than listening to 'FocusIn'/'FocusOut' event. Might have more accuracy, 
+# provided that the WM supports it.
+#
+# use-ewmh-active-win = false
+
+# Unredirect all windows if a full-screen opaque window is detected, 
+# to maximize performance for full-screen windows. Known to cause flickering 
+# when redirecting/unredirecting windows.
+#
+# unredir-if-possible = false
+
+# Delay before unredirecting the window, in milliseconds. Defaults to 0.
+# unredir-if-possible-delay = 0
+
+# Conditions of windows that shouldn't be considered full-screen for unredirecting screen.
+# unredir-if-possible-exclude = []
+
+# Use 'WM_TRANSIENT_FOR' to group windows, and consider windows 
+# in the same group focused at the same time.
+#
+# detect-transient = false
+detect-transient = true
+
+# Use 'WM_CLIENT_LEADER' to group windows, and consider windows in the same 
+# group focused at the same time. 'WM_TRANSIENT_FOR' has higher priority if 
+# detect-transient is enabled, too.
+#
+# detect-client-leader = false
+detect-client-leader = true
+
+# Resize damaged region by a specific number of pixels. 
+# A positive value enlarges it while a negative one shrinks it. 
+# If the value is positive, those additional pixels will not be actually painted 
+# to screen, only used in blur calculation, and such. (Due to technical limitations, 
+# with use-damage, those pixels will still be incorrectly painted to screen.) 
+# Primarily used to fix the line corruption issues of blur, 
+# in which case you should use the blur radius value here 
+# (e.g. with a 3x3 kernel, you should use `--resize-damage 1`, 
+# with a 5x5 one you use `--resize-damage 2`, and so on). 
+# May or may not work with *--glx-no-stencil*. Shrinking doesn't function correctly.
+#
+# resize-damage = 1
+
+# Specify a list of conditions of windows that should be painted with inverted color. 
+# Resource-hogging, and is not well tested.
+#
+# invert-color-include = []
+
+# GLX backend: Avoid using stencil buffer, useful if you don't have a stencil buffer. 
+# Might cause incorrect opacity when rendering transparent content (but never 
+# practically happened) and may not work with blur-background. 
+# My tests show a 15% performance boost. Recommended.
+#
+# glx-no-stencil = false
+
+# GLX backend: Avoid rebinding pixmap on window damage. 
+# Probably could improve performance on rapid window content changes, 
+# but is known to break things on some drivers (LLVMpipe, xf86-video-intel, etc.).
+# Recommended if it works.
+#
+# glx-no-rebind-pixmap = false
+
+# Disable the use of damage information. 
+# This cause the whole screen to be redrawn everytime, instead of the part of the screen
+# has actually changed. Potentially degrades the performance, but might fix some artifacts.
+# The opposing option is use-damage
+#
+# no-use-damage = false
+use-damage = true
+
+# Use X Sync fence to sync clients' draw calls, to make sure all draw 
+# calls are finished before picom starts drawing. Needed on nvidia-drivers 
+# with GLX backend for some users.
+#
+# xrender-sync-fence = false
+
+# GLX backend: Use specified GLSL fragment shader for rendering window contents. 
+# See `compton-default-fshader-win.glsl` and `compton-fake-transparency-fshader-win.glsl` 
+# in the source tree for examples.
+#
+# glx-fshader-win = ''
+
+# Force all windows to be painted with blending. Useful if you 
+# have a glx-fshader-win that could turn opaque pixels transparent.
+#
+# force-win-blend = false
+
+# Do not use EWMH to detect fullscreen windows. 
+# Reverts to checking if a window is fullscreen based only on its size and coordinates.
+#
+# no-ewmh-fullscreen = false
+
+# Dimming bright windows so their brightness doesn't exceed this set value. 
+# Brightness of a window is estimated by averaging all pixels in the window, 
+# so this could comes with a performance hit. 
+# Setting this to 1.0 disables this behaviour. Requires --use-damage to be disabled. (default: 1.0)
+#
+# max-brightness = 1.0
+
+# Make transparent windows clip other windows like non-transparent windows do,
+# instead of blending on top of them.
+#
+# transparent-clipping = false
+
+# Set the log level. Possible values are:
+#  "trace", "debug", "info", "warn", "error"
+# in increasing level of importance. Case doesn't matter. 
+# If using the "TRACE" log level, it's better to log into a file 
+# using *--log-file*, since it can generate a huge stream of logs.
+#
+# log-level = "debug"
+log-level = "warn";
+
+# Set the log file.
+# If *--log-file* is never specified, logs will be written to stderr. 
+# Otherwise, logs will to written to the given file, though some of the early 
+# logs might still be written to the stderr. 
+# When setting this option from the config file, it is recommended to use an absolute path.
+#
+# log-file = '/path/to/your/log/file'
+
+# Show all X errors (for debugging)
+# show-all-xerrors = false
+
+# Write process ID to a file.
+# write-pid-path = '/path/to/your/log/file'
+
+# Window type settings
+# 
+# 'WINDOW_TYPE' is one of the 15 window types defined in EWMH standard: 
+#     "unknown", "desktop", "dock", "toolbar", "menu", "utility", 
+#     "splash", "dialog", "normal", "dropdown_menu", "popup_menu", 
+#     "tooltip", "notification", "combo", and "dnd".
+# 
+# Following per window-type options are available: ::
+# 
+#   fade, shadow:::
+#     Controls window-type-specific shadow and fade settings.
+# 
+#   opacity:::
+#     Controls default opacity of the window type.
+# 
+#   focus:::
+#     Controls whether the window of this type is to be always considered focused. 
+#     (By default, all window types except "normal" and "dialog" has this on.)
+# 
+#   full-shadow:::
+#     Controls whether shadow is drawn under the parts of the window that you 
+#     normally won't be able to see. Useful when the window has parts of it 
+#     transparent, and you want shadows in those areas.
+# 
+#   redir-ignore:::
+#     Controls whether this type of windows should cause screen to become 
+#     redirected again after been unredirected. If you have unredir-if-possible
+#     set, and doesn't want certain window to cause unnecessary screen redirection, 
+#     you can set this to `true`.
+#
+#window-shader-fg-rule = [
+#    "/home/markwoodhall/dotfiles/lebarshader.frag:window_type = 'dock'"
+#]
+wintypes:
+{
+  tooltip = { fade = true; shadow = true; opacity = 0.75; focus = true; full-shadow = false; };
+  dock = { shadow = true; opacity = 1; focus = false; full-shadow = false; }
+  dnd = { shadow = false; }
+  popup_menu = { opacity = 0.8; }
+  dropdown_menu = { opacity = 0.8; }
+};
+#+end_src
+
+* GTK
+
+** GTK 3
+
+#+begin_src bash :tangle ~/.config/gtk-3.0/settings.ini :mkdirp yes
+[Settings]
+gtk-theme-name=catppuccin-macchiato-lavender-standard+default
+gtk-icon-theme-name=Papirus-Dark
+gtk-font-name=System-ui 11
+gtk-cursor-theme-name=Adwaita
+gtk-cursor-theme-size=24
+gtk-toolbar-style=GTK_TOOLBAR_ICONS
+gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
+gtk-button-images=0
+gtk-menu-images=0
+gtk-enable-event-sounds=1
+gtk-enable-input-feedback-sounds=0
+gtk-xft-antialias=1
+gtk-xft-hinting=1
+gtk-xft-hintstyle=hintslight
+gtk-xft-rgba=rgb
+gtk-application-prefer-dark-theme=0
+#+end_src
+
+* Rofi
+
+** Theme
+
+#+begin_src javascript :tangle ~/.local/share/rofi/themes/catppuccin-macchiato.rasi
+ * {
+    bg-col:  #24273a;
+    bg-col-light: #24273a;
+    border-col: #24273a;
+    selected-col: #24273a;
+    blue: #8aadf4;
+    fg-col: #cad3f5;
+    fg-col2: #ed8796;
+    grey: #6e738d;
+
+    width: 600;
+    font: "JetBrainsMono Nerd Font 14";
+}
+
+element-text, element-icon , mode-switcher {
+    background-color: inherit;
+    text-color:       inherit;
+}
+
+window {
+    height: 360px;
+    border: 3px;
+    border-color: @border-col;
+    background-color: @bg-col;
+}
+
+mainbox {
+    background-color: @bg-col;
+}
+
+inputbar {
+    children: [prompt,entry];
+    background-color: @bg-col;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+prompt {
+    background-color: @blue;
+    padding: 6px;
+    text-color: @bg-col;
+    border-radius: 3px;
+    margin: 20px 0px 0px 20px;
+}
+
+textbox-prompt-colon {
+    expand: false;
+    str: ":";
+}
+
+entry {
+    padding: 6px;
+    margin: 20px 0px 0px 10px;
+    text-color: @fg-col;
+    background-color: @bg-col;
+}
+
+listview {
+    border: 0px 0px 0px;
+    padding: 6px 0px 0px;
+    margin: 10px 0px 0px 20px;
+    columns: 2;
+    lines: 5;
+    background-color: @bg-col;
+}
+
+element {
+    padding: 5px;
+    background-color: @bg-col;
+    text-color: @fg-col  ;
+}
+
+element-icon {
+    size: 25px;
+}
+
+element selected {
+    background-color:  @selected-col ;
+    text-color: @fg-col2  ;
+}
+
+mode-switcher {
+    spacing: 0;
+  }
+
+button {
+    padding: 10px;
+    background-color: @bg-col-light;
+    text-color: @grey;
+    vertical-align: 0.5; 
+    horizontal-align: 0.5;
+}
+
+button selected {
+  background-color: @bg-col;
+  text-color: @blue;
+}
+
+message {
+    background-color: @bg-col-light;
+    margin: 2px;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+textbox {
+    padding: 6px;
+    margin: 20px 0px 0px 20px;
+    text-color: @blue;
+    background-color: @bg-col-light;
+}
+#+end_src
+
+** Config
+
+#+begin_src javascript :tangle ~/.config/rofi/config.rasi
+configuration{
+    modi: "run,drun,window";
+    icon-theme: "Oranchelo";
+    show-icons: true;
+    terminal: "kitty";
+    drun-display-format: "{icon} {name}";
+    location: 0;
+    disable-history: false;
+    hide-scrollbar: true;
+    display-drun: "   Apps ";
+    display-run: "   Run ";
+    display-window: " 﩯  Window";
+    display-Network: " 󰤨  Network";
+    sidebar-mode: true;
+}
+
+@theme "catppuccin-macchiato"
+#+end_src
+
+Programming Languages and associated tools
+* Clojure
+
+** Kondo
+
+#+begin_src clojure :tangle ~/.config/clj-kondo/config.edn :mkdirp yes
+{:lint-as {day8.re-frame.tracing/fn-traced clojure.core/fn}
+ :linters {:clojure-lsp/unused-public-var {:level :warning
+                                           :exclude-regex #{".*events/.*"}}
+           :unresolved-var {:exclude [clova.core/email?
+                                      clova/=?
+                                      clova.core/required?
+                                      clova.core/not-empty?
+                                      clova.core/exists?
+                                      clova.core/numeric?
+                                      clova.core/one-of?
+                                      clova.core/not-exists?]}}}
+#+end_src
+
+** lein
+#+begin_src clojure :tangle ~/.lein/profiles.clj
+{:user
+ {:plugins [[nrepl "1.0.0"]
+            [cider/cider-nrepl "0.28.7"]
+            [refactor-nrepl "3.6.0"]]
+  :dependencies [[org.clojure/tools.namespace "1.3.0"]
+                 [org.clojure/tools.reader "1.3.6"]]}}
+ #+end_src
+
+** shadow
+#+begin_src clojure :tangle ~/.shadow-cljs/config.edn
+;; shadow-cljs configuration
+{;; ADD - CIDER-nREPL middleware required by Fireplace.vim
+ :dependencies
+ [[cider/cider-nrepl "0.22.4"]]}
+ #+end_src
+
+* Git
+
+** Config
+
+#+begin_src bash :tangle ~/.gitconfig
+[user]
+    name = Mark Woodhall
+    email = mark.woodhall@gmail.com
+    signingkey = 6814C0C7A2E45188
+[color]
+    ui = auto
+[merge]
+    tool = fugitive
+    stat = true
+    conflictstyle = diff3
+[push]
+    default = current
+[commit]
+    ;;gpgsign = true
+[diff]
+    cmd = nvim -f -c \"Gvdiff\" \"$LOCAL\" \"$REMOTE\"
+    colorMoved = default
+[difftool]
+    prompt = false
+[alias]
+    vimdiff = difftool
+[github]
+    user = markwoodhall
+[rebase]
+    autoStash = true
+[pull]
+    rebase = true
+[safe]
+    directory = /opt/flutter
+[core]
+    pager = delta
+    excludesfile = ~/.gitignore
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+    line-numbers = true
+    minus-style =  "#f38ba8" bold dim "#2f343f"
+    plus-style = "#a6e3a1" bold dim  "#2f343f"
+[init]
+    defaultBranch = main
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+#+end_src
+
+* Kitty
+
+** Config
+
+#+begin_src bash :tangle ~/.config/kitty/kitty.conf :mkdirp yes
+font_family      JetBrains Mono Nerd Font
+bold_font        JetBrains Mono Bold Nerd Font Complete
+italic_font      JetBrains Mono Italic Nerd Font Complete
+bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
+font_size 11.8
+
+# The basic colors
+foreground              #CDD6F4
+background              #1E1E2E
+selection_foreground    #1E1E2E
+selection_background    #F5E0DC
+
+# Cursor colors
+cursor                  #F5E0DC
+cursor_text_color       #1E1E2E
+
+# URL underline color when hovering with mouse
+url_color               #F5E0DC
+
+# Kitty window border colors
+active_border_color     #B4BEFE
+inactive_border_color   #6C7086
+bell_border_color       #F9E2AF
+
+# OS Window titlebar colors
+wayland_titlebar_color system
+macos_titlebar_color system
+hide_window_decoration yes
+hide_titlebar yes
+x11_hide_window_decorations yes
+
+# Tab bar colors
+active_tab_foreground   #11111B
+active_tab_background   #CBA6F7
+inactive_tab_foreground #CDD6F4
+inactive_tab_background #181825
+tab_bar_background      #11111B
+
+# Colors for marks (marked text in the terminal)
+mark1_foreground #1E1E2E
+mark1_background #B4BEFE
+mark2_foreground #1E1E2E
+mark2_background #CBA6F7
+mark3_foreground #1E1E2E
+mark3_background #74C7EC
+
+# The 16 terminal colors
+
+# black
+color0 #45475A
+color8 #585B70
+
+# red
+color1 #F38BA8
+color9 #F38BA8
+
+# green
+color2  #A6E3A1
+color10 #A6E3A1
+
+# yellow
+color3  #F9E2AF
+color11 #F9E2AF
+
+# blue
+color4  #89B4FA
+color12 #89B4FA
+
+# magenta
+color5  #F5C2E7
+color13 #F5C2E7
+
+# cyan
+color6  #94E2D5
+color14 #94E2D5
+
+# white
+color7  #BAC2DE
+color15 #A6ADC8
+
+window_padding_width 2
+linux_display_server x11
+repaint_delay 5
+input_delay 1
+
+modify_font cell_width 106%
+modify_font cell_height 5px
+#+end_src
+
+* Postgres
+
+** Config
+
+#+begin_src bash :tangle ~/.psqlrc
+\x off
+\timing on
+\pset null '[null]'
+\set HISTFILE ~/psql_history/.psql_history- :DBNAME
+#+end_src
