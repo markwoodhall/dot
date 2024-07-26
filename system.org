@@ -739,7 +739,7 @@ gtk-application-prefer-dark-theme=0
     grey: #6e738d;
 
     width: 600;
-    font: "JetBrainsMono Nerd Font 14";
+    font: "System-ui 14";
 }
 
 element-text, element-icon , mode-switcher {
