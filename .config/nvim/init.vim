@@ -6,7 +6,6 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'SmiteshP/nvim-navic'
 Plug 'nvim-tree/nvim-web-devicons'
-Plug 'echasnovski/mini.nvim'
 Plug 'utilyre/barbecue.nvim'
 Plug 'guns/vim-sexp'
 let g:sexp_filetypes='clojure,fennel'
