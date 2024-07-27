@@ -24,9 +24,7 @@
             :mt {:name "tangle" :buffer (vim.api.nvim_get_current_buf)}}
            {:prefix " "})
          (util.m-binding "ee" vabel.eval-code-block "eval-code-block")
-         (util.m-binding "tt" (fn []
-                                (let [file (vim.fn.expand "%:p")]
-                                  (vim.cmd (.. "!emacs --batch --eval \"(require 'org)\" --eval '(org-babel-tangle-file \"" file "\")'")))) "emacs-tangle-file"))))
+         (util.m-binding "tt" vabel.tangle-blocks "tangle-file"))))
 
 (let [cg (vim.api.nvim_create_augroup "org" {:clear true})]
   (vim.api.nvim_create_autocmd 

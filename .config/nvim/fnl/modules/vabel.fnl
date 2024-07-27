@@ -1,4 +1,5 @@
 (local vabel {})
+(local parsers (require "nvim-treesitter.parsers"))
 (local util (require :util))
 
 (fn verbatim [results indent lang]
@@ -108,6 +109,49 @@
          :start-line line1
          :end-line line2
          :env env}))))
+
+(fn parse-header [header]
+  (if header
+    (let [parts (util.split header ":")
+          kvs (icollect [_ v (ipairs parts)]
+                (let [options (util.split v " ")]
+                  (match (util.first options)
+                    "tangle" (util.last options)
+                    "mkdirp" (util.last options))))]
+      kvs)))
+
+(set vabel.tangle-blocks 
+     (fn []
+       (let [parser (parsers.get_parser 0)
+             tree (unpack (parser:parse))
+             query (vim.treesitter.query.parse 
+                     "org"
+                     "((block
+                        (expr)
+                        (expr)
+                        (contents)) @block)")]
+         (each [_ value (query:iter_captures (tree:root) 0)]
+           (local (start-row _ _ _) (value:range))
+           (let [header (vim.fn.getline (+ 1 start-row))
+                 parsed-header (parse-header header)]
+             (when (> (util.count-matches header "begin_src") 0)
+               (let [[file _mkdirp] parsed-header]
+                 (when file
+                   (print (.. "Deleting tangled file " file))
+                   (vim.fn.delete (vim.fn.expand (vim.fn.fnameescape file))))))))
+
+         (each [_ value (query:iter_captures (tree:root) 0)]
+           (local (start-row _ end-row _) (value:range))
+           (let [header (vim.fn.getline (+ 1 start-row))
+                 source (vim.fn.getline (+ 2 start-row) (- end-row 1))
+                 parsed-header (parse-header header)]
+             (when (> (util.count-matches header "begin_src") 0)
+               (let [[file _mkdirp] parsed-header]
+                 (when file
+                   (print (.. "Tangling code block to file " file))
+                   (if (util.exists? (vim.fn.expand file))
+                     (vim.fn.writefile source (vim.fn.expand file) "a")
+                     (vim.fn.writefile source (vim.fn.expand file)))))))))))
 
 (set vabel.eval-code-block 
      (fn []
