@@ -4,7 +4,7 @@
 
 * About
 
-  This document is a literate version of my system config and include core tools and applications used often. 
+  This document is a literate version of my system config and includes core tools and applications used often. 
 
   The code blocks here are tangled to their relevant files.
 
