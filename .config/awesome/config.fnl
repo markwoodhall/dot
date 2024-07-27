@@ -29,7 +29,7 @@
 (beautiful.init (.. (gears.filesystem.get_themes_dir) :default/theme.lua))
 
 ;; Set terminal, editor and modkey
-(global terminal :kitty)
+(global terminal :wezterm)
 (global editor (or (os.getenv :EDITOR) :nvim))
 (global editor-cmd (.. terminal " -e " editor))
 (global modkey :Mod1)
@@ -162,7 +162,7 @@
 
 ;; Send programs to certain tags automatically
 (set awful.rules.rules
-     [{:rule {:class :kitty}
+     [{:rule {:class "org.wezfurlong.wezterm"}
        :properties {:tag :1}}
       {:rule_any {:type ["dialog"]}
        :properties {:floating true}}
@@ -231,7 +231,7 @@
 
 (when (not (restart?))
   (do
-    (awful.spawn "kitty")
+    (awful.spawn "wezterm")
     (awful.spawn "picom")
     (awful.spawn "slack")
     (awful.spawn "google-chrome-stable")
