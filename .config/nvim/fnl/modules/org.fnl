@@ -18,11 +18,10 @@
 (set org.bind
      (fn []
        (let [wk (require :which-key)]
-         (wk.register 
-           {:m {:name "org" :buffer (vim.api.nvim_get_current_buf)}
-            :me {:name "evaluate" :buffer (vim.api.nvim_get_current_buf)}
-            :mt {:name "tangle" :buffer (vim.api.nvim_get_current_buf)}}
-           {:prefix " "})
+         (wk.add
+          [{1 " m" :group "mode"} 
+           {1 " me" :group "evaluation"} 
+           {1 " mt" :group "tangle"}])
          (util.m-binding "ee" vabel.eval-code-block "eval-code-block")
          (util.m-binding "tt" vabel.tangle-blocks "tangle-file"))))
 

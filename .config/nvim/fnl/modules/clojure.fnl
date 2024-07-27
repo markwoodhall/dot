@@ -42,13 +42,12 @@
          (eval-binding "r" "Require" "require-ns-with-reload")
          (eval-binding "R" "Require!" "require-ns-with-reload-all")
 
-         (wk.register 
-           {:m {:name "mode" 
-                :r {:name "reloaded" :buffer (vim.api.nvim_get_current_buf)}
-                :e {:name "evaluation" :buffer (vim.api.nvim_get_current_buf)}
-                :t {:name "test" :buffer (vim.api.nvim_get_current_buf)}
-                :s {:name "+sesman" :buffer (vim.api.nvim_get_current_buf)}}}
-           {:prefix " "}))))
+         (wk.add 
+           [{1 " m" :group "mode"} 
+            {1 " mr" :group "reloaded" :buffer (vim.api.nvim_get_current_buf)}
+            {1 " me" :group "evaluation" :buffer (vim.api.nvim_get_current_buf)}
+            {1 " mt" :group "test" :buffer (vim.api.nvim_get_current_buf)}
+            {1 " ms" :group "+sesman" :buffer (vim.api.nvim_get_current_buf)}]))))
 
 (let [cg (vim.api.nvim_create_augroup "clojure" {:clear true})]
   (vim.api.nvim_create_autocmd 

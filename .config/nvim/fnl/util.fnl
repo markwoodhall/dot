@@ -302,11 +302,8 @@
          (util.read-env env))))
 
 (set util.which-key-deregister 
-     (fn [prefix lhs]
-       (let [wk (require :which-key)]
-         (each [_ l (pairs lhs)]
-           (wk.register {l "which_key_ignore"}
-                        {:prefix prefix})))))
+     (fn [_prefix _lhs]
+       ))
 
 (set util.which-key-clear-major 
      (fn []

@@ -33,9 +33,8 @@
      :desc "Setup idea major mode bindings"
      :callback 
      (fn []
-       (wk.register 
-         {:m {:name "mode"
-              :i {:name "idea"}}}
-         {:prefix " "})
+       (wk.add
+        [{1 " m" :group "mode"} 
+         {1 " mi" :group "idea"}])
        (util.m-binding "ii" (display inspect-changes-plain)  "Run idea inspections on changes")
        (util.m-binding "iI" (display inspect-plain)  "Run all idea inspections"))}))

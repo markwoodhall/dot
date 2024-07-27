@@ -48,10 +48,9 @@
      :desc "Setup maven major mode bindings"
      :callback 
      (fn []
-       (wk.register 
-         {:m {:name "mode"
-              :m {:name "maven"}}}
-         {:prefix " "})
+       (wk.add
+        [{1 " m" :group "mode"} 
+         {1 " mm" :group "maven"}])
        (util.m-binding "mx" (display clean mvn-display-strategy)  "Clean")
        (util.m-binding "mC" (display compile-all :dispatch)  "Compile all")
        (util.m-binding "mc" (display compile :dispatch)  "Compile")

@@ -5,21 +5,20 @@
 
 (let [wk (require :which-key)]
   (wk.setup {:triggers [" "]})
-  (wk.register 
-    {:f {:name "file"}
-     :b {:name "buffer"}
-     :g {:name "git"}
-     :gP {:name "push"}
-     :l {:name "lsp"}
-     :p {:name "project"}
-     :lg {:name "goto"}
-     :ld {:name "diagnostics"}
-     :n {:name "notes"}
-     :t {:name "terminal"}
-     :tr {:name "run"}
-     :tp {:name "psql"}
-     :w {:name "window"}}
-    {:prefix " "}))
+  (wk.add 
+    [{1 " f" :group "file"}
+     {1 " b" :group "buffer"}
+     {1 " g" :group "git"}
+     {1 " gP" :group "push"}
+     {1 " l" :group "lsp"}
+     {1 " p" :group "project"}
+     {1 " lg" :group "goto"}
+     {1 " ld" :group "diagnostics"}
+     {1 " n" :group "notes"}
+     {1 " t" :group "terminal"}
+     {1 " tr" :group "run"}
+     {1 " tp" :group "psql"}
+     {1 " w" :group "window"}]))
 
 ;; buffers
 (util.nnoremap "bh" "nohl" "no-highlight-search")

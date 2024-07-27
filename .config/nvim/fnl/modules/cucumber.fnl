@@ -58,10 +58,9 @@
      :desc "Setup cucumber major mode bindings"
      :callback 
      (fn []
-       (wk.register 
-         {:m {:name "mode"
-              :c {:name "cucumber"}}}
-         {:prefix " "})
+       (wk.add 
+         [{1 " m" :group "mode"}
+          {1 " mc" :name "cucumber"}])
        (util.m-binding "cr" (display test-repeat) "Repeat cucumber run")
        (util.m-binding "cs" (display test-scenario) "Run cucumber scenario")
        (util.m-binding "ca" (display test-all) "Run all cucumber tests")

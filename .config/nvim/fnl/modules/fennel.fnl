@@ -31,10 +31,9 @@
      :callback 
      (fn []
        (util.which-key-clear-major)
-       (wk.register 
-         {:m {:name "fennel"}
-          :me {:name "evaluation"}}
-         {:prefix " "})
+       (wk.add 
+         [{1 " m" :group "fennel"} 
+          {1 " me" :group "evanluation"}])
        (eval-binding "e" "ConjureEvalRootForm" "current-expression-to-repl")
        (eval-binding "E" "ConjureEvalCurrentForm" "root-expression-to-repl")
        (eval-binding "b" "ConjureEvalBuf" "buf-to-repl"))})

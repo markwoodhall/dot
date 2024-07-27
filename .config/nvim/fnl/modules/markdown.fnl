@@ -11,11 +11,10 @@
      :callback 
      (fn []
        (util.which-key-clear-major)
-       (wk.register 
-         {:m {:name "markdown"}
-          :me {:name "evaluate"}
-          :mo {:name "export"}}
-         {:prefix " "})
+       (wk.add
+        [{1 " m" :group "mode"} 
+         {1 " me" :group "evaluate"} 
+         {1 " mo" :group "export"}])
        (util.m-binding "ee" vabel.eval-code-block "eval-code-block")
        (util.m-binding "op" (fn []
                        (let [file (vim.fn.expand "%:p")

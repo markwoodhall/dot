@@ -45,10 +45,10 @@
      :desc "Setup mono major mode bindings"
      :callback 
      (fn []
-       (wk.register 
-         {:m {:name "mode"
-              :m {:name "mono"}}}
-         {:prefix " "})
+       (wk.add
+        [{1 " m" :group "mode"} 
+         {1 " mm" :group "mono"} 
+         {1 " m" :group "mode"}])
        (util.m-binding "mx" (display clean mono-display-strategy)  "Clean")
        (util.m-binding "mr" (display restore mono-display-strategy)  "Restore")
        (util.m-binding "ms" (display run :drawer)  "Run")

@@ -41,10 +41,9 @@
      :desc "Setup dotnet major mode bindings"
      :callback 
      (fn []
-       (wk.register 
-         {:m {:name "mode"
-              :d {:name "dotnet"}}}
-         {:prefix " "})
+       (wk.add 
+         [{1 " m" :group "mode"} 
+          {1 " md" :group "dotnet"}])
        (util.m-binding "dx" (display clean dotnet-display-strategy)  "Clean")
        (util.m-binding "ds" (display run :drawer)  "Run")
        (util.m-binding "dc" (display compile :dispatch)  "Compile"))}))
