@@ -8,7 +8,7 @@
 
   The code blocks here are tangled to their relevant files.
 
-  These blocks are tangled using a poor mans version of emacs orgmode code tangled, as found in [[https://github.com/markwoodhall/dot/blob/main/.config/nvim/fnl/modules/vabel.fnl#L123][my neovim config]].
+  These blocks are tangled using a poor mans version of emacs orgmode code tangling, as found in [[https://github.com/markwoodhall/dot/blob/main/.config/nvim/fnl/modules/vabel.fnl#L123][my neovim config]].
 
 * Xorg
 
