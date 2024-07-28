@@ -147,7 +147,11 @@
                  source (vim.fn.getline (+ 2 start-row) (- end-row 1))
                  parsed-header (parse-header header)]
              (when (> (util.count-matches header "begin_src") 0)
-               (let [[file _mkdirp] parsed-header]
+               (let [[file mkdirp] parsed-header
+                     dir (vim.fn.expand (vim.fn.fnamemodify (vim.fn.expand file) ":h"))]
+                 (print dir)
+                 (when (= mkdirp "yes")
+                   (vim.fn.mkdir dir "p"))
                  (when file
                    (print (.. "Tangling code block to file " file))
                    (if (util.exists? (vim.fn.expand file))
