@@ -281,7 +281,7 @@ Theming
 * Picom
 
 #+begin_src bash :tangle ~/.config/picom/picom.conf :mkdirp yes
-corner-radius = 6.0;
+corner-radius = 4.0;
 #################################
 #             Shadows           #
 #################################
@@ -536,7 +536,7 @@ log-level = "warn";
 wintypes:
 {
   tooltip = { fade = true; shadow = true; opacity = 0.75; focus = true; full-shadow = false; };
-  dock = { shadow = true; opacity = 1; focus = false; full-shadow = false; }
+  dock = { shadow = true; corner-radius = 4.0; opacity = 1; focus = false; full-shadow = false; }
   dnd = { shadow = false; }
   popup_menu = { opacity = 0.8; }
   dropdown_menu = { opacity = 0.8; }

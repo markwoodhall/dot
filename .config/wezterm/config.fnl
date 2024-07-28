@@ -6,6 +6,9 @@
 (set config.font_size 12.8)
 (set config.leader {:key :b :mods :CTRL :timeout_milliseconds 1000 })
 
+(set config.show_close_tab_button_in_tabs false)
+(set config.show_new_tab_button_in_tab_bar false)
+
 (set config.colors 
      {:tab_bar 
       {:inactive_tab_edge "#1e1e2e"
@@ -19,6 +22,8 @@
        :inactive_tab 
        {:bg_color "#1e1e2e" 
         :fg_color "#6c7086"}}})
+
+(set config.window_padding {:left 0 :right 0 :top 0 :bottom 0})
 
 (set config.window_frame
      {:active_titlebar_bg "#1e1e2e"
