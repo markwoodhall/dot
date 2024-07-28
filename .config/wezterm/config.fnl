@@ -35,6 +35,9 @@
     (let [tab (window:active_tab)]
       (tab:set_title line))))
 
+(set config.unix_domains [{:name "dot"} {:name "abv"} {:name "pelly"}])
+(set config.default_gui_startup_args ["connect" "dot"])
+
 (set config.keys [{:mods :LEADER :key :H :action (wezterm.action.SplitVertical {:domain :CurrentPaneDomain})}
                   {:mods :LEADER :key :h :action (wezterm.action.SplitHorizontal {:domain :CurrentPaneDomain})}
                   {:mods :LEADER :key "[" :action wezterm.action.ActivateCopyMode}
@@ -51,4 +54,5 @@
                   {:mods :LEADER :key :9 :action (wezterm.action.ActivateTab 8)}
                   {:mods :LEADER :key :t :action (wezterm.action.ShowLauncherArgs {:flags "FUZZY|TABS|WORKSPACES|DOMAINS"})}
                   {:mods :LEADER :key :w :action (wezterm.action.PromptInputLine {:description "Enter a workspace name" :action (wezterm.action_callback new-workspace)})}])
+
 config
