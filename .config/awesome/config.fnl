@@ -7,7 +7,6 @@
 (local dpi (. (require :beautiful.xresources) :apply_dpi))
 (local beautiful (require :beautiful))
 (local naughty (require :naughty))
-(local hotkeys-popup (require :awful.hotkeys_popup))
 
 ;; Set up error handling
 (when awesome.startup_errors
@@ -29,7 +28,7 @@
 (beautiful.init (.. (gears.filesystem.get_themes_dir) :default/theme.lua))
 
 ;; Set terminal, editor and modkey
-(global terminal :wezterm)
+(global terminal :kitty)
 (global editor (or (os.getenv :EDITOR) :nvim))
 (global editor-cmd (.. terminal " -e " editor))
 (global modkey :Mod1)
@@ -162,7 +161,7 @@
 
 ;; Send programs to certain tags automatically
 (set awful.rules.rules
-     [{:rule {:class "org.wezfurlong.wezterm"}
+     [{:rule {:class "Kitty"}
        :properties {:tag :1}}
       {:rule_any {:type ["dialog"]}
        :properties {:floating true}}
@@ -231,8 +230,9 @@
 
 (when (not (restart?))
   (do
-    (awful.spawn "wezterm")
+    (awful.spawn "kitty")
     (awful.spawn "picom")
     (awful.spawn "slack")
+    (awful.spawn "xscreensaver")
     (awful.spawn "google-chrome-stable")
     (awful.spawn "/opt/lebar/lebardock")))
