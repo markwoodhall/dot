@@ -8,6 +8,8 @@
 (local beautiful (require :beautiful))
 (local naughty (require :naughty))
 
+(local wibox (require :wibox))
+
 ;; Set up error handling
 (when awesome.startup_errors
   (naughty.notify {:preset naughty.config.presets.critical
@@ -193,6 +195,57 @@
                          (c:emit_signal "request::activate" :mouse_enter
                                         {:raise false})))
 
+(set beautiful.bg_normal "#181825")
+(set beautiful.fg_normal "#45475a")
+
+(set beautiful.tasklist_bg_focus "#181825")
+(set beautiful.tasklist_fg_focus "#cdd6f4")
+
+(set beautiful.taglist_bg_focus "#1e1e2e")
+(set beautiful.taglist_fg_focus "#cdd6f4")
+(set beautiful.tasklist_disable_icon true)
+(set beautiful.tasklist_plain_task_name true)
+
+(global mytextclock (wibox.widget.textclock))
+(local taglist-buttons
+       (gears.table.join (awful.button {} 1 (fn [t] (t:view_only)))
+                         (awful.button [modkey] 1
+                                       (fn [t]
+                                         (when client.focus
+                                           (client.focus:move_to_tag t))))
+                         (awful.button {} 3 awful.tag.viewtoggle)
+                         (awful.button [modkey] 3
+                                       (fn [t]
+                                         (when client.focus
+                                           (client.focus:toggle_tag t))))
+                         (awful.button {} 4
+                                       (fn [t] (awful.tag.viewnext t.screen)))
+                         (awful.button {} 5
+                                       (fn [t] (awful.tag.viewprev t.screen)))))
+
+(awful.screen.connect_for_each_screen 
+  (fn [s]
+    (set s.mytaglist
+         (awful.widget.taglist {:buttons taglist-buttons
+                                :filter awful.widget.taglist.filter.all
+                                :screen s}))
+
+    (set s.mywibox
+         (awful.wibar {:position :top
+                       :bg beautiful.bg_normal
+                       :fg beautiful.fg_normal
+                       :screen s}))
+
+    (set s.mytasklist 
+         (awful.widget.tasklist {:screen s
+                                 :filter awful.widget.tasklist.filter.currenttags}))
+    (s.mywibox:setup {1 {1 s.mytaglist
+                         :layout wibox.layout.fixed.horizontal}
+                      2 {1 s.mytasklist
+                         :layout wibox.layout.fixed.horizontal}
+                      3 {1 mytextclock
+                         :layout wibox.layout.fixed.horizontal}
+                      :layout wibox.layout.align.horizontal})))	
 ;; Gaps
 (set beautiful.useless_gap 30)
 
@@ -234,5 +287,4 @@
     (awful.spawn "picom")
     (awful.spawn "slack")
     (awful.spawn "xscreensaver")
-    (awful.spawn "google-chrome-stable")
-    (awful.spawn "/opt/lebar/lebardock")))
+    (awful.spawn "google-chrome-stable")))

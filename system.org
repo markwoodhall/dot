@@ -281,17 +281,8 @@ Theming
 * Picom
 
 #+begin_src bash :tangle ~/.config/picom/picom.conf :mkdirp yes
-corner-radius = 4.0;
-#################################
-#             Shadows           #
-#################################
+corner-radius = 9.0;
 
-
-# Enabled client-side shadows on windows. Note desktop windows 
-# (windows with '_NET_WM_WINDOW_TYPE_DESKTOP') never get shadow, 
-# unless explicitly requested using the wintypes option.
-#
-# shadow = false
 shadow = true;
 
 # The blur radius for shadows, in pixels. (defaults to 12)
@@ -533,10 +524,13 @@ log-level = "warn";
 #window-shader-fg-rule = [
 #    "/home/markwoodhall/dotfiles/lebarshader.frag:window_type = 'dock'"
 #]
+rounded-corners-exclude = [
+  "window_type = 'dock'"
+];
 wintypes:
 {
   tooltip = { fade = true; shadow = true; opacity = 0.75; focus = true; full-shadow = false; };
-  dock = { shadow = true; corner-radius = 4.0; opacity = 1; focus = false; full-shadow = false; }
+  dock = { shadow = true; opacity = 1; focus = false; full-shadow = false; }
   dnd = { shadow = false; }
   popup_menu = { opacity = 0.8; }
   dropdown_menu = { opacity = 0.8; }
@@ -894,6 +888,18 @@ repaint_delay 5
 input_delay 1
 #+end_src
 
+* Wezterm
+
+** Config
+
+    Fennel is used to configure wezterm, this lua is used to bootstrap that. The fennel can be found in .config/.wezterm.
+
+#+begin_src fennel :tangle ~/.config/wezterm/wezterm.lua :mkdirp yes
+debug = {traceback = function() end}
+local fennel = require("./fennel").install()
+fennel.path = fennel.path .. ";.config/wezterm/?.fnl"
+return require("config")
+#+end_src
 * Postgres
 
 ** Config
