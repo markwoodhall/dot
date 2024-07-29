@@ -235,4 +235,5 @@
     (awful.spawn "picom")
     (awful.spawn "slack")
     (awful.spawn "xscreensaver")
-    (awful.spawn "google-chrome-stable")))
+    (awful.spawn "google-chrome-stable")
+    (awful.spawn "/opt/lebar/lebardock")))
