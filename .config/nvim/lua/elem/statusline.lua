@@ -1,16 +1,16 @@
 local lualine = require('lualine')
 
 local colors = {
-  bg       = '#1E1E2E',
+  bg       = '#181825',
   fg       = '#CDD6F4',
   yellow   = '#F9E2AF',
   cyan     = '#94e2d5',
   darkblue = '#89b4fa',
   green    = '#a6e3a1',
-  orange   = '#f5a97f',
+  orange   = '#fab387',
   violet   = '#c6a0f6',
   magenta  = '#ee99a0',
-  blue     = '#89b4fa',
+  blue     = '#74c7ec',
   red      = '#f38ba8',
 }
 
@@ -205,7 +205,7 @@ ins_right {
 ins_right {
   'diff',
   -- Is it me or the symbol for modified us really weird
-  symbols = { added = ' ', modified = '柳 ', removed = ' ' },
+  symbols = { added = '+ ', modified = '~ ', removed = '- ' },
   diff_color = {
     added = { fg = colors.green },
     modified = { fg = colors.orange },

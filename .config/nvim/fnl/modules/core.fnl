@@ -27,6 +27,7 @@
 (set nvim.o.encoding "utf-8")
 (set nvim.o.signcolumn "number")
 (set nvim.o.guifont "JetBrains Mono:h11") 
+(set nvim.o.cmdheight 0) 
 
 (nvim.ex.set :ruler)
 (nvim.ex.set :undofile)

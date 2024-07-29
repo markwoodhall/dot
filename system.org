@@ -282,60 +282,10 @@ Theming
 
 #+begin_src bash :tangle ~/.config/picom/picom.conf :mkdirp yes
 corner-radius = 9.0;
-
 shadow = true;
-
-# The blur radius for shadows, in pixels. (defaults to 12)
-# shadow-radius = 12
 shadow-radius = 12;
-
-# The opacity of shadows. (0.0 - 1.0, defaults to 0.75)
-# shadow-opacity = .75
-
-# The left offset for shadows, in pixels. (defaults to -15)
-# shadow-offset-x = -15
 shadow-offset-x = -6;
-
-# The top offset for shadows, in pixels. (defaults to -15)
-# shadow-offset-y = -15
 shadow-offset-y = -6;
-
-# Avoid drawing shadows on dock/panel windows. This option is deprecated,
-# you should use the *wintypes* option in your config file instead.
-#
-# no-dock-shadow = false
-
-# Don't draw shadows on drag-and-drop windows. This option is deprecated, 
-# you should use the *wintypes* option in your config file instead.
-#
-# no-dnd-shadow = false
-
-# Red color value of shadow (0.0 - 1.0, defaults to 0).
-# shadow-red = 0
-
-# Green color value of shadow (0.0 - 1.0, defaults to 0).
-# shadow-green = 0
-
-# Blue color value of shadow (0.0 - 1.0, defaults to 0).
-# shadow-blue = 0
-
-# Do not paint shadows on shaped windows. Note shaped windows 
-# here means windows setting its shape through X Shape extension. 
-# Those using ARGB background is beyond our control. 
-# Deprecated, use 
-#   shadow-exclude = 'bounding_shaped'
-# or 
-#   shadow-exclude = 'bounding_shaped && !rounded_corners'
-# instead.
-#
-# shadow-ignore-shaped = ''
-
-# Specify a list of conditions of windows that should have no shadow.
-#
-# examples:
-#   shadow-exclude = "n:e:Notification";
-#
-# shadow-exclude = []
 shadow-exclude = [
   "name = 'Notification'",
   "class_g = 'Conky'",
@@ -343,27 +293,7 @@ shadow-exclude = [
   "class_g = 'Cairo-clock'",
   "_GTK_FRAME_EXTENTS@:c"
 ];
-
-# Specify a X geometry that describes the region in which shadow should not
-# be painted in, such as a dock window region. Use 
-#    shadow-exclude-reg = "x10+0+0"
-# for example, if the 10 pixels on the bottom of the screen should not have shadows painted on.
-#
-# shadow-exclude-reg = "" 
-
-# Crop shadow of a window fully on a particular Xinerama screen to the screen.
-# xinerama-shadow-crop = false
-
-
-#################################
-#           Fading              #
-#################################
-
-
-# Fade windows in/out when opening/closing and when opacity changes,
-#  unless no-fading-openclose is used.
-# fading = false
-fading = false
+fading = true
 
 # Opacity change between steps while fading in. (0.01 - 1.0, defaults to 0.028)
 # fade-in-step = 0.028
@@ -372,27 +302,6 @@ fade-in-step = 0.03;
 # Opacity change between steps while fading out. (0.01 - 1.0, defaults to 0.03)
 # fade-out-step = 0.03
 fade-out-step = 0.03;
-
-# The time between steps in fade step, in milliseconds. (> 0, defaults to 10)
-# fade-delta = 10
-
-# Specify a list of conditions of windows that should not be faded.
-# fade-exclude = []
-
-# Do not fade on window open/close.
-# no-fading-openclose = false
-
-# Do not fade destroyed ARGB windows with WM frame. Workaround of bugs in Openbox, Fluxbox, etc.
-# no-fading-destroyed-argb = false
-
-
-#################################
-#   Transparency / Opacity      #
-#################################
-
-
-# Opacity of inactive windows. (0.1 - 1.0, defaults to 1.0)
-# inactive-opacity = 1
 inactive-opacity = 1;
 
 # Opacity of window titlebars and borders. (0.1 - 1.0, disabled by default)
@@ -408,54 +317,6 @@ inactive-opacity-override = true;
 
 # Default opacity for active windows. (0.0 - 1.0, defaults to 1.0)
 active-opacity = 1 
-
-# Dim inactive windows. (0.0 - 1.0, defaults to 0.0)
-# inactive-dim = 0.0
-
-# Specify a list of conditions of windows that should always be considered focused.
-# focus-exclude = []
-#focus-exclude = [ "class_g = 'Termite'" ];
-
-# Use fixed inactive dim value, instead of adjusting according to window opacity.
-# inactive-dim-fixed = 1.0
-
-# Specify a list of opacity rules, in the format `PERCENT:PATTERN`, 
-# like `50:name *= "Firefox"`. picom-trans is recommended over this. 
-# Note we don't make any guarantee about possible conflicts with other 
-# programs that set '_NET_WM_WINDOW_OPACITY' on frame or client windows.
-# example:
-#    opacity-rule = [ "80:class_g = 'URxvt'" ];
-
-
-#################################
-#     Background-Blurring       #
-#################################
-
-
-# Parameters for background blurring, see the *BLUR* section for more information.
-# blur-method = 
-# blur-size = 12
-#
-# blur-deviation = false
-
-# Blur background of semi-transparent / ARGB windows. 
-# Bad in performance, with driver-dependent behavior. 
-# The name of the switch may change without prior notifications.
-#
-# blur-background = false
-
-# Blur background of windows when the window frame is not opaque. 
-# Implies:
-#    blur-background 
-# Bad in performance, with driver-dependent behavior. The name may change.
-#
-# blur-background-frame = false
-
-
-# Use fixed blur strength rather than adjusting according to window opacity.
-# blur-background-fixed = false
-
-
 # Specify the blur convolution kernel, with the following format:
 # example:
 #   blur-kern = "5,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1";
@@ -471,13 +332,6 @@ blur-background-exclude = [
   "_GTK_FRAME_EXTENTS@:c"
 ];
 
-#################################
-#       General Settings        #
-#################################
-
-# Daemonize process. Fork to background after initialization. Causes issues with certain (badly-written) drivers.
-# daemon = false
-
 # Specify the backend to use: `xrender`, `glx`, or `xr_glx_hybrid`.
 # `xrender` is the default one.
 #
@@ -487,9 +341,6 @@ backend = "xrender";
 # Enable/disable VSync.
 # vsync = false
 vsync = true
-
-# Enable remote control via D-Bus. See the *D-BUS API* section below for more details.
-# dbus = false
 
 # Try to detect WM windows (a non-override-redirect window with no 
 # child that has 'WM_STATE') and mark them as active.
@@ -524,9 +375,9 @@ log-level = "warn";
 #window-shader-fg-rule = [
 #    "/home/markwoodhall/dotfiles/lebarshader.frag:window_type = 'dock'"
 #]
-rounded-corners-exclude = [
-  "window_type = 'dock'"
-];
+# rounded-corners-exclude = [
+#   "window_type = 'dock'"
+# ];
 wintypes:
 {
   tooltip = { fade = true; shadow = true; opacity = 0.75; focus = true; full-shadow = false; };
