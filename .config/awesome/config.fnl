@@ -65,6 +65,14 @@
                (fn [] (awful.client.focus.byidx (- 1)))
                {:description "focus previous by index"
                 :group :client})
+    (awful.key [modkey] :l
+               (fn [] (awful.tag.incmwfact 0.05))
+               {:description "increase master width factor"
+                :group :layout})
+    (awful.key [modkey] :h
+               (fn [] (awful.tag.incmwfact -0.05))
+               {:description "decrease master width factor"
+                :group :layout})
     (awful.key [modkey :Shift] :j
                (fn [] (awful.client.swap.byidx 1))
                {:description "swap with next client by index"
