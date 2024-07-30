@@ -253,7 +253,7 @@ bind V split-window -v
 bind -T copy-mode-vi y send-keys -X copy-pipe 'xclip -in -selection clipboard'
 
 set -g status-position top
-set -g status-justify "left"
+set -g status-justify "centre"
 set -g status "on"
 set -g message-command-style bg="#1E1E2E",fg="#cdd6f4"
 set -g status-left-length "100"
@@ -336,7 +336,7 @@ blur-background-exclude = [
 # `xrender` is the default one.
 #
 # backend = 'glx'
-backend = "xrender";
+backend = "glx";
 
 # Enable/disable VSync.
 # vsync = false
@@ -654,9 +654,9 @@ font_family      JetBrains Mono Nerd Font
 bold_font        JetBrains Mono Bold Nerd Font Complete
 italic_font      JetBrains Mono Italic Nerd Font Complete
 bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
-font_size 12.2
+font_size 13.0
 
-placement_strategy top-left
+placement_strategy left
 
 # The basic colors
 foreground              #CDD6F4
@@ -732,7 +732,7 @@ color14 #94E2D5
 color7  #BAC2DE
 color15 #A6ADC8
 
-window_padding_width 2
+window_padding_width 0 0 0 4
 window_margin_width 0
 linux_display_server x11
 repaint_delay 5
