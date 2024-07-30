@@ -173,6 +173,8 @@
        :properties {:tag :1}}
       {:rule_any {:type ["dialog"]}
        :properties {:floating true}}
+      {:rule_any {:type ["dock"]}
+       :properties {:focus false}}
       {:rule {:class :Slack}
        :properties {:tag :4}}
       {:rule {:class "Google-chrome"}
