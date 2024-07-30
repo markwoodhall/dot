@@ -241,6 +241,7 @@
 
 (when (not (restart?))
   (do
+    (awful.spawn "/opt/lebar/lebardock")
     (awful.spawn "wezterm")
     (awful.spawn "picom")
     (awful.spawn "slack")
