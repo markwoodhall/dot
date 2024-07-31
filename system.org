@@ -232,7 +232,7 @@ fi
 
 ** Config
 
-#+begin_src bash :tangle ~/.tmux.conf
+#+begin_src tmux :tangle ~/.tmux.conf
 set -g default-terminal "tmux"
 set -g base-index 1
 set -g pane-base-index 1
@@ -252,27 +252,16 @@ bind V split-window -v
 
 bind -T copy-mode-vi y send-keys -X copy-pipe 'xclip -in -selection clipboard'
 
-set -g status-position top
-set -g status-justify "centre"
-set -g status "on"
-set -g message-command-style bg="#1E1E2E",fg="#cdd6f4"
-set -g status-left-length "100"
-set -g pane-active-border-style bg="#1E1E2E",fg="#1E1E2E"
-set -g status-style bg="#1E1E2E"
-set -g pane-border-style bg="#1E1E2E",fg="#11111B"
-set -g message-style bg="#1E1E2E",fg="#cdd6f4"
-set -g status-right-length "100"
-setw -g window-status-activity-style bg="#1E1E2E",fg="#65737e"
-setw -g window-status-separator ""
-set -g status-left ""
-set -g status-right ""
-setw -g window-status-format "#[nobold,nounderscore,noitalics]#[default] #I #W #[nobold,nounderscore,noitalics]"
-setw -g window-status-current-format "#[nobold,nounderscore,noitalics]#[] #I #W #[nobold,nounderscore,noitalics]"
-set -g window-status-current-style bg="#a6e3a1",fg="#1e1e2e"
-setw -g window-status-style bg="#1e1e2e",fg="#cdd6f4"
 set-option -g automatic-rename off
 
+set -g status-position top
+
+set -g @plugin 'catppuccin/tmux'
 set -g @plugin 'tmux-plugins/tpm'
+set -g @catppuccin_flavour 'mocha' # latte,frappe, macchiato or mocha
+
+set -g @catppuccin_window_current_text "#W"
+
 run '~/.tmux/plugins/tpm/tpm'
 #+end_src
 
@@ -654,7 +643,7 @@ font_family      JetBrains Mono Nerd Font
 bold_font        JetBrains Mono Bold Nerd Font Complete
 italic_font      JetBrains Mono Italic Nerd Font Complete
 bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
-font_size 13.0
+font_size 12.3
 
 placement_strategy left
 
