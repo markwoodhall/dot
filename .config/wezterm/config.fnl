@@ -25,8 +25,8 @@
 
 (set config.window_padding {:left 5 :right 0 :top 0 :bottom 0})
 
-;;(set config.unix_domains [{:name "localhost"}])
-;;(set  config.default_gui_startup_args [ "connect" "localhost" ])
+(set  config.unix_domains [{:name "unix" :socket_path "/home/markwoodhall/.local/wez.socket" :local_echo_threshold_ms 50000 }])
+;;(set config.default_gui_startup_args [ "connect" "unix" ])
 
 (set config.window_frame
      {:active_titlebar_bg "#181825"
