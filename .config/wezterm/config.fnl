@@ -3,7 +3,7 @@
 (set config.color_scheme "Catppuccin Mocha")
 (set config.use_fancy_tab_bar true)
 (set config.font (wezterm.font "JetBrains Mono"))
-(set config.font_size 11.0)
+(set config.font_size 12)
 (set config.leader {:key :b :mods :CTRL :timeout_milliseconds 1000 })
 
 (set config.show_close_tab_button_in_tabs false)
@@ -18,7 +18,7 @@
         :fg_color "#1e1e2e"}
        :active_tab 
        {:bg_color "#1e1e2e" 
-        :fg_color "#cdd6f4"} 
+        :fg_color "#a6e3a1"} 
        :inactive_tab 
        {:bg_color "#181825" 
         :fg_color "#45475a"}}})
@@ -29,7 +29,7 @@
      [{:name "unix" 
        :socket_path "/home/markwoodhall/.local/wez.socket" 
        :local_echo_threshold_ms 9999999 }])
-(set config.default_gui_startup_args [ "connect" "unix" ])
+;;(set config.default_gui_startup_args [ "connect" "unix" ])
 
 (set config.window_frame
      {:active_titlebar_bg "#181825"
@@ -62,6 +62,7 @@
                   {:mods :LEADER :key :7 :action (wezterm.action.ActivateTab 6)}
                   {:mods :LEADER :key :8 :action (wezterm.action.ActivateTab 7)}
                   {:mods :LEADER :key :9 :action (wezterm.action.ActivateTab 8)}
+                  {:mods :LEADER :key :x :action (wezterm.action.CloseCurrentTab {:confirm false})}
                   {:mods :LEADER :key :t :action (wezterm.action.ShowLauncherArgs {:flags "FUZZY|TABS|WORKSPACES|DOMAINS"})}
                   {:mods :LEADER :key :w :action (wezterm.action.PromptInputLine {:description "Enter a workspace name" :action (wezterm.action_callback new-workspace)})}])
 
