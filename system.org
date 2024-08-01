@@ -262,6 +262,8 @@ set -g @catppuccin_flavour 'mocha' # latte,frappe, macchiato or mocha
 
 set -g @catppuccin_window_current_text "#W"
 
+set -g @catppuccin_window_left_separator ""
+
 run '~/.tmux/plugins/tpm/tpm'
 #+end_src
 
