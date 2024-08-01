@@ -6,8 +6,8 @@
 (set config.font_size 11.0)
 (set config.leader {:key :b :mods :CTRL :timeout_milliseconds 1000 })
 
-;;(set config.show_close_tab_button_in_tabs false)
-;;(set config.show_new_tab_button_in_tab_bar false)
+(set config.show_close_tab_button_in_tabs false)
+(set config.show_new_tab_button_in_tab_bar false)
 
 (set config.colors 
      {:tab_bar 
@@ -25,8 +25,11 @@
 
 (set config.window_padding {:left 5 :right 0 :top 0 :bottom 0})
 
-(set config.unix_domains [{:name "unix" :socket_path "/home/markwoodhall/.local/wez.socket" :local_echo_threshold_ms 50000 }])
-;;(set config.default_gui_startup_args [ "connect" "unix" ])
+(set config.unix_domains 
+     [{:name "unix" 
+       :socket_path "/home/markwoodhall/.local/wez.socket" 
+       :local_echo_threshold_ms 9999999 }])
+(set config.default_gui_startup_args [ "connect" "unix" ])
 
 (set config.window_frame
      {:active_titlebar_bg "#181825"
