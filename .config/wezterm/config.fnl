@@ -2,8 +2,8 @@
 (local config {})
 (set config.color_scheme "Catppuccin Mocha")
 (set config.use_fancy_tab_bar true)
-(set config.font (wezterm.font "JetBrains Mono Nerd Font"))
-(set config.font_size 12.3)
+(set config.font (wezterm.font "JetBrains Mono"))
+(set config.font_size 10.5)
 (set config.leader {:key :b :mods :CTRL :timeout_milliseconds 1000 })
 
 (set config.show_close_tab_button_in_tabs false)
@@ -23,7 +23,7 @@
        {:bg_color "#181825" 
         :fg_color "#45475a"}}})
 
-(set config.window_padding {:left 5 :right 0 :top 14 :bottom 0})
+(set config.window_padding {:left 5 :right 0 :top 0 :bottom 0})
 
 (set config.unix_domains 
      [{:name "unix" 
