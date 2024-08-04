@@ -257,7 +257,7 @@ set-option -g automatic-rename off
 
 set -g status-position top
 
-set -g status-justify "left"
+set -g status-justify "right"
 set -g status "on"
 set -g message-command-style bg="#1E1E2E",fg="#cdd6f4"
 set -g status-left-length "100"
@@ -271,8 +271,8 @@ set -g status-left ""
 set -g status-right ""
 setw -g window-status-format "#[nobold,nounderscore,noitalics]#[default] #I #W #[nobold,nounderscore,noitalics]"
 setw -g window-status-current-format "#[nobold,nounderscore,noitalics]#[] #I #W #[nobold,nounderscore,noitalics]"
-set -g window-status-current-style bg="#a6e3a1",fg="#1e1e2e"
-setw -g window-status-style bg="#1e1e2e",fg="#cdd6f4"
+set -g window-status-current-style bg="#11111b",fg="#cdd6f4"
+setw -g window-status-style bg="#1e1e2e",fg="#65737e"
 set-option -g automatic-rename off
 
 set -g @plugin 'tmux-plugins/tpm'
@@ -657,7 +657,7 @@ font_family      JetBrains Mono Nerd Font
 bold_font        JetBrains Mono Bold Nerd Font Complete
 italic_font      JetBrains Mono Italic Nerd Font Complete
 bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
-font_size 12.3
+font_size 10.9
 
 placement_strategy left
 
@@ -736,7 +736,7 @@ color7  #BAC2DE
 color15 #A6ADC8
 
 window_padding_width 0 0 0 4
-window_margin_width 0
+window_margin_width 1 0 0 3
 linux_display_server x11
 repaint_delay 5
 input_delay 1

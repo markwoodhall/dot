@@ -228,6 +228,8 @@
 ;; Change caps lock to control
 (awful.spawn "setxkbmap -option caps:ctrl_modifier")
 
+(awful.spawn "picom")
+
 (local restart?
       (fn []
         (var restart_detected false)
@@ -241,7 +243,6 @@
   (do
     (awful.spawn "/opt/lebar/lebardock")
     (awful.spawn "wezterm")
-    (awful.spawn "picom")
     (awful.spawn "slack")
     (awful.spawn "xscreensaver")
     (awful.spawn "google-chrome-stable")))
