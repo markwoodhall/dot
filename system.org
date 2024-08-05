@@ -555,7 +555,159 @@ configuration{
 @theme "catppuccin-macchiato"
 #+end_src
 
+* Lebar
+
+Lebar is a system toolbar configured with fennel
+
+#+begin_src fennel :tangle ~/.local/share/love/lebar/rc.fnl :mkdirp yes
+(local config {})
+
+(local blocks (require "blocks.fnl"))
+(local themes (require "themes.fnl"))
+(local lib (require "lib.fnl"))
+
+(set config.refresh-seconds 0.001)
+
+;; When set to true this will cause the render loop to 
+;; pause and wait for something to appear on the draw channel
+;; When set to false the render loop will only pause based on
+;; config.refresh-seconds
+(set config.render-on-change true)
+
+(set config.font "JetBrainsMonoNerdFont-Regular.ttf")
+(set config.font-size 16)
+
+; set the window position and margins
+(set config.window {})
+(set config.window.position :top)
+(set config.window.margin 4)
+(set config.window.height 27)
+
+; set the theme
+(set config.theme themes.catppuccin)
+(set config.background-color config.theme.black)
+(set config.foreground-color config.theme.text)
+
+(set config.block {})
+
+; configuration for the separator block
+(set config.block.separator (lib.default-settings config.theme))
+(set config.block.separator.padding-x 2)
+(set config.block.separator.text "|")
+(set config.block.separator.foreground-color config.theme.gray-3)
+
+; configuration for the time block
+(set config.block.time (lib.default-settings config.theme))
+(set config.block.time.format "%%a %%d, %%H:%%M")
+
+; configuration for the power block
+(set config.block.power (lib.default-settings config.theme))
+(set config.block.power.include-remaining-time true)
+
+; configuration for the shell block
+(set config.block.shell (lib.default-settings config.theme))
+
+; configuration for the memory block
+(set config.block.memory (lib.default-settings config.theme))
+(set config.block.memory.label " MEM ")
+
+; configuration for the dunst block
+(set config.block.dunst (lib.default-settings config.theme))
+(set config.block.dunst.label " ")
+
+; configuration for the user block
+(set config.block.user (lib.default-settings config.theme))
+(set config.block.user.label " ")
+(set config.block.user.background-color config.theme.blue)
+(set config.block.user.foreground-color config.theme.black)
+
+; configuration for the cpu block
+(set config.block.cpu (lib.default-settings config.theme))
+(set config.block.cpu.label " CPU ")
+(set config.block.cpu.ok-threshold 50)
+
+; configuration for the window-title block
+(set config.block.window-title (lib.default-settings config.theme))
+(set config.block.window-title.love-font (love.graphics.newFont "JetBrainsMonoNerdFont-Italic.ttf" 14))
+(set config.block.window-title.label " ")
+(set config.block.window-title.foreground-color config.theme.gray-2)
+
+; configuration for the i3-workspace block
+(set config.block.i3-workspace (lib.default-settings config.theme))
+
+; configuration for the free-disk-space block
+(set config.block.free-disk-space (lib.default-settings config.theme))
+(set config.block.free-disk-space.label " ")
+
+; configuration for the pacman block
+(set config.block.pacman (lib.default-settings config.theme))
+(set config.block.pacman.label "  ")
+
+; configuration for the i3-binding-state block
+(set config.block.i3-binding-state (lib.default-settings config.theme))
+(set config.block.i3-binding-state.label " ")
+
+; configuration for the wmctrl block
+(set config.block.wmctrl (lib.default-settings config.theme))
+(set config.block.wmctrl.margin (+ config.block.wmctrl.margin 1))
+(set config.block.wmctrl.radius 4)
+
+(set config.blocks 
+     {:left 
+      [blocks.user
+       blocks.separator
+       blocks.wmctrl
+       blocks.window-title]
+      :right 
+      [blocks.time 
+       blocks.separator
+       blocks.power
+       blocks.separator
+       blocks.memory
+       blocks.separator
+       blocks.cpu]})
+
+config
+
+(fn hostname []
+  (let [f (io.popen "/bin/hostname")
+        host (or (f:read "*a") "")
+        host (string.gsub host "\n$" "")]
+    (f:close)
+    host))
+
+(set config.blocks 
+     {:left 
+      [blocks.user
+       blocks.separator
+       blocks.wmctrl
+       blocks.window-title]
+      :right 
+      [blocks.time 
+       blocks.separator
+       blocks.power
+       blocks.separator
+       blocks.memory
+       blocks.separator
+       blocks.cpu
+       blocks.separator
+       {:load (partial (. blocks.free-disk-space :load) "/dev/nvme0n1p2" "ssd")
+        :draw (partial (. blocks.free-disk-space :draw) "/dev/nvme0n1p2" "ssd" "/ ")}
+       blocks.separator
+       (when (= (hostname) "thinker")
+         {:load (partial (. blocks.free-disk-space :load) "/home" "data")
+          :draw (partial (. blocks.free-disk-space :draw) "/home" "data" "/home ")})
+       (when (= (hostname) "archy")
+         {:load (partial (. blocks.free-disk-space :load) "/mnt/data" "data")
+          :draw (partial (. blocks.free-disk-space :draw) "/mnt/data" "data" "DATA ")})
+       blocks.separator
+       blocks.pacman]})
+
+config
+#+end_src
+
 Programming Languages and associated tools
+
 * Clojure
 
 ** Kondo
