@@ -37,6 +37,7 @@
 (nvim.ex.set :showcmd)
 (nvim.ex.set :hlsearch)
 (nvim.ex.set :nowrap)
+(nvim.ex.set :notermsync)
 (nvim.ex.set :splitbelow)
 (nvim.ex.set :hidden)
 (nvim.ex.set :wildmenu)

@@ -28,8 +28,8 @@
 (set config.unix_domains 
      [{:name "unix" 
        :socket_path "/home/markwoodhall/.local/wez.socket" 
-       :local_echo_threshold_ms 9999999 }])
-;;(set config.default_gui_startup_args [ "connect" "unix" ])
+       :local_echo_threshold_ms 5000 }])
+(set config.default_gui_startup_args [ "connect" "unix" ])
 
 (set config.window_frame
      {:active_titlebar_bg "#181825"
