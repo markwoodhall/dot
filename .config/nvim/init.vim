@@ -61,7 +61,7 @@ let g:ale_fixers_explicit = 1
 let g:ale_fixers = {'kotlin': ['ktlint']}
 let g:ale_kotlin_ktlint_options = '-l none'
 
-Plug 'github/copilot.vim'
+"Plug 'github/copilot.vim'
 " press <Tab> to expand or jump in a snippet. These can also be mapped separately
 " via <Plug>luasnip-expand-snippet and <Plug>luasnip-jump-next.
 imap <silent><expr> <c-j> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<c-j>' 
