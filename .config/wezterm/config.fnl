@@ -21,7 +21,10 @@
         :fg_color "#a6e3a1"} 
        :inactive_tab 
        {:bg_color "#181825" 
-        :fg_color "#45475a"}}})
+        :fg_color "#45475a"}
+       :inactive_tab_hover 
+       {:bg_color "#a6e3a1" 
+        :fg_color "#1e1e2e"}}})
 
 (set config.window_padding {:left 5 :right 0 :top 0 :bottom 0})
 
