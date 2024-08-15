@@ -22,9 +22,7 @@
             (sequence_arguments)) @expression")))
 
 (let [wk (require :which-key)
-      cg (vim.api.nvim_create_augroup "fennel" {:clear true})
-      pe (require :nvim-paredit-fennel)]
-  (pe.setup)
+      cg (vim.api.nvim_create_augroup "fennel" {:clear true})]
   (vim.api.nvim_create_autocmd 
     "BufEnter" 
     {:pattern "*.fnl"
@@ -32,6 +30,8 @@
      :desc "Setup fennel major mode bindings"
      :callback 
      (fn []
+       (let [pe (require :nvim-paredit-fennel)]
+         (pe.setup))
        (util.which-key-clear-major)
        (wk.add 
          [{1 " m" :group "fennel"} 

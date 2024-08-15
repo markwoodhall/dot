@@ -4,16 +4,16 @@ let g:neovide_cursor_animation_length = 0
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'SmiteshP/nvim-navic'
 Plug 'nvim-tree/nvim-web-devicons'
-Plug 'utilyre/barbecue.nvim'
 Plug 'folke/which-key.nvim'
-Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
-Plug 'nvim-treesitter/playground'
 Plug 'hiphish/rainbow-delimiters.nvim'
 
-Plug 'markwoodhall/vim-idea'
-Plug 'markwoodhall/maven-compiler.vim'
+" Treesitter
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+Plug 'nvim-treesitter/playground'
+
+Plug 'markwoodhall/vim-idea', { 'for': [ 'java', 'kotlin' ] }
+Plug 'markwoodhall/maven-compiler.vim', { 'for': [ 'java', 'kotlin' ] }
 Plug 'kevinhwang91/nvim-bqf'
 Plug 'stevearc/oil.nvim'
 
@@ -27,7 +27,7 @@ Plug 'julienvincent/nvim-paredit'
 Plug 'windwp/nvim-autopairs'
 
 " Fennel 
-Plug 'julienvincent/nvim-paredit-fennel'
+Plug 'julienvincent/nvim-paredit-fennel', { 'for': 'fennel' }
 
 " Clojure
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
@@ -51,6 +51,8 @@ Plug 'tpope/vim-rhubarb'
 
 " Completion & LSP
 Plug 'neovim/nvim-lspconfig'
+Plug 'SmiteshP/nvim-navic'
+Plug 'utilyre/barbecue.nvim'
 Plug 'onsails/lspkind.nvim'
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
@@ -78,7 +80,7 @@ snoremap <silent> <c-j> <cmd>lua require('luasnip').jump(1)<Cr>
 snoremap <silent> <c-k> <cmd>lua require('luasnip').jump(-1)<Cr>
 
 Plug 'rafamadriz/friendly-snippets'
-Plug 'udalov/kotlin-vim'
+Plug 'udalov/kotlin-vim', { 'for': 'kotlin' }
 Plug 'nvim-lualine/lualine.nvim'
 
 function! FireplaceConnected()
@@ -123,21 +125,17 @@ Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'stevearc/dressing.nvim'
-Plug 'xolox/vim-misc'
+"Plug 'xolox/vim-misc'
 
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-dispatch'
+
 Plug 'radenling/vim-dispatch-neovim'
-Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-obsession'
 Plug 'mhinz/vim-signify'
 Plug 'lilydjwg/colorizer'
 let g:colorizer_nomap=1
 let g:colorizer_maxlines=1000
-Plug 'tmhedberg/matchit'
 Plug 'DataWraith/auto_mkdir'
 Plug 'ekalinin/Dockerfile.vim'
 Plug 'lukas-reineke/indent-blankline.nvim'
@@ -146,16 +144,10 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
-
 let g:db_ui_save_location='~/dotfiles/' 
 
 " Colours
-Plug 'bluz71/vim-nightfly-colors', { 'as': 'nightfly' }
-Plug 'olimorris/onedarkpro.nvim'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
-Plug 'nyoom-engineering/oxocarbon.nvim', { 'as': 'oxocarbon' }
-Plug 'Mofiqul/dracula.nvim'
-Plug 'folke/tokyonight.nvim'
 
 " Terraform
 Plug 'hashivim/vim-terraform'
@@ -182,12 +174,6 @@ autocmd BufNewFile,BufRead *.sh setlocal filetype=sh
 autocmd BufWritePre *.edn,*.cljs,*.cljc,*.clj,*.cljd :%s/\s\+$//e
 
 " General mappings
-inoremap {      {}<Left>
-inoremap {<CR>  {<CR>}<Esc>O
-inoremap {{     {
-inoremap {}     {}
-inoremap if( if (
-
 nnoremap Q <nop>
 nnoremap <up> <nop>
 nnoremap <down> <nop>
