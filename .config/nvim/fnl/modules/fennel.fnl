@@ -22,7 +22,9 @@
             (sequence_arguments)) @expression")))
 
 (let [wk (require :which-key)
-      cg (vim.api.nvim_create_augroup "fennel" {:clear true})]
+      cg (vim.api.nvim_create_augroup "fennel" {:clear true})
+      pe (require :nvim-paredit-fennel)]
+  (pe.setup)
   (vim.api.nvim_create_autocmd 
     "BufEnter" 
     {:pattern "*.fnl"

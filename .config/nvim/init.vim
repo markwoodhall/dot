@@ -7,9 +7,6 @@ call plug#begin('~/.vim/plugged')
 Plug 'SmiteshP/nvim-navic'
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'utilyre/barbecue.nvim'
-Plug 'guns/vim-sexp'
-let g:sexp_filetypes='clojure,fennel'
-Plug 'tpope/vim-sexp-mappings-for-regular-people'
 Plug 'folke/which-key.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/playground'
@@ -25,6 +22,13 @@ Plug 'nvim-orgmode/orgmode'
 Plug 'akinsho/org-bullets.nvim'
 Plug 'dhruvasagar/vim-table-mode'
 
+" Lisp
+Plug 'julienvincent/nvim-paredit'
+Plug 'windwp/nvim-autopairs'
+
+" Fennel 
+Plug 'julienvincent/nvim-paredit-fennel'
+
 " Clojure
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 let g:fireplace_print_width=80
@@ -32,11 +36,10 @@ Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
 Plug 'clojure-vim/clojure.vim', { 'for': 'clojure' }
 let g:clojure_maxlines=1000
 Plug 'clojure-vim/async-clj-omni', { 'for': 'clojure' }
-"
+
 " Mine
 Plug 'markwoodhall/vim-aurepl', { 'for': 'clojure' }
 Plug 'markwoodhall/vim-cljreloaded', { 'for': 'clojure' }
-Plug 'markwoodhall/vim-cljdocs', { 'for': 'clojure' }
 
 Plug 'airblade/vim-rooter'
 let g:rooter_patterns = ['project.clj', 'shadow-cljs.edn', 'pom.xml', '*.sln']
@@ -44,7 +47,9 @@ let g:rooter_silent_chdir = 1
 
 " Version control
 Plug 'tpope/vim-fugitive'
-Plug 'mhinz/vim-grepper'
+Plug 'tpope/vim-rhubarb'
+
+" Completion & LSP
 Plug 'neovim/nvim-lspconfig'
 Plug 'onsails/lspkind.nvim'
 Plug 'hrsh7th/nvim-cmp'
@@ -54,6 +59,7 @@ Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'davidsierradz/cmp-conventionalcommits'
 Plug 'hrsh7th/cmp-path'
 Plug 'L3MON4D3/LuaSnip'
+
 Plug 'dense-analysis/ale'
 let g:ale_linters_explicit = 1
 let g:ale_linters = {'kotlin': ['ktlint']}
@@ -127,7 +133,6 @@ Plug 'radenling/vim-dispatch-neovim'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-rhubarb'
 Plug 'mhinz/vim-signify'
 Plug 'lilydjwg/colorizer'
 let g:colorizer_nomap=1
