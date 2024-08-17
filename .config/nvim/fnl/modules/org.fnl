@@ -2,22 +2,19 @@
 (local util (require :util))
 (local cl (require "modules.codelens"))
 (local vabel (require "modules.vabel"))
+(local og (require "orgmode"))
 
 (fn org-codelens []
   (cl.get-blocks 
     "org"
     "(headline) @ss"))
 
-(let [og (require "orgmode")]
-  ;;(og.setup_ts_grammar)
-  (og.setup {:mappings {:disable_all true}}))
-
-(let [ob (require "org-bullets")]
-  (ob.setup))
-
-(set org.bind
+(set org.setup
      (fn []
-       (let [wk (require :which-key)]
+       (let [wk (require :which-key)
+             ob (require "org-bullets")]
+         (og.setup {:mappings {:disable_all true}})
+         (ob.setup)
          (wk.add
           [{1 " m" :group "mode"} 
            {1 " me" :group "evaluation"} 

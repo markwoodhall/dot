@@ -2,6 +2,7 @@
 (local nvim (require "aniseed.nvim"))
 (local cl (require "modules.codelens"))
 (local clj (require "modules.clojure"))
+(local fnl (require "modules.fennel"))
 (local org (require "modules.org"))
 
 ;;(set nvim.o.colorcolumn "80")
@@ -65,13 +66,14 @@
     "BufWinEnter" 
     {:pattern "*.*"
      :group cg
-     :desc "Clear major mode bindings"
+     :desc "Setup filetype"
      :callback 
      (fn []
        (util.which-key-clear-major)
        (match nvim.bo.filetype
-         "clojure" (clj.bind)
-         "org" (org.bind)))})
+         "clojure" (clj.setup)
+         "fennel" (fnl.setup)
+         "org" (org.setup)))})
   (vim.api.nvim_create_autocmd 
     ["BufWritePre"] 
     {:pattern "*.*"

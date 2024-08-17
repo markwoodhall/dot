@@ -2,6 +2,7 @@
 (local util (require "util"))
 (local ts (require "modules.telescope"))
 (local cl (require "modules.codelens"))
+(local paredit (require "modules.paredit"))
 
 (fn reloaded-binding [bind action desc]
   (util.m-binding (.. "r" bind) action desc))
@@ -14,7 +15,7 @@
     "clojure"
     "(source (list_lit) @ll)"))
 
-(set clojure.bind 
+(set clojure.setup 
      (fn []
        (let [wk (require :which-key)]
          (util.m-binding "si" ts.repl "list-jackable-repls")
@@ -47,7 +48,9 @@
             {1 " mr" :group "reloaded" :buffer (vim.api.nvim_get_current_buf)}
             {1 " me" :group "evaluation" :buffer (vim.api.nvim_get_current_buf)}
             {1 " mt" :group "test" :buffer (vim.api.nvim_get_current_buf)}
-            {1 " ms" :group "+sesman" :buffer (vim.api.nvim_get_current_buf)}]))))
+            {1 " ms" :group "+sesman" :buffer (vim.api.nvim_get_current_buf)}])
+         
+         (paredit.setup))))
 
 (let [cg (vim.api.nvim_create_augroup "clojure" {:clear true})]
   (vim.api.nvim_create_autocmd 
