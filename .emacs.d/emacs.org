@@ -156,7 +156,7 @@ We need a nice colorscheme.
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
 (load-theme 'catppuccin t)
 
-(setq catppuccin-flavor 'macchiato) ;; or 'latte, 'macchiato, or 'mocha
+(setq catppuccin-flavor 'mocha) ;; or 'latte, 'macchiato, or 'mocha
 (catppuccin-reload)
 #+end_src
 
