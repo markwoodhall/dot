@@ -3,11 +3,13 @@
 (set config.color_scheme "Catppuccin Mocha")
 (set config.use_fancy_tab_bar true)
 (set config.font (wezterm.font "JetBrains Mono"))
-(set config.font_size 10.5)
+(set config.font_size 10.7)
 (set config.leader {:key :b :mods :CTRL :timeout_milliseconds 1000 })
 
 (set config.show_close_tab_button_in_tabs false)
 (set config.show_new_tab_button_in_tab_bar false)
+
+(set config.cell_width 1.0)
 
 (set config.colors 
      {:tab_bar 
