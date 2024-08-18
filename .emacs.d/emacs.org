@@ -149,13 +149,13 @@ We need a nice colorscheme.
 (use-package doom-themes)
 (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
       doom-themes-enable-italic t) ; if nil, italics is universally disabled
-(load-theme 'doom-tokyo-night t)
+;;(load-theme 'doom-tokyo-night t)
 
-;;(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
-;;(load-theme 'catppuccin t)
-;;
-;;(setq catppuccin-flavor 'macchiato) ;; or 'latte, 'macchiato, or 'mocha
-;;(catppuccin-reload)
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes")
+(load-theme 'catppuccin t)
+
+(setq catppuccin-flavor 'macchiato) ;; or 'latte, 'macchiato, or 'mocha
+(catppuccin-reload)
 #+end_src
 
 * STARTUP PERFORMANCE
