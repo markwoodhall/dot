@@ -51,7 +51,7 @@ Evil is an extensible 'vi' layer for Emacs. It emulates the main features of Vim
   (setq evil-vsplit-window-right t)
   (setq evil-split-window-below t)
   (setq evil-search-module 'evil-search)
-  (evil-mode))
+  (evil-mode 1))
 
 (use-package evil-collection
   :after evil

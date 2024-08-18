@@ -6,7 +6,14 @@
     (let [config (. lsp-config server)]
       (case server
         "omnisharp" (config.setup {:capabilities capabilities :cmd ["omnisharp"]})
-        "fennel_language_server" (config.setup {:capabilities capabilities :settings {:fennel {:workspace {:library (vim.api.nvim_list_runtime_paths)} :diagnostics {:globals ["vim" "modules" "case" "love" "fennel" "_" "where"]}}}})
+        "fennel_language_server" 
+        (config.setup 
+          {:capabilities capabilities 
+           :settings {:fennel 
+                      {:workspace 
+                       {:library (vim.api.nvim_list_runtime_paths)} 
+                       :diagnostics 
+                       {:globals ["vim" "modules" "case" "love" "fennel" "_" "where" "unpack"]}}}})
         _ (config.setup {:capabilities capabilities})))))
 
 ;; (vim.api.nvim_create_autocmd 

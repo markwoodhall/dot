@@ -1,8 +1,7 @@
 (local util (require :util))
 (local parsers (require "nvim-treesitter.parsers"))
 (local codelens {})
-
-(var namespace (vim.api.nvim_create_namespace "codelens"))
+(local namespace (vim.api.nvim_create_namespace "codelens"))
 
 (fn relative-to-seconds [unit val]
   (match unit
@@ -49,7 +48,7 @@
       (let [a (util.split v " Date: ")]
         a))))
 
-(fn process-blame-block [start-line job-id data event line-offset]
+(fn process-blame-block [start-line job-id data _event line-offset]
   (let [d (util.join data " ")
         authors (util.distinct (authors d))
         author-dates (author-dates d)

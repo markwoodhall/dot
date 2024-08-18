@@ -83,9 +83,9 @@
   (wrapper
     "Repl"
     (fn []
-      ["AWS_PROFILE=algorithmica-dev AWS_REGION=eu-west-1 lein repl" 
-       "lein repl" 
+      ["lein repl" 
        "npx shadow-cljs watch app"
+       "fennel"
        "npm run watch"])
     #(util.pane-repl (. $1 1))))
 

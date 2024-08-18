@@ -8,9 +8,6 @@ Plug 'nvim-tree/nvim-web-devicons'
 Plug 'folke/which-key.nvim'
 Plug 'hiphish/rainbow-delimiters.nvim'
 
-Plug 'jpalardy/vim-slime'
-let g:slime_target = "neovim"
-
 " Treesitter
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'nvim-treesitter/playground'

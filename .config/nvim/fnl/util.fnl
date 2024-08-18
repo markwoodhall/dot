@@ -311,4 +311,11 @@
                                   [:ma :mb :mc :md :me :mf :mg :mh :mi :mj :mk :ml :mm :mn :mo :mp
                                    :mq :mr :ms :mt :mu :mv :mx :my :mz])))
 
+(set util.code-block
+     (fn [start-s end-s]
+       (let [[line1 _] (vim.fn.searchpos start-s "bc")
+             [line2 _] (vim.fn.searchpos end-s "c")
+             code (vim.fn.getline line1 line2)]
+         code)))
 util
+
