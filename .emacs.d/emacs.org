@@ -117,6 +117,7 @@ Let's make GNU Emacs look a little better.
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (tooltip-mode nil)
+(setq frame-resize-pixelwise t)
 #+end_src
 
 ** Display Line Numbers
