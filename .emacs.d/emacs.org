@@ -55,7 +55,8 @@ Evil is an extensible 'vi' layer for Emacs. It emulates the main features of Vim
 
 (use-package evil-collection
   :after evil
-  :config (setq evil-collection-mode-list '(dashboard dired ibuffer))
+  :config
+  (setq evil-collection-mode-list '(dashboard dired ibuffer))
   :custom (evil-collection-setup-minibuffer t)
   :init (evil-collection-init))
 
