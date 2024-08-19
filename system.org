@@ -729,8 +729,8 @@ Programming Languages and associated tools
 ** lein
 #+begin_src clojure :tangle ~/.lein/profiles.clj :mkdirp yes
 {:user
- {:plugins [[nrepl "1.0.0"]
-            [cider/cider-nrepl "0.28.7"]
+ {:plugins [[nrepl "1.3.0"]
+            [cider/cider-nrepl "0.49.3"]
             [refactor-nrepl "3.6.0"]]
   :dependencies [[org.clojure/tools.namespace "1.3.0"]
                  [org.clojure/tools.reader "1.3.6"]]}}

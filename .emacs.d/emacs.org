@@ -38,6 +38,15 @@ Install use-package and enable ':ensure t' globally.  The ':ensure' keyword caus
 (setq use-package-always-ensure t)
 #+end_src
 
+** History
+
+Save history and limit to a sensible size.
+
+#+begin_src emacs-lisp
+(setq history-length 50)
+(savehist-mode 1)
+#+end_src
+
 ** Evil Mode
 
 Evil is an extensible 'vi' layer for Emacs. It emulates the main features of Vim, and provides facilities for writing custom extensions.  Evil Collection is also installed since it adds 'evil' bindings to parts of Emacs that the standard Evil package does not cover, such as: calenda, help-mode adn ibuffer.
@@ -1188,6 +1197,8 @@ Vterm is a terminal emulator within Emacs.  The 'shell-file-name' setting sets t
   (setq shell-file-name "/bin/zsh"
 	vterm-shell "/bin/zsh"
 	vterm-max-scrollback 9000)
+
+  (evil-set-key 'normal "p" 'vterm-yank)
 
   (nvmap :keymaps '(override vterm-mode-map) :prefix "C-c"
 	 "C-c"   '(vterm--self-insert :which-key "Literal Ctrl C")
