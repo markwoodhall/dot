@@ -413,6 +413,7 @@ General.el allows us to set keybindings.  As a longtime Doom Emacs user, I have 
   (("C-s" . swiper)
    :map evil-insert-state-map
    ("C-k" . ivy-previous-line)
+   ("C-j" . ivy-next-line)
    :map ivy-minibuffer-map
    ("TAB" . ivy-alt-done)
    ("C-l" . ivy-alt-done)
@@ -538,7 +539,6 @@ Add an option to run an npm target as compilation and setup a shortcut to a tail
   (interactive)
   (mw/npm-run-target "tailwindw" ""))
 #+end_src
-
 
 *** MVN
 
@@ -882,7 +882,6 @@ respectively."
   "m s I" '(cider-jack-in-cljs :which-key "Cider jack in cljs")
   "m s i" '(cider-jack-in :which-key "Cider jack in"))
 #+end_src
-
 
 *** Fennel
 
