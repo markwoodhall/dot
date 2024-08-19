@@ -650,7 +650,8 @@ Lebar is a system toolbar configured with fennel
 ; configuration for the wmctrl block
 (set config.block.wmctrl (lib.default-settings config.theme))
 (set config.block.wmctrl.margin (+ config.block.wmctrl.margin 1))
-(set config.block.wmctrl.radius 4)
+(set config.block.wmctrl.border [0 0 1 0])
+(set config.block.wmctrl.radius 0)
 
 (set config.blocks 
      {:left 

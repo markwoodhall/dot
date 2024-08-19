@@ -23,11 +23,12 @@ Plug 'akinsho/org-bullets.nvim'
 Plug 'dhruvasagar/vim-table-mode'
 
 " Lisp
-Plug 'julienvincent/nvim-paredit'
-Plug 'windwp/nvim-autopairs'
+"Plug 'julienvincent/nvim-paredit'
+"Plug 'windwp/nvim-autopairs'
+Plug 'kovisoft/paredit'
 
 " Fennel 
-Plug 'julienvincent/nvim-paredit-fennel', { 'for': 'fennel' }
+"Plug 'julienvincent/nvim-paredit-fennel', { 'for': 'fennel' }
 
 " Clojure
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }

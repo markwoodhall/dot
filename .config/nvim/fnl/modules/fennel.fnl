@@ -28,8 +28,7 @@
 
 (set fennel.setup 
      (fn []
-       (let [wk (require :which-key)
-             pe (require :nvim-paredit-fennel)]
+       (let [wk (require :which-key)]
          (util.m-binding "si" (fn []
                                 (set fennel.repl (fennel.start-repl window-printer))) "list-jackable-repls"
          (util.m-binding "ee" (fn []
@@ -39,8 +38,7 @@
            [{1 " m" :group "mode"} 
             {1 " me" :group "evaluation" :buffer (vim.api.nvim_get_current_buf)}
             {1 " ms" :group "+sesman" :buffer (vim.api.nvim_get_current_buf)}])
-         (paredit.setup)
-         (pe.setup)))))
+         (paredit.setup)))))
 
 (set fennel.start-repl
      (fn [printer]
