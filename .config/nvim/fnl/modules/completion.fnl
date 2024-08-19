@@ -1,19 +1,12 @@
 (let [cmp-nvim-lsp (require :cmp_nvim_lsp)
       lsp-config (require :lspconfig)
-      servers ["clojure_lsp" "kotlin_language_server" "gopls" "rust_analyzer" "csharp_ls" "sqlls" "fennel_ls"]
+      servers ["clojure_lsp" "kotlin_language_server"
+               "csharp_ls" "sqlls" "fennel_ls"]
       capabilities (cmp-nvim-lsp.default_capabilities)]
   (each [_ server (pairs servers)]
     (let [config (. lsp-config server)]
       (case server
         "omnisharp" (config.setup {:capabilities capabilities :cmd ["omnisharp"]})
-        "fennel_language_server" 
-        (config.setup 
-          {:capabilities capabilities 
-           :settings {:fennel 
-                      {:workspace 
-                       {:library (vim.api.nvim_list_runtime_paths)} 
-                       :diagnostics 
-                       {:globals ["vim" "modules" "case" "love" "fennel" "_" "where" "unpack"]}}}})
         _ (config.setup {:capabilities capabilities})))))
 
 ;; (vim.api.nvim_create_autocmd 
