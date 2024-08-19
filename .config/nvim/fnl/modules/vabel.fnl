@@ -138,8 +138,8 @@
                (let [[file _mkdirp] parsed-header]
                  (when file
                    (when (util.exists? (vim.fn.expand file))
-                     (print (.. "Deleting tangled file " file))
-                     (vim.fn.delete (vim.fn.expand (vim.fn.fnameescape file)))))))))
+                     (print (.. "Clearing tangled file " file))
+                     (vim.fn.writefile [] (vim.fn.expand (vim.fn.fnameescape file)))))))))
 
          (each [_ value (query:iter_captures (tree:root) 0)]
            (local (start-row _ end-row _) (value:range))
