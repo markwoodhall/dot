@@ -16,10 +16,15 @@
      (fn []
        (cl.get-blocks 
          "fennel"
-         "(fn_form
+         "(program (_
+            (symbol)
+            (binding_pair)) @expression)")
+       (cl.get-blocks 
+         "fennel"
+         "(program (fn_form
             (symbol)
             (symbol)
-            (sequence_arguments)) @expression")))
+            (sequence_arguments)) @expression)")))
 
 (set fennel.setup 
      (fn []
@@ -36,9 +41,6 @@
             {1 " ms" :group "+sesman" :buffer (vim.api.nvim_get_current_buf)}])
          (paredit.setup)
          (pe.setup)))))
-
-(let [a {:a 1 :b 2}]
-  a)
 
 (set fennel.start-repl
      (fn [printer]
@@ -62,9 +64,5 @@
      :group cg
      :desc "Setup fennel codelens"
      :callback fennel.fennel-codelens}))
-
-(comment 
-  (let [r (fennel.start-repl (fn [data] (print (string.sub (util.join data " ") 1 -4))))]
-    ((. r :send) "(+ 1 1 1)\n")))
 
 fennel
