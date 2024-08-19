@@ -229,6 +229,7 @@ Note. May need to run all-the-icons-install-fonts
     "b x"   '((lambda () (interactive) (kill-this-buffer) (evil-window-delete)) :which-key "Kill buffer")
     "b l"   '(counsel-ibuffer :which-key "List buffers")
     "b n"   '(next-buffer :which-key "Next buffer")
+    "b n"   '(rename-buffer :which-key "Rename buffer")
     "b p"   '(previous-buffer :which-key "Previous buffer"))
 #+end_src
 
@@ -248,6 +249,13 @@ Indent with spaces and setup trailing whitespace removal with ws-butler.
 (use-package exec-path-from-shell)
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
+
+(defun mw/named-vterm (name)
+  "Starts a vterm and renames the buffer"
+  (interactive "sTerminal name:")
+  (vterm)
+  (rename-buffer name))
+
 #+end_src
 
 ** Bindings
@@ -255,9 +263,8 @@ Indent with spaces and setup trailing whitespace removal with ws-butler.
 #+begin_src emacs-lisp
 (nvmap :prefix "SPC" :keymaps 'override
     "t"     '(:which-key "terminal")
-    "t t"   '((lambda () (interactive) (vterm)) :which-key "New Terminal")
-    "t n"   '((lambda () (interactive) (projectile-run-vterm)) :which-key "New Terminal")
-    "t f"   '((lambda () (interactive) (projectile-run-vterm)) :which-key "New Terminal")
+    "t f"   '(mw/named-vterm :which-key "New Terminal")
+    "t t"   '((lambda () (interactive) (projectile-run-vterm)) :which-key "New Terminal")
     "t s"   '((lambda () (interactive) (projectile-run-shell)) :which-key "New Shell"))
 #+end_src
 
@@ -1191,17 +1198,17 @@ Emacs' default scrolling is annoying because of the sudden half-page jumps.  Als
 Vterm is a terminal emulator within Emacs.  The 'shell-file-name' setting sets the shell to be used in M-x shell, M-x term, M-x ansi-term and M-x vterm.  By default, the shell is set to 'fish' but could change it to 'bash' or 'zsh' if you prefer.
 
 #+begin_src emacs-lisp
-  (use-package vterm)
+(use-package vterm)
 
-  (setq-default explicit-shell-file-name "/bin/zsh")
+(setq-default explicit-shell-file-name "/bin/zsh")
 
-  (setq shell-file-name "/bin/zsh"
-	vterm-shell "/bin/zsh"
-	vterm-max-scrollback 9000)
+(setq shell-file-name "/bin/zsh"
+      vterm-shell "/bin/zsh"
+      vterm-max-scrollback 9000)
 
-  (nvmap :keymaps '(override vterm-mode-map) :prefix "C-c"
-	 "C-c"   '(vterm--self-insert :which-key "Literal Ctrl C")
-	 "C-d"   '(vterm--self-insert :which-key "Literal Ctrl D"))
+(nvmap :keymaps '(override vterm-mode-map) :prefix "C-c"
+  "C-c"   '(vterm--self-insert :which-key "Literal Ctrl C")
+  "C-d"   '(vterm--self-insert :which-key "Literal Ctrl D"))
 
 #+end_src
 
