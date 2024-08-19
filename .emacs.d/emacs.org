@@ -24,7 +24,7 @@ The order in which the various Emacs modules load is very important.  So the ver
 (require 'package)
 (add-to-list 'package-archives
        '("melpa" . "https://melpa.org/packages/"))
-(package-refresh-contents)
+;;(package-refresh-contents)
 (package-initialize)
 #+end_src
 
@@ -255,6 +255,7 @@ Indent with spaces and setup trailing whitespace removal with ws-butler.
 #+begin_src emacs-lisp
 (nvmap :prefix "SPC" :keymaps 'override
     "t"     '(:which-key "terminal")
+    "t t"   '((lambda () (interactive) (vterm)) :which-key "New Terminal")
     "t n"   '((lambda () (interactive) (projectile-run-vterm)) :which-key "New Terminal")
     "t f"   '((lambda () (interactive) (projectile-run-vterm)) :which-key "New Terminal")
     "t s"   '((lambda () (interactive) (projectile-run-shell)) :which-key "New Shell"))
@@ -1197,8 +1198,6 @@ Vterm is a terminal emulator within Emacs.  The 'shell-file-name' setting sets t
   (setq shell-file-name "/bin/zsh"
 	vterm-shell "/bin/zsh"
 	vterm-max-scrollback 9000)
-
-  (evil-set-key 'normal "p" 'vterm-yank)
 
   (nvmap :keymaps '(override vterm-mode-map) :prefix "C-c"
 	 "C-c"   '(vterm--self-insert :which-key "Literal Ctrl C")
