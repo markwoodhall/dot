@@ -384,7 +384,7 @@ Defining our fonts.
 ;; (setq-default line-spacing 0.05)
 
 ;; Needed if using emacsclient. Otherwise, your fonts will be smaller than expected.
-(add-to-list 'default-frame-alist '(font . "JetBrains Mono"))
+(add-to-list 'default-frame-alist '(font . "JetBrains Mono-10"))
 ;; changes certain keywords to symbols, such as lamda!
 (setq global-prettify-symbols-mode t)
 #+end_src
