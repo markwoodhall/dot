@@ -1236,9 +1236,6 @@ Vterm is a terminal emulator within Emacs.  The 'shell-file-name' setting sets t
 #+begin_src emacs-lisp
 (winner-mode 1)
 
-
-
-
 (add-to-list 'display-buffer-alist
           `((derived-mode . magit-mode)
             (display-buffer-in-side-window)
