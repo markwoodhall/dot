@@ -133,8 +133,10 @@ Let's make GNU Emacs look a little better.
 
 #+begin_src emacs-lisp
 (setq display-line-numbers-type 'relative)
-(global-display-line-numbers-mode)
-(global-visual-line-mode t)
+
+(add-hook 'prog-mode-hook (lambda() (display-line-numbers-mode 1)))
+(add-hook 'text-mode-hook (lambda() (display-line-numbers-mode 1)))
+
 #+end_src
 
 ** Kind icons
