@@ -398,13 +398,6 @@ General.el allows us to set keybindings.  As a longtime Doom Emacs user, I have 
        "h r e" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config"))
 #+end_src
 
-* Mode line
-
-#+begin_src emacs-lisp
-;; (use-package doom-modeline)
-;; (doom-modeline-mode 1)
-#+end_src
-
 * Counsel
 
 #+begin_src emacs-lisp
@@ -1043,38 +1036,6 @@ Org-bullets gives us attractive bullets rather than asterisks.
 #+begin_src emacs-lisp
 (use-package org-bullets)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-#+end_src
-
-** Org Link Abbreviations
-
-This allows for the use of abbreviations that will get expanded out into a lengthy URL.
-
-#+begin_src emacs-lisp
-;; An example of how this works.
-;; [[arch-wiki:Name_of_Page][Description]]
-(setq org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
-        '(("google" . "http://www.google.com/search?q=")
-          ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
-          ("ddg" . "https://duckduckgo.com/?q=")
-          ("wiki" . "https://en.wikipedia.org/wiki/")))
-#+end_src
-
-** Org Todo Keywords
-
-This lets us create the various TODO tags that we can use in Org.
-
-#+begin_src emacs-lisp
-  (setq org-todo-keywords        ; This overwrites the default Doom org-todo-keywords
-          '((sequence
-             "TODO(t)"           ; A task that is ready to be tackled
-             "BLOG(b)"           ; Blog writing assignments
-             "GYM(g)"            ; Things to accomplish at the gym
-             "PROJ(p)"           ; A project that contains other tasks
-             "VIDEO(v)"          ; Video assignments
-             "WAIT(w)"           ; Something is holding up this task
-             "|"                 ; The pipe necessary to separate "active" states and "inactive" states
-             "DONE(d)"           ; Task has been completed
-             "CANCELLED(c)" )))  ; Task has been cancelled
 #+end_src
 
 ** Source Code Block Tag Expansion
