@@ -223,6 +223,14 @@ Note. May need to run all-the-icons-install-fonts
 
 * BUFFERS AND BOOKMARKS
 
+By default Emacs distinguishes between automatic and manual window switching. If you effect a window switch yourself with C-x b, it’s manual — and exempt from any display action rules you create yourself.
+
+You probably don’t want that.
+
+#+begin_src emacs-lisp
+(setq switch-to-buffer-obey-display-actions t)
+#+end_src
+
 #+begin_src emacs-lisp
  (nvmap :prefix "SPC" :keymaps 'override
     "b"     '(:which-key "buffers")
@@ -254,7 +262,7 @@ Indent with spaces and setup trailing whitespace removal with ws-butler.
   "Starts a vterm and renames the buffer"
   (interactive "sTerminal name:")
   (vterm)
-  (rename-buffer name))
+  (rename-buffer (concat "vterm-" name)))
 
 #+end_src
 
@@ -354,15 +362,15 @@ Defining our fonts.
 #+begin_src emacs-lisp
 (set-face-attribute 'default nil
   :font "JetBrains Mono"
-  :height 110
+  :height 95
   :weight 'medium)
 (set-face-attribute 'variable-pitch nil
   :font "JetBrains Mono"
-  :height 110
+  :height 95
   :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
   :font "JetBrains Mono"
-  :height 110
+  :height 95
   :weight 'medium)
 ;; Makes commented text and keywords italics.
 ;; This is working in emacsclient but not emacs.
@@ -373,7 +381,7 @@ Defining our fonts.
   :slant 'italic)
 
 ;; Uncomment the following line if line spacing needs adjusting.
-(setq-default line-spacing 0.12)
+;; (setq-default line-spacing 0.05)
 
 ;; Needed if using emacsclient. Otherwise, your fonts will be smaller than expected.
 (add-to-list 'default-frame-alist '(font . "JetBrains Mono"))
@@ -396,8 +404,8 @@ General.el allows us to set keybindings.  As a longtime Doom Emacs user, I have 
 * Mode line
 
 #+begin_src emacs-lisp
-(use-package doom-modeline)
-(doom-modeline-mode 1)
+;; (use-package doom-modeline)
+;; (doom-modeline-mode 1)
 #+end_src
 
 * Counsel
@@ -735,6 +743,13 @@ This specifies cucumber options for testing just the feature in file."
        "m e e" '(sql-send-paragraph :which-key "Eval sql paragraph"))
 #+end_src
 
+**** MSSQL
+
+#+begin_src emacs-lisp
+(setq sql-ms-program "sqlcmd")
+(setq sql-ms-options '())
+#+end_src
+
 **** Connections
 
 #+begin_src emacs-lisp
@@ -746,17 +761,21 @@ This specifies cucumber options for testing just the feature in file."
                    (sql-port 5433)
                    (sql-server "localhost"))))
 
-(defun psql-connect (product connection)
+(defun ms-connect (connection)
+  (setq sql-product 'ms)
+  (sql-connect connection))
+
+(defun psql-connect (connection)
   (setq sql-product 'postgres)
   (sql-connect connection))
 
 (defun psql-local ()
   (interactive)
-  (psql-connect 'postgres 'local))
+  (psql-connect 'local))
 
 (defun psql-local5433 ()
   (interactive)
-  (psql-connect 'postgres 'local5433))
+  (psql-connect 'local5433))
 
 #+end_src
 
@@ -901,35 +920,34 @@ respectively."
 * LSP
 
 #+begin_src emacs-lisp
-(use-package lsp-ui)
-(use-package lsp-mode
-  :config
- (setq lsp-semantic-tokens-enable t))
-(use-package lsp-treemacs)
-(use-package lsp-ivy)
+  (use-package lsp-ui)
+  (use-package lsp-mode
+    :config
+   (setq lsp-semantic-tokens-enable t))
+  (use-package lsp-treemacs)
+  (use-package lsp-ivy)
 
-(add-hook 'sql-mode-hook 'lsp)
-(setq lsp-sqls-workspace-config-path nil)
-(setq lsp-sqls-connections
-    '(((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=bags password=bags dbname=bags sslmode=disable"))
-     ((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=pelly password=pelly dbname=pelly sslmode=disable"))
-     ((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=abv password=abv dbname=abv sslmode=disable"))
-))
+  (add-hook 'sql-mode-hook 'lsp)
+  (setq lsp-sqls-workspace-config-path nil)
+  (setq lsp-sqls-connections
+      '(((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=bags password=bags dbname=bags sslmode=disable"))
+       ((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=pelly password=pelly dbname=pelly sslmode=disable"))
+       ((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=abv password=abv dbname=abv sslmode=disable"))))
 
-(add-hook 'clojure-mode-hook 'lsp)
-(add-hook 'clojurescript-mode-hook 'lsp)
-(add-hook 'clojurec-mode-hook 'lsp)
-(add-hook 'kotlin-mode-hook 'lsp)
-(add-hook 'fennel-mode-hook 'lsp)
-(setq lsp-enable-indentation nil)
-(setq read-process-output-max (* 1024 1024))
+  (add-hook 'clojure-mode-hook 'lsp)
+  (add-hook 'clojurescript-mode-hook 'lsp)
+  (add-hook 'clojurec-mode-hook 'lsp)
+  (add-hook 'kotlin-mode-hook 'lsp)
+  (add-hook 'fennel-mode-hook 'lsp)
+  (setq lsp-enable-indentation nil)
+  (setq read-process-output-max (* 1024 1024))
 
-(add-to-list 'lsp-language-id-configuration '(fennel-mode . "fennel"))
+  (add-to-list 'lsp-language-id-configuration '(fennel-mode . "fennel"))
 
-(lsp-register-client (make-lsp-client
-                      :new-connection (lsp-stdio-connection "fennel-ls")
-                      :activation-fn (lsp-activate-on "fennel")
-                      :server-id 'fennel-ls))
+  (lsp-register-client (make-lsp-client
+                        :new-connection (lsp-stdio-connection "fennel-ls")
+                        :activation-fn (lsp-activate-on "fennel")
+                        :server-id 'fennel-ls))
 
 #+end_src
 
@@ -974,7 +992,9 @@ respectively."
 A git client for Emacs.  Often cited as a killer feature for Emacs.
 
 #+begin_src emacs-lisp
-(use-package magit)
+(use-package magit
+:config
+(setq magit-display-buffer-function #'display-buffer))
  #+end_src
 
 ** Bindings
@@ -1217,6 +1237,14 @@ Vterm is a terminal emulator within Emacs.  The 'shell-file-name' setting sets t
 (winner-mode 1)
 
 (add-to-list 'display-buffer-alist
+          `((derived-mode . magit-mode)
+            (display-buffer-in-side-window)
+            (mode magit-mode)
+            (window-height . 0.33)
+            (side . bottom)
+            (slot . 0)))
+
+(add-to-list 'display-buffer-alist
      '("\*vterm\*"
        (display-buffer-in-side-window)
        (window-height . 0.33)
@@ -1253,6 +1281,20 @@ Vterm is a terminal emulator within Emacs.  The 'shell-file-name' setting sets t
 
 (add-to-list 'display-buffer-alist
      '("\*Fennel REPLl\*"
+       (display-buffer-in-side-window)
+       (window-height . 0.33)
+       (side . bottom)
+       (slot . 0)))
+
+(add-to-list 'display-buffer-alist
+     '("\*sqls results\*"
+       (display-buffer-in-side-window)
+       (window-height . 0.33)
+       (side . bottom)
+       (slot . 0)))
+
+(add-to-list 'display-buffer-alist
+     '("\*SQL\*"
        (display-buffer-in-side-window)
        (window-height . 0.33)
        (side . bottom)
