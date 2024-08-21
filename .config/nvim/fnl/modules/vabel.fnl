@@ -113,11 +113,13 @@
 (fn parse-header [header]
   (if header
     (let [parts (util.split header ":")
-          kvs (icollect [_ v (ipairs parts)]
+          kvs (accumulate [h {:tangle nil :shebang nil :mkdirp nil} _ v (ipairs parts)]
                 (let [options (util.split v " ")]
                   (match (util.first options)
-                    "tangle" (util.last options)
-                    "mkdirp" (util.last options))))]
+                    "shebang" (set h.shebang (util.last options))
+                    "tangle" (set h.tangle (util.last options))
+                    "mkdirp" (set h.mkdirp (util.last options)))
+                  h))]
       kvs)))
 
 (set vabel.tangle-blocks 
@@ -135,28 +137,38 @@
            (let [header (vim.fn.getline (+ 1 start-row))
                  parsed-header (parse-header header)]
              (when (> (util.count-matches header "begin_src") 0)
-               (let [[file _mkdirp] parsed-header]
+               (let [file (. parsed-header :tangle)]
                  (when file
                    (when (util.exists? (vim.fn.expand file))
                      (print (.. "Clearing tangled file " file))
                      (vim.fn.writefile [] (vim.fn.expand (vim.fn.fnameescape file)))))))))
 
+         (var count 0)
          (each [_ value (query:iter_captures (tree:root) 0)]
            (local (start-row _ end-row _) (value:range))
            (let [header (vim.fn.getline (+ 1 start-row))
                  source (vim.fn.getline (+ 2 start-row) (- end-row 1))
                  parsed-header (parse-header header)]
              (when (> (util.count-matches header "begin_src") 0)
-               (let [[file mkdirp] parsed-header
+               (let [file (. parsed-header :tangle)
+                     mkdirp (. parsed-header :mkdirp)
+                     shebang (. parsed-header :shebang)
                      dir (vim.fn.expand (vim.fn.fnamemodify (vim.fn.expand file) ":h"))]
-                 (print dir)
                  (when (= mkdirp "yes")
+                 (print "making")
                    (vim.fn.mkdir dir "p"))
                  (when file
                    (print (.. "Tangling code block to file " file))
+                   (when shebang 
+                     (print "shebang")
+                     (print shebang)
+                     (if (util.exists? (vim.fn.expand file))
+                       (vim.fn.writefile [shebang] (vim.fn.expand file) "a")
+                       (vim.fn.writefile [shebang] (vim.fn.expand file))))
                    (if (util.exists? (vim.fn.expand file))
                      (vim.fn.writefile source (vim.fn.expand file) "a")
-                     (vim.fn.writefile source (vim.fn.expand file)))))))))))
+                     (vim.fn.writefile source (vim.fn.expand file)))))))
+           (set count (+ 1 count))))))
 
 (set vabel.eval-code-block 
      (fn []
