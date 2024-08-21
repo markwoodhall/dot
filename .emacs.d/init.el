@@ -1,3 +1,6 @@
+(setq gc-cons-threshold 5002653184
+      gc-cons-percentage 0.6)
+
 (setq vc-follow-symlinks t)
 (org-babel-load-file
  (expand-file-name
