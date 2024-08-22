@@ -1,5 +1,5 @@
 filetype off
-set guifont=JetBrains\ Mono\ ExtraLight:h10
+set guifont=JetBrains\ Mono\ ExtraLight:h8
 let g:neovide_cursor_animation_length = 0
 
 call plug#begin('~/.vim/plugged')
@@ -23,12 +23,7 @@ Plug 'akinsho/org-bullets.nvim'
 Plug 'dhruvasagar/vim-table-mode'
 
 " Lisp
-"Plug 'julienvincent/nvim-paredit'
-"Plug 'windwp/nvim-autopairs'
 Plug 'kovisoft/paredit'
-
-" Fennel 
-"Plug 'julienvincent/nvim-paredit-fennel', { 'for': 'fennel' }
 
 " Clojure
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
