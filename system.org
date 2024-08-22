@@ -228,7 +228,58 @@ fi
 
 #+end_src
 
+* TMUX
 
+** Config
+
+#+begin_src tmux :tangle ~/.tmux.conf
+set -g default-terminal "tmux"
+set -g base-index 1
+set -g pane-base-index 1
+set -g set-titles on
+set -g status-keys vi
+set -s escape-time 0
+set -g set-clipboard on
+set -g history-limit 50000
+set -g mode-keys vi
+
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+bind H split-window -h
+bind V split-window -v
+bind r source-file ~/.tmux.conf
+
+bind -T copy-mode-vi y send-keys -X copy-pipe 'xclip -in -selection clipboard'
+
+set-option -g automatic-rename off
+
+set -g status-position top
+
+set -g status-justify "left"
+set -g status "on"
+set -g message-command-style bg="#1E1E2E",fg="#cdd6f4"
+set -g status-left-length "100"
+set -g pane-active-border-style bg="#1E1E2E",fg="#1E1E2E"
+set -g status-style bg="#1E1E2E"
+set -g pane-border-style bg="#1E1E2E",fg="#11111B"
+set -g message-style bg="#1E1E2E",fg="#cdd6f4"
+set -g status-right-length "100"
+setw -g window-status-activity-style bg="#1E1E2E",fg="#65737e"
+set -g status-left ""
+set -g status-right ""
+setw -g window-status-format "#[nobold,nounderscore,noitalics]#[default] #I #W #[nobold,nounderscore,noitalics]"
+setw -g window-status-current-format "#[nobold,nounderscore,noitalics]#[] #I #W #[nobold,nounderscore,noitalics]"
+set -g window-status-current-style bg="#11111b",fg="#cdd6f4"
+setw -g window-status-style bg="#1e1e2e",fg="#65737e"
+set-option -g automatic-rename off
+
+set -g @plugin 'tmux-plugins/tpm'
+run '~/.tmux/plugins/tpm/tpm'
+#+end_src
+
+Theming
 
 * Picom
 
@@ -748,6 +799,101 @@ Programming Languages and associated tools
     required = true
 #+end_src
 
+* Kitty
+
+** Config
+
+   Kitty is the terminal of choice, configured with JetBrains Mono and Catppuccin colors.
+
+#+begin_src bash :tangle ~/.config/kitty/kitty.conf :mkdirp yes
+font_family      JetBrains Mono Nerd Font
+bold_font        JetBrains Mono Bold Nerd Font Complete
+italic_font      JetBrains Mono Italic Nerd Font Complete
+bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
+font_size 10.9
+
+placement_strategy left
+
+# The basic colors
+foreground              #CDD6F4
+background              #1E1E2E
+selection_foreground    #1E1E2E
+selection_background    #F5E0DC
+
+# Cursor colors
+cursor                  #F5E0DC
+cursor_text_color       #1E1E2E
+
+# URL underline color when hovering with mouse
+url_color               #F5E0DC
+
+# Kitty window border colors
+active_border_color     #B4BEFE
+inactive_border_color   #6C7086
+bell_border_color       #F9E2AF
+
+# OS Window titlebar colors
+wayland_titlebar_color system
+macos_titlebar_color system
+hide_window_decoration yes
+hide_titlebar yes
+x11_hide_window_decorations yes
+
+# Tab bar colors
+active_tab_foreground   #11111B
+active_tab_background   #CBA6F7
+inactive_tab_foreground #CDD6F4
+inactive_tab_background #181825
+tab_bar_background      #11111B
+
+# Colors for marks (marked text in the terminal)
+mark1_foreground #1E1E2E
+mark1_background #B4BEFE
+mark2_foreground #1E1E2E
+mark2_background #CBA6F7
+mark3_foreground #1E1E2E
+mark3_background #74C7EC
+
+# The 16 terminal colors
+
+# black
+color0 #45475A
+color8 #585B70
+
+# red
+color1 #F38BA8
+color9 #F38BA8
+
+# green
+color2  #A6E3A1
+color10 #A6E3A1
+
+# yellow
+color3  #F9E2AF
+color11 #F9E2AF
+
+# blue
+color4  #89B4FA
+color12 #89B4FA
+
+# magenta
+color5  #F5C2E7
+color13 #F5C2E7
+
+# cyan
+color6  #94E2D5
+color14 #94E2D5
+
+# white
+color7  #BAC2DE
+color15 #A6ADC8
+
+window_padding_width 0 0 0 4
+window_margin_width 1 0 0 3
+linux_display_server x11
+repaint_delay 5
+input_delay 1
+#+end_src
 
 * Wezterm
 
