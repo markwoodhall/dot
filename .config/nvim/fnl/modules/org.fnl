@@ -4,6 +4,11 @@
 (local vabel (require "modules.vabel"))
 (local og (require "orgmode"))
 
+;; Because orgmode internally manages its own treesitter
+;; we need to activate it early, otherwise it will cause
+;; issue with file previews
+(og.setup {:mappings {:disable_all true}})
+
 (fn org-codelens []
   (cl.get-blocks 
     "org"
@@ -13,7 +18,6 @@
      (fn []
        (let [wk (require :which-key)
              ob (require "org-bullets")]
-         (og.setup {:mappings {:disable_all true}})
          (ob.setup)
          (wk.add
           [{1 " m" :group "mode"} 
