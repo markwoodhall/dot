@@ -3,19 +3,23 @@
 (local util (require :util))
 
 (fn verbatim [results indent lang]
-  (util.split 
-    (.. 
-      "" 
-      "\n\n"
-      (util.fill-string " " indent) "#+RESULTS:" 
-      "\n" 
-      (util.fill-string " " indent) "#+begin_example " lang
-      "\n" 
-      (util.join (icollect [_ v  (ipairs (util.split results "\n"))]
-                   (.. (util.fill-string " " indent) v)) "\n") 
-      "\n" 
-      (util.fill-string " " indent) "#+end_example") 
-    "\n"))
+  (match lang
+    "sql" (let [t (util.split results "\n")
+                t (icollect [_ v  (ipairs t)]
+                    (.. (util.fill-string " " indent) (if (not= v "") (.. "|" v "|") v)))] 
+            (table.insert t 1 (.. (util.fill-string " " indent) (.. "#+BEGIN_EXAMPLE " lang)))
+            (table.insert t 1 (.. (util.fill-string " " indent) "#+RESULTS:"))
+            (table.insert t 1 "")
+            (table.insert t (.. (util.fill-string " " indent) "#+END_EXAMPLE"))
+            t)
+    _ (let [t (util.split results "\n")
+                t (icollect [_ v  (ipairs t)]
+                    (.. (util.fill-string " " indent) v))] 
+            (table.insert t 1 (.. (util.fill-string " " indent) (.. "#+BEGIN_EXAMPLE " lang)))
+            (table.insert t 1 (.. (util.fill-string " " indent) "#+RESULTS:"))
+            (table.insert t 1 "")
+            (table.insert t (.. (util.fill-string " " indent) "#+END_EXAMPLE"))
+            t)))
 
 (fn presenter [p-type]
   (match p-type
@@ -32,10 +36,10 @@
     "sql" (fn [env code]
                 (let [fname (.. (vim.fn.tempname) ".sql")]
                   (with-open [fout (io.open fname :w)]
-                    (fout:write (util.join code "\n")))
+                    (fout:write (.. "\\timing off\n" (util.join code "\n"))))
                   (vim.fn.system 
                     (.. env 
-                        " psql -f " fname))))
+                        " psql -P footer=off -q -f " fname))))
     "clojure" (fn [env code]
                 (let [fname (.. (vim.fn.tempname) ".clj")]
                   (with-open [fout (io.open fname :w)]
@@ -80,8 +84,8 @@
 
 (fn clear-code-block [from-line]
   (let [pos (vim.fn.winsaveview)
-        [line1 _] (vim.fn.searchpos "#+begin_example" "c")
-        [line2 _] (vim.fn.searchpos "#+end_example$" "c") ]
+        [line1 _] (vim.fn.searchpos "\\c#+BEGIN_EXAMPLE" "c")
+        [line2 _] (vim.fn.searchpos "\\c#+END_EXAMPLE" "c") ]
     (when (and (> line1 0)
                (> line1 from-line))
       (vim.cmd (.. (- line1 1) "," line2 "d")))
