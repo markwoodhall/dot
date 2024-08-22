@@ -895,7 +895,6 @@ repaint_delay 5
 input_delay 1
 #+end_src
 
-* Wezterm
 
 ** Config
 
@@ -912,8 +911,9 @@ return require("config")
 ** Config
 
 #+begin_src bash :tangle ~/.psqlrc
+\set QUIET 1
 \x off
-\timing on
+\timing off
 \pset null '[null]'
 \set HISTFILE ~/psql_history/.psql_history- :DBNAME
 #+end_src
