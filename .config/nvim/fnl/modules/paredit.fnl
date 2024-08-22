@@ -5,7 +5,7 @@
              wrap (fn [start end]
                     (vim.cmd (.. "call PareditWrap('" start "','" end "')" )))]
 
-         ;;(vim.cmd "call PareditUnmapKeys()")
+         (set vim.g.paredit_electric_return 0)        ;;(vim.cmd "call PareditUnmapKeys()")
 
          (vim.keymap.set "n" " sw(" (partial wrap "(" ")") {:desc "Wrap with parens"})
          (vim.keymap.set "n" " sw)" (partial wrap "(" ")") {:desc "Wrap with parens"})
