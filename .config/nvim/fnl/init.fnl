@@ -16,11 +16,11 @@
   (Plug "kevinhwang91/nvim-bqf")
 
   ;; Directory manipulation
-  (Plug "stevearc/oil.nvim")
+  (Plug "stevearc/oil.nvim" {:on :Oil})
 
   ;; Treesitter
   (Plug "nvim-treesitter/nvim-treesitter" {:do ":TSUpdate"})
-  (Plug "nvim-treesitter/playground" {:on "TSPlaygroundToggle"})
+  (Plug "nvim-treesitter/playground" {:on :TSPlaygroundToggle})
 
   ;; Org mode
   (Plug "nvim-orgmode/orgmode")
@@ -29,6 +29,7 @@
 
   ;; Lisp
   (Plug "kovisoft/paredit" {:for [:clojure :fennel]})
+  (set vim.g.paredit_leader ",")
 
   ; Clojure
   (Plug "tpope/vim-fireplace" {:for :clojure})
@@ -69,9 +70,8 @@
   (Plug "nvim-lua/plenary.nvim")
   (Plug "nvim-telescope/telescope.nvim")
   (Plug "stevearc/dressing.nvim")
-  (Plug "tpope/vim-unimpaired")
   (Plug "tpope/vim-surround")
-  (Plug "tpope/vim-dispatch")
+  (Plug "tpope/vim-dispatch" {:on :Dispatch})
   (Plug "tpope/vim-eunuch")
   (Plug "radenling/vim-dispatch-neovim")
   (Plug "mhinz/vim-signify")
@@ -112,21 +112,21 @@
   (require :modules.clojure)
   (require :modules.codelens)
   (require :modules.completion)
-  (require :modules.csharp)
-  (require :modules.cucumber)
-  (require :modules.dotnet)
+  ;;(require :modules.csharp)
+  ;;(require :modules.cucumber)
+  ;;(require :modules.dotnet)
   (require :modules.dressing)
   (require :modules.fennel)
-  (require :modules.idea)
+;;  (require :modules.idea)
   (require :modules.keymap)
-  (require :modules.kotlin)
+ ;; (require :modules.kotlin)
   (require :modules.lualine)
   (require :modules.markdown)
-  (require :modules.maven)
-  (require :modules.mono)
+  ;;(require :modules.maven)
+  ;;(require :modules.mono)
   (require :modules.notes)
   (require :modules.oil)
   (require :modules.org)
-  (require :modules.telescope)
+  ;;(require :modules.telescope)
   (require :modules.treesitter)
   (require :modules.vabel))

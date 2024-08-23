@@ -67,18 +67,6 @@
           (vim.cmd (.. run  " " symbol))
           (run symbol))))))
 
-(set telescope.scripts
-  (wrapper
-    "Zsh History"
-    #(-> "cat /home/markwoodhall/.zsh_history"
-         (vim.fn.system)
-         (vim.fn.split "\n"))
-    (fn [selection]
-      (let [first (. selection 1)
-            script-parts (vim.fn.split first ";")
-            script (. script-parts 1)]
-        (vim.cmd (.. "Start" script))))))
-
 (set telescope.repl
   (wrapper
     "Repl"
@@ -89,49 +77,6 @@
        "npm run watch"])
     #(util.pane-repl (. $1 1))))
 
-(set telescope.repls
-  (wrapper
-    "Repls"
-    (fn []
-      (let [bufs (vim.api.nvim_list_bufs)]
-        (icollect [_ b (pairs bufs)]
-          (let [bi (vim.fn.getbufinfo b)
-                bi-first (. bi 1)
-                vars (. bi-first :variables)
-                term-title (?. vars "term_title")]
-            (when (and term-title
-                       (or (> (util.count-matches term-title "lein repl") 0)
-                           (> (util.count-matches term-title "shadow") 0)))
-              (.. b ":" term-title))))))
-    (fn [a] 
-      (vim.cmd (.. "buffer " (tonumber (. (util.split (. a 1) ":") 1)))))))
-
-(set telescope.terminals
-  (wrapper
-    "Terminals"
-    (fn []
-      (let [bufs (vim.api.nvim_list_bufs)]
-        (icollect [_ b (pairs bufs)]
-          (let [bi (vim.fn.getbufinfo b)
-                bi-first (. bi 1)
-                vars (. bi-first :variables)]
-            (when (?. vars "term_title")
-              (.. b ":" (. vars "term_title")))))))
-    (fn [a] 
-      (vim.cmd (.. "buffer " (tonumber (. (util.split (. a 1) ":") 1)))))))
-
-(set telescope.projects
-  (wrapper
-    "Projects"
-    (fn []
-      (let [bufs (vim.api.nvim_list_bufs)]
-        (icollect [_ b (pairs bufs)]
-          (let [bi (vim.fn.getbufinfo b)
-                bi-first (. bi 1)
-                vars (. bi-first :variables)]
-            (if (?. vars "rootDir")
-              (. vars "rootDir"))))))
-    #(vim.cmd (.. "e " (. $1 1)))))
 
 (vim.api.nvim_create_user_command
   "CljDocs"
@@ -165,33 +110,9 @@
   {:bang false :desc "Explore Namespace"})
 
 (vim.api.nvim_create_user_command
-  "ZshHistory"
-  (fn [opts]
-    (telescope.scripts opts))
-  {:bang false :desc "Zsh History"})
-
-(vim.api.nvim_create_user_command
   "Repl"
   (fn [opts]
     (telescope.repl opts))
-  {:bang false :desc "Repls"})
-
-(vim.api.nvim_create_user_command
-  "Projects"
-  (fn [opts]
-    (telescope.projects opts))
-  {:bang false :desc "Projects"})
-
-(vim.api.nvim_create_user_command
-  "Terminals"
-  (fn [opts]
-    (telescope.terminals opts))
-  {:bang false :desc "Terminals"})
-
-(vim.api.nvim_create_user_command
-  "Repls"
-  (fn [opts]
-    (telescope.repls opts))
   {:bang false :desc "Repls"})
 
 (let [ts (require :telescope)

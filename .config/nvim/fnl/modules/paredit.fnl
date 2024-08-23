@@ -29,7 +29,8 @@
            (vim.keymap.set "n" " sur" ":call PareditRaise()<CR>" {:desc "Raise form"}))
 
          (set my-paredit-loaded true)
-         (wk.add [{1 " s" :group "smartparens"}
+         (wk.add [{1 "I" :hidden true}
+                  {1 " s" :group "smartparens"}
                   {1 " sw" :group "wrap"}
                   {1 " ss" :group "slurp"}
                   {1 " sb" :group "barf"}

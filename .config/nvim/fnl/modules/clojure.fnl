@@ -1,6 +1,5 @@
 (local clojure {})
 (local util (require "util"))
-(local ts (require "modules.telescope"))
 (local cl (require "modules.codelens"))
 
 (fn reloaded-binding [bind action desc]
@@ -16,11 +15,11 @@
 
 (set clojure.setup 
      (fn []
-       (let [wk (require :which-key)
+       (let [ts (require :modules.telescope)
+             wk (require :which-key)
              paredit (require "modules.paredit")]
          (util.m-binding "si" ts.repl "list-jackable-repls")
          (util.m-binding "sj" "ShadowJack app" "hook-into-shadow-repl")
-         (util.m-binding "sl" ts.repls "list-running-repls")
 
          (util.m-binding "tp" "RunTests" "Run project tests")
 

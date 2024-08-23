@@ -1,7 +1,6 @@
 (local util (require :util))
-
-(var mvn-cmd "mvn -e")
-(var mvn-display-strategy :drawer)
+(local mvn-cmd "mvn -e")
+(local mvn-display-strategy :drawer)
 
 (fn wrap-with-env [cmd]
   (let [e (util.read-project-env)]

@@ -58,7 +58,6 @@
 
 ;; projects
 (util.nnoremap "pf" "Telescope find_files" "telescope-find-files-in-project")
-(vim.keymap.set "n" " pl" ts.projects {:desc "telescope-project-list"})
 
 ;; windows
 (vim.keymap.set "n" " ws" "<c-w>v<c-w>w" {:desc "Split window vertically"})
@@ -77,7 +76,6 @@
 
 ;; terminal
 (util.nnoremap "tt" "Start" "start-new-tmux-window")
-(vim.keymap.set "n" " tl" ts.terminals {:desc "telescope-terminal-list"})
 (vim.keymap.set "n" " tn" util.pane-terminal-window {:desc "Start a new terminl"})
 (vim.keymap.set "n" " tf" util.pane-terminal-window {:desc "Start a new terminl"})
 (vim.keymap.set "n" " trd" util.rerun-last-drawer-command {:desc "Rerun the last drawer command"})
