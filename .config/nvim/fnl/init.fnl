@@ -31,6 +31,8 @@
   (Plug "kovisoft/paredit" {:for [:clojure :fennel]})
   (set vim.g.paredit_leader ",")
 
+  (Plug "jaawerth/fennel.vim" {:for [:fennel]})
+
   ; Clojure
   (Plug "tpope/vim-fireplace" {:for :clojure})
   (set vim.g.fireplace_print_width 80)
