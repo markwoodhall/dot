@@ -1,5 +1,5 @@
 (local util (require "util"))
-(local nvim (require "aniseed.nvim"))
+(local nvim (require "nvim"))
 (local cl (require "modules.codelens"))
 (local clj (require "modules.clojure"))
 (local fnl (require "modules.fennel"))

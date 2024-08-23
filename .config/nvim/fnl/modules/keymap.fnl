@@ -1,5 +1,5 @@
 (local util (require :util))
-(local nvim (require "aniseed.nvim"))
+(local nvim (require "nvim"))
 (local ts (require "modules.telescope"))
 (local notes (require "modules.notes"))
 

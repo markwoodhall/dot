@@ -1,4 +1,4 @@
-(local nvim (require "aniseed.nvim"))
+(local nvim (require "nvim"))
 
 (let [bl (require :ibl)]
   (bl.setup))

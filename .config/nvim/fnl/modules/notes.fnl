@@ -71,13 +71,13 @@
         (os.execute (.. "mkdir " (note-dir notes-path workspace)))
         (start-note workspace note-file false)
         (with-open [fout (io.open note-file :a)]
-          (fout:write (.. "- [[../" workspace "/" id ".org]["id" Org]] [[../" workspace "/" id ".html]["id"]]"))
+          (fout:write (.. "- [[../" workspace "/" id ".org][" id " Org]] [[../" workspace "/" id ".html][" id "]]"))
           (fout:write "\n"))
         (export note-file))
       (do 
         (with-open [fout (io.open note-file :a)]
           (fout:write "\n")
-          (fout:write (.. "- [[../" workspace "/" id ".org]["id" Org]] [[../" workspace "/" link"]["id"]]"))
+          (fout:write (.. "- [[../" workspace "/" id ".org][" id " Org]] [[../" workspace "/" link "][" id "]]"))
           (fout:write "\n"))
         (export note-file)))))
 

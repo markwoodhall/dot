@@ -1,71 +1,5 @@
 filetype off
-set guifont=JetBrains\ Mono\ ExtraLight:h8
-let g:neovide_cursor_animation_length = 0
 
-call plug#begin('~/.vim/plugged')
-
-Plug 'nvim-tree/nvim-web-devicons'
-Plug 'folke/which-key.nvim'
-Plug 'hiphish/rainbow-delimiters.nvim'
-
-" Treesitter
-Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
-Plug 'nvim-treesitter/playground'
-
-Plug 'markwoodhall/vim-idea', { 'for': [ 'java', 'kotlin' ] }
-Plug 'markwoodhall/maven-compiler.vim', { 'for': [ 'java', 'kotlin' ] }
-Plug 'kevinhwang91/nvim-bqf'
-Plug 'stevearc/oil.nvim'
-
-" Org
-Plug 'nvim-orgmode/orgmode'
-Plug 'akinsho/org-bullets.nvim'
-Plug 'dhruvasagar/vim-table-mode'
-
-" Lisp
-Plug 'kovisoft/paredit'
-
-" Clojure
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-let g:fireplace_print_width=80
-Plug 'guns/vim-clojure-static', { 'for': 'clojure' }
-Plug 'clojure-vim/clojure.vim', { 'for': 'clojure' }
-let g:clojure_maxlines=1000
-Plug 'clojure-vim/async-clj-omni', { 'for': 'clojure' }
-
-" Mine
-Plug 'markwoodhall/vim-aurepl', { 'for': 'clojure' }
-Plug 'markwoodhall/vim-cljreloaded', { 'for': 'clojure' }
-
-Plug 'airblade/vim-rooter'
-let g:rooter_patterns = ['project.clj', 'shadow-cljs.edn', 'pom.xml', '*.sln']
-let g:rooter_silent_chdir = 1
-
-" Version control
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
-
-" Completion & LSP
-Plug 'neovim/nvim-lspconfig'
-Plug 'SmiteshP/nvim-navic'
-Plug 'utilyre/barbecue.nvim'
-Plug 'onsails/lspkind.nvim'
-Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'petertriho/cmp-git'
-Plug 'saadparwaiz1/cmp_luasnip'
-Plug 'davidsierradz/cmp-conventionalcommits'
-Plug 'hrsh7th/cmp-path'
-Plug 'L3MON4D3/LuaSnip'
-
-Plug 'dense-analysis/ale'
-let g:ale_linters_explicit = 1
-let g:ale_linters = {'kotlin': ['ktlint']}
-let g:ale_fixers_explicit = 1
-let g:ale_fixers = {'kotlin': ['ktlint']}
-let g:ale_kotlin_ktlint_options = '-l none'
-
-"Plug 'github/copilot.vim'
 " press <Tab> to expand or jump in a snippet. These can also be mapped separately
 " via <Plug>luasnip-expand-snippet and <Plug>luasnip-jump-next.
 imap <silent><expr> <c-j> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<c-j>' 
@@ -74,10 +8,6 @@ inoremap <silent> <c-k> <cmd>lua require'luasnip'.jump(-1)<Cr>
 
 snoremap <silent> <c-j> <cmd>lua require('luasnip').jump(1)<Cr>
 snoremap <silent> <c-k> <cmd>lua require('luasnip').jump(-1)<Cr>
-
-Plug 'rafamadriz/friendly-snippets'
-Plug 'udalov/kotlin-vim', { 'for': 'kotlin' }
-Plug 'nvim-lualine/lualine.nvim'
 
 function! FireplaceConnected()
   if exists('b:fireplace_connected_tries') && (b:fireplace_connected_tries > 1) == 1 && b:fireplace_connected == 0
@@ -115,42 +45,6 @@ autocmd BufEnter *.clj,*.cljs if exists('b:fireplace_connected') | let b:firepla
 
 autocmd BufEnter *.clj,*.cljs if !exists('b:fireplace_connected_tries') | let b:fireplace_connected_tries = 0 | endif
 autocmd BufEnter *.clj,*.cljs if exists('b:fireplace_connected_tries') | let b:fireplace_connected_tries = 0 | endif
-
-" scss
-Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'stevearc/dressing.nvim'
-"Plug 'xolox/vim-misc'
-
-Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-dispatch'
-
-Plug 'radenling/vim-dispatch-neovim'
-Plug 'mhinz/vim-signify'
-Plug 'lilydjwg/colorizer'
-let g:colorizer_nomap=1
-let g:colorizer_maxlines=1000
-Plug 'DataWraith/auto_mkdir'
-Plug 'ekalinin/Dockerfile.vim'
-Plug 'lukas-reineke/indent-blankline.nvim'
-
-" Database
-Plug 'tpope/vim-dadbod'
-Plug 'kristijanhusak/vim-dadbod-ui'
-Plug 'kristijanhusak/vim-dadbod-completion'
-let g:db_ui_save_location='~/dotfiles/' 
-
-" Colours
-Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
-
-" Terraform
-Plug 'hashivim/vim-terraform'
-
-Plug 'Olical/aniseed'
-" Add plugins to &runtimepath
-call plug#end()
 
 filetype plugin indent on
 syntax on
@@ -210,11 +104,13 @@ augroup highlight_yank
     au TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=700}
 augroup END
 
-let g:aniseed#env = v:true
-
 lua << EOF
 
-require('aniseed.env').init()
+
+local fennel = require("fennel").install()
+fennel.path = fennel.path .. ";/home/markwoodhall/.config/nvim/fnl/?.fnl;/home/markwoodhall/.config/nvim/fnl/modules/?.fnl"
+pcall(require "init")
+
 require('elem.statusline')
 
 EOF

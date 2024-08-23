@@ -52,7 +52,7 @@
   (let [d (util.join data " ")
         authors (util.distinct (authors d))
         author-dates (author-dates d)
-        separator (if (> (length authors) 1) (.." and " (- (length authors) 1) " others ") " ")
+        separator (if (> (length authors) 1) (.. " and " (- (length authors) 1) " others ") " ")
         latest (most-recent author-dates separator)
         message latest]
     (if (not (util.empty authors))

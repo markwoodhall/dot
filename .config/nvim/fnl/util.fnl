@@ -1,6 +1,5 @@
 (local util {})
-(local nvim (require "aniseed.nvim"))
-(local astring (require "aniseed.string"))
+(local nvim (require "nvim"))
 
 (set util.expand 
      (fn [path]
@@ -127,7 +126,7 @@
                0
                0 -1
                false
-               (astring.split content "\\n")))
+               (util.split content "\\n")))
            (when (not= content "") (vim.cmd (.. "e " content))))
          (vim.cmd "wincmd J")
          (vim.cmd "12wincmd_"))))
@@ -150,7 +149,7 @@
                0
                0 -1
                false
-               (astring.split content "\\n")))
+               (util.split content "\\n")))
            (when (not= content "") (vim.cmd (.. "e " content))))
          (vim.cmd "wincmd J")
          (vim.cmd "12wincmd_"))))
@@ -209,7 +208,7 @@
                0
                0 -1
                false
-               (astring.split content "\\n")))
+               (util.split content "\\n")))
            (when (not= content "") (vim.cmd (.. "e " content)))))))
 
 (set util.floating-terminal-command 

@@ -1,3 +1,5 @@
 (let [ll (require "lualine")]
   (ll.setup
-    {:options {:theme :catppucin}}))
+    {:options 
+    {:globalstatus true
+     :theme :catppuccin}}))

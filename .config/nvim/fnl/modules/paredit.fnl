@@ -3,9 +3,9 @@
      (fn []
        (let [wk (require :which-key)
              wrap (fn [start end]
-                    (vim.cmd (.. "call PareditWrap('" start "','" end "')" )))]
+                    (vim.cmd (.. "call PareditWrap('" start "','" end "')")))]
 
-         (set vim.g.paredit_electric_return 0)        ;;(vim.cmd "call PareditUnmapKeys()")
+         (set vim.g.paredit_electric_return 0)
 
          (vim.keymap.set "n" " sw(" (partial wrap "(" ")") {:desc "Wrap with parens"})
          (vim.keymap.set "n" " sw)" (partial wrap "(" ")") {:desc "Wrap with parens"})
@@ -16,8 +16,8 @@
          (vim.keymap.set "n" " sw{" (partial wrap "{" "}") {:desc "Wrap with braces"})
          (vim.keymap.set "n" " sw}" (partial wrap "[" "]") {:desc "Wrap with braces"})
 
-         (vim.keymap.set "n" " sw'" (partial wrap "\' ""\'") {:desc "Wrap with single quotes"})
-         (vim.keymap.set "n" " sw\"" (partial wrap "\" ""\"") {:desc "Wrap with double quotes"})
+         (vim.keymap.set "n" " sw'" (partial wrap "\' " "\'") {:desc "Wrap with single quotes"})
+         (vim.keymap.set "n" " sw\"" (partial wrap "\" " "\"") {:desc "Wrap with double quotes"})
 
          (vim.keymap.set "n" " ssb" ":call PareditMoveLeft()<CR>" {:desc "Slurp backwords"})
          (vim.keymap.set "n" " ssf" ":call PareditMoveRight()<CR>" {:desc "Slurp forwards"})
