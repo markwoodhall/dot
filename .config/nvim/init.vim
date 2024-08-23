@@ -1,5 +1,3 @@
-filetype off
-
 " press <Tab> to expand or jump in a snippet. These can also be mapped separately
 " via <Plug>luasnip-expand-snippet and <Plug>luasnip-jump-next.
 imap <silent><expr> <c-j> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<c-j>' 
@@ -46,9 +44,6 @@ autocmd BufEnter *.clj,*.cljs if exists('b:fireplace_connected') | let b:firepla
 autocmd BufEnter *.clj,*.cljs if !exists('b:fireplace_connected_tries') | let b:fireplace_connected_tries = 0 | endif
 autocmd BufEnter *.clj,*.cljs if exists('b:fireplace_connected_tries') | let b:fireplace_connected_tries = 0 | endif
 
-filetype plugin indent on
-syntax on
-
 " Diff colours
 highlight DiffAdd cterm=none ctermfg=black ctermbg=Green
 highlight DiffDelete cterm=none ctermfg=black ctermbg=Red
@@ -56,12 +51,6 @@ highlight DiffChange cterm=none ctermfg=black ctermbg=Yellow
 highlight DiffText cterm=none ctermfg=black ctermbg=Magenta
 
 autocmd BufNewFile,BufRead *.edn,*.cljx,*.cljc,*.cljs,*.cljd setlocal filetype=clojure
-
-autocmd BufNewFile,BufRead *.js,*.jsx setlocal filetype=javascript
-autocmd BufNewFile,BufRead *.json setlocal filetype=javascript
-autocmd BufNewFile,BufRead *.sh setlocal filetype=sh
-
-autocmd BufWritePre *.edn,*.cljs,*.cljc,*.clj,*.cljd :%s/\s\+$//e
 
 " General mappings
 nnoremap Q <nop>
@@ -82,20 +71,11 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
 "terminal mappings
 tnoremap <Esc> <C-\><C-n>
 tnoremap <Esc><Esc> <C-\><C-n>:q<CR>
 
 command! -bang -nargs=* ShadowJack execute 'CljEval (shadow/repl :' .. <q-args> .. ')'
-
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab
-autocmd FileType vim setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab
-autocmd FileType cucumber setlocal shiftwidth=2 tabstop=2 softtabstop=0 expandtab
 
 autocmd BufWinEnter,WinEnter term://* normal G
 
@@ -105,21 +85,11 @@ augroup highlight_yank
 augroup END
 
 lua << EOF
-
-
 local fennel = require("fennel").install()
 fennel.path = fennel.path .. ";/home/markwoodhall/.config/nvim/fnl/?.fnl;/home/markwoodhall/.config/nvim/fnl/modules/?.fnl"
 pcall(require "init")
-
 require('elem.statusline')
-
 EOF
-
-nnoremap <leader>br :%s/\s\+$//e<CR>
-
-highlight NormalFloat guibg=#1E1E2E guifg=#CDD6F4
-highlight FloatBorder guibg=#1E1E2E guifg=#CDD6F4
-
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
 set foldlevelstart=20
