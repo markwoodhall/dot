@@ -29,10 +29,13 @@
 (fn command [lang]
   (match lang
     "bash" (fn [env code]
-             (let [code (string.gsub (util.join code " ") "^%s*" "")]
+             (let [code (string.gsub (util.join code " ") "^%s*" "")
+                   fname (.. (vim.fn.tempname) ".sh")]
+               (with-open [fout (io.open fname :w)]
+                    (fout:write code))
                (vim.fn.system 
                  (.. env 
-                     " bash -c \"" code "\""))))
+                     " bash " fname))))
     "sql" (fn [env code]
                 (let [fname (.. (vim.fn.tempname) ".sql")]
                   (with-open [fout (io.open fname :w)]
@@ -93,16 +96,16 @@
 
 (fn get-code-block []
   (let [curr-lin (vim.fn.line ".")
-        [line1 pos] (vim.fn.searchpos "#+begin_src" "bc")
-        [line2 _] (vim.fn.searchpos "#+end_src$" "c")
+        [line1 pos] (vim.fn.searchpos "\\c#+begin_src" "bc")
+        [line2 _] (vim.fn.searchpos "\\c#+end_src$" "c")
         code (vim.fn.getline (+ line1 1) (- line2 1))
         line (vim.fn.getline line1)
-        lang (util.first (util.split (util.last (util.split line "#+begin_src ")) " "))
+        lang (util.first (util.split (util.last (util.split line "\\c#+begin_src ")) " "))
         cmd (command lang)]
     (when (and cmd
                (>= curr-lin line1)
                (>= line2 curr-lin))
-      (let [headers (util.split line (.. "#+begin_src " lang " "))
+      (let [headers (util.split line (.. "\\c#+begin_src " lang " "))
             header (util.last headers)
             header-parser-fn (header-parser lang header)
             env (header-parser-fn lang header)]
@@ -122,7 +125,10 @@
                   (match (util.first options)
                     "shebang" (set h.shebang (util.last options))
                     "tangle" (set h.tangle (util.last options))
-                    "mkdirp" (set h.mkdirp (util.last options)))
+                    "mkdirp" (set h.mkdirp (util.last options))
+                    "SHEBANG" (set h.shebang (util.last options))
+                    "TANGLE" (set h.tangle (util.last options))
+                    "MKDIRP" (set h.mkdirp (util.last options)))
                   h))]
       kvs)))
 
@@ -140,7 +146,8 @@
            (local (start-row _ _ _) (value:range))
            (let [header (vim.fn.getline (+ 1 start-row))
                  parsed-header (parse-header header)]
-             (when (> (util.count-matches header "begin_src") 0)
+             (when (or (> (util.count-matches header "begin_src") 0)
+                       (> (util.count-matches header "BEGIN_SRC") 0))
                (let [file (. parsed-header :tangle)]
                  (when file
                    (when (util.exists? (vim.fn.expand file))
@@ -153,7 +160,8 @@
            (let [header (vim.fn.getline (+ 1 start-row))
                  source (vim.fn.getline (+ 2 start-row) (- end-row 1))
                  parsed-header (parse-header header)]
-             (when (> (util.count-matches header "begin_src") 0)
+             (when (or (> (util.count-matches header "begin_src") 0)
+                       (> (util.count-matches header "BEGIN_SRC") 0))
                (let [file (. parsed-header :tangle)
                      mkdirp (. parsed-header :mkdirp)
                      shebang (. parsed-header :shebang)
