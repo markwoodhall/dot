@@ -1,7 +1,4 @@
 (local org {})
-(local util (require :util))
-(local cl (require "modules.codelens"))
-(local vabel (require "modules.vabel"))
 (local og (require "orgmode"))
 
 ;; Because orgmode internally manages its own treesitter
@@ -10,14 +7,17 @@
 (og.setup {:mappings {:disable_all true}})
 
 (fn org-codelens []
-  (cl.get-blocks 
-    "org"
-    "(headline) @ss"))
+  (let [cl (require :modules.codelens)]
+    (cl.get-blocks 
+      "org"
+      "(headline) @ss")))
 
 (set org.setup
      (fn []
        (let [wk (require :which-key)
-             ob (require "org-bullets")]
+             util (require :util)
+             ob (require "org-bullets")
+             vabel (require :modules.vabel)]
          (ob.setup)
          (wk.add
           [{1 " m" :group "mode"} 

@@ -1,9 +1,4 @@
-(local util (require "util"))
 (local nvim (require "nvim"))
-(local cl (require "modules.codelens"))
-(local clj (require "modules.clojure"))
-(local fnl (require "modules.fennel"))
-(local org (require "modules.org"))
 
 ;;(set nvim.o.colorcolumn "80")
 (set nvim.o.mouse "a")
@@ -65,11 +60,12 @@
      :desc "Setup filetype"
      :callback 
      (fn []
-       (util.which-key-clear-major)
-       (match nvim.bo.filetype
-         "clojure" (clj.setup)
-         "fennel" (fnl.setup)
-         "org" (org.setup)))})
+       (let [util (require :util)]
+         (util.which-key-clear-major)
+         (match nvim.bo.filetype
+           "clojure" (let [clj (require :modules.clojure)] (clj.setup))
+           "fennel" (let [fnl (require :modules.fennel)] (fnl.setup))
+           "org" (let [org (require :modules.org)] (org.setup)))))})
   (vim.api.nvim_create_autocmd 
     ["BufWritePre"] 
     {:pattern "*.*"
@@ -85,9 +81,9 @@
      :desc "Setup generic codelens"
      :callback 
      (fn []
-       (match nvim.bo.filetype
-         "clojure" nil
-         "kotlin" (cl.get-blocks nvim.bo.filetype nil)
-         "fennel" (cl.get-blocks nvim.bo.filetype nil)
-         _ (cl.get-blocks nvim.bo.filetype nil))
-       )}))
+       (let [cl (require :modules.codelens)]
+         (match nvim.bo.filetype
+           "clojure" nil
+           "kotlin" (cl.get-blocks nvim.bo.filetype nil)
+           "fennel" (cl.get-blocks nvim.bo.filetype nil)
+           _ (cl.get-blocks nvim.bo.filetype nil))))}))
