@@ -88,7 +88,6 @@ lua << EOF
 local fennel = require("fennel").install()
 fennel.path = fennel.path .. ";/home/markwoodhall/.config/nvim/fnl/?.fnl;/home/markwoodhall/.config/nvim/fnl/modules/?.fnl"
 pcall(require "init")
-require('elem.statusline')
 EOF
 set foldmethod=expr
 set foldexpr=nvim_treesitter#foldexpr()
