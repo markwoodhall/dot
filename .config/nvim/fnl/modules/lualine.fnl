@@ -5,6 +5,7 @@
                :cyan "#94e2d5"
                :darkblue "#89b4fa"
                :fg "#CDD6F4"
+               :grey "#494D64 "
                :green "#a6e3a1"
                :magenta "#ee99a0"
                :orange "#fab387"
@@ -40,6 +41,21 @@
               :lualine_x {}
               :lualine_y {}
               :lualine_z {}}})
+
+(fn active-lsp []
+  (var msg "No Active Lsp")
+  (let [buf-ft (vim.api.nvim_buf_get_option 0 :filetype)
+        clients (vim.lsp.get_active_clients)]
+    (if (= (next clients) nil)
+      msg
+      (do 
+        (each [_ client (ipairs clients)]
+          (local filetypes client.config.filetypes)
+          (when (and filetypes
+                     (not= (vim.fn.index filetypes buf-ft) (- 1)))
+            (let [name client.name]
+              (set msg name))))
+        msg))))
 
 (fn ins-left [component] (table.insert config.sections.lualine_c component))
 (fn ins-right [component] (table.insert config.sections.lualine_x component))
@@ -87,22 +103,16 @@
            :sources [:nvim_diagnostic]
            :symbols {:error "  " :info "  " :warn "  "}})
 (ins-left [(fn [] "%=")])
-(ins-left {1 (fn []
-               (let [msg "No Active Lsp"
-                     buf-ft (vim.api.nvim_buf_get_option 0 :filetype)
-                     clients (vim.lsp.get_active_clients)]
-                 (when (= (next clients) nil) (lua "return msg"))
-                 (each [_ client (ipairs clients)]
-                   (local filetypes client.config.filetypes)
-                   (when (and filetypes
-                              (not= (vim.fn.index filetypes buf-ft) (- 1)))
-                     (let [___antifnl_rtn_1___ client.name]
-                       (lua "return ___antifnl_rtn_1___"))))
-                 msg))
-           :color {:fg "#cad3f5" :gui :bold}
+(ins-left {1 active-lsp
+           :color (fn [] (if (= (active-lsp) "No Active Lsp") {:fg colors.grey :gui :bold} {:fg colors.green :gui :bold}))
            :icon " LSP:"})
 (ins-left {1 (fn [] (vim.fn.call :FireplaceConnected {}))
-           :color {:fg "#cad3f5" :gui :bold}
+           :color (fn [] 
+                    (let [repl-state (vim.fn.call :FireplaceConnected {})]
+                      (if (or (= repl-state "unknown")
+                              (= repl-state 0)) 
+                        {:fg colors.grey :gui :bold} 
+                        {:fg colors.green :gui :bold})))
            :cond (fn []
                    (and true (= (vim.api.nvim_buf_get_option 0 :filetype)
                                 :clojure)))

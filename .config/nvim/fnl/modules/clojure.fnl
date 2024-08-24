@@ -18,7 +18,10 @@
        (let [ts (require :modules.telescope)
              wk (require :which-key)
              paredit (require "modules.paredit")]
-         (util.m-binding "si" ts.repl "list-jackable-repls")
+
+         (ts.clojure)
+
+         (util.m-binding "si" "Repl" "list-jackable-repls")
          (util.m-binding "sj" "ShadowJack app" "hook-into-shadow-repl")
 
          (util.m-binding "tp" "RunTests" "Run project tests")
@@ -48,7 +51,7 @@
             {1 " me" :group "evaluation" :buffer (vim.api.nvim_get_current_buf)}
             {1 " mt" :group "test" :buffer (vim.api.nvim_get_current_buf)}
             {1 " ms" :group "+sesman" :buffer (vim.api.nvim_get_current_buf)}])
-         
+
          (paredit.setup))))
 
 (let [cg (vim.api.nvim_create_augroup "clojure" {:clear true})]

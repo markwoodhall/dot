@@ -27,93 +27,86 @@
                                          true)})]
         (picker:find)))))
 
-(local clj-in-namespace
-  (wrapper
-    "Switch to Namespace"
-    #(vim.fn.call "cljreloaded#all_ns" [])
-    (fn [selection]
-      (let [ns (. selection 1)
-            cmd (.. "ReloadedInNs " ns)]
-        (vim.cmd cmd)))))
+(set telescope.clojure 
+     (fn []
+       (let [clj-in-namespace (wrapper
+                                "Switch to Namespace"
+                                #(vim.fn.call "cljreloaded#all_ns" [])
+                                (fn [selection]
+                                  (let [ns (. selection 1)
+                                        cmd (.. "ReloadedInNs " ns)]
+                                    (vim.cmd cmd))))
+             clj-namespace-publics (fn [ns] (wrapper
+                                              "Namespace Publics"
+                                              #(vim.fn.call "cljreloaded#ns_publics" [ns])
+                                              (fn [selection]
+                                                (let [sym (. selection 1)]
+                                                  (vim.cmd (.. "ClojureDocs " sym))))))
+             clj-publics (fn [title pattern run]
+                           (wrapper
+                             title
+                             (fn []
+                               (let [publics (vim.fn.call "cljreloaded#all_publics" [])]
+                                 (icollect [_ v (pairs publics)]
+                                   (when (or (= pattern "")
+                                             (string.find v pattern))
+                                     v))))
+                             (fn [selection]
+                               (let [symbol (. selection 1)]
+                                 (if (= "string" (type run))
+                                   (vim.cmd (.. run  " " symbol))
+                                   (run symbol))))))]
+         (vim.api.nvim_buf_create_user_command
+           0
+           "CljDocs"
+           (fn [opts]
+             ((clj-publics "Clojure Docs" "^clojure" "ClojureDocs") opts))
+           {:bang false :desc "Clojure Docs"})
 
-(fn clj-namespace-publics [ns]
-  (wrapper
-    "Namespace Publics"
-    #(vim.fn.call "cljreloaded#ns_publics" [ns])
-    (fn [selection]
-      (let [sym (. selection 1)]
-        (vim.cmd (.. "ClojureDocs " sym))))))
+         (vim.api.nvim_buf_create_user_command
+           0
+           "CljApropos"
+           (fn [opts]
+             ((clj-publics
+                "Clojure Apropos"
+                ""
+                (fn [sym]
+                  (let [source (-> (vim.fn.call "cljreloaded#source" [sym])
+                                   (string.sub 2 -2)
+                                   (string.gsub "\\\"" "\""))]
+                    (util.floating-window "clojure" source false true)))) opts))
+           {:bang false :desc "Clojure Docs"})
 
-(local clj-explore-namespace
-  (wrapper
-    "Explore Namespace"
-    #(vim.fn.call "cljreloaded#all_ns" [])
-    (fn [selection]
-      (let [ns (. selection 1)]
-        ((clj-namespace-publics ns))))))
+         (vim.api.nvim_buf_create_user_command
+           0
+           "CljInNamespace"
+           (fn [opts]
+             (clj-in-namespace opts))
+           {:bang false :desc "Switch to Namespace"})
 
-(fn clj-publics [title pattern run]
-  (wrapper
-    title
-    (fn []
-      (let [publics (vim.fn.call "cljreloaded#all_publics" [])]
-        (icollect [_ v (pairs publics)]
-          (when (or (= pattern "")
-                    (string.find v pattern))
-            v))))
-    (fn [selection]
-      (let [symbol (. selection 1)]
-        (if (= "string" (type run))
-          (vim.cmd (.. run  " " symbol))
-          (run symbol))))))
+         (vim.api.nvim_buf_create_user_command
+           0
+           "CljExplore"
+           (wrapper
+             "Explore Namespace"
+             #(vim.fn.call "cljreloaded#all_ns" [])
+             (fn [selection]
+               (let [ns (. selection 1)]
+                 ((clj-namespace-publics ns)))))
+           {:bang false :desc "Explore Namespace"})
 
-(set telescope.repl
-  (wrapper
-    "Repl"
-    (fn []
-      ["lein repl" 
-       "npx shadow-cljs watch app"
-       "fennel"
-       "npm run watch"])
-    #(util.pane-repl (. $1 1))))
-
-
-(vim.api.nvim_create_user_command
-  "CljDocs"
-  (fn [opts]
-    ((clj-publics "Clojure Docs" "^clojure" "ClojureDocs") opts))
-  {:bang false :desc "Clojure Docs"})
-
-(vim.api.nvim_create_user_command
-  "CljApropos"
-  (fn [opts]
-    ((clj-publics
-       "Clojure Apropos"
-       ""
-       (fn [sym]
-         (let [source (-> (vim.fn.call "cljreloaded#source" [sym])
-                          (string.sub 2 -2)
-                          (string.gsub "\\\"" "\""))]
-           (util.floating-window "clojure" source false true)))) opts))
-  {:bang false :desc "Clojure Docs"})
-
-(vim.api.nvim_create_user_command
-  "CljInNamespace"
-  (fn [opts]
-    (clj-in-namespace opts))
-  {:bang false :desc "Switch to Namespace"})
-
-(vim.api.nvim_create_user_command
-  "CljExplore"
-  (fn [opts]
-    (clj-explore-namespace opts))
-  {:bang false :desc "Explore Namespace"})
-
-(vim.api.nvim_create_user_command
-  "Repl"
-  (fn [opts]
-    (telescope.repl opts))
-  {:bang false :desc "Repls"})
+         (vim.api.nvim_buf_create_user_command
+           0
+           "Repl"
+           (wrapper
+             "Repl"
+             (fn []
+               ["lein repl" 
+                "npx shadow-cljs watch app"
+                "fennel"
+                "npm run watch"])
+             #(util.pane-repl (. $1 1)))
+           {:bang false :desc "Repls"}))))
 
 (let [ts (require :telescope)
       actions (require "telescope.actions")

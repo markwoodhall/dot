@@ -85,6 +85,7 @@ augroup highlight_yank
 augroup END
 
 lua << EOF
+vim.loader.enable()
 local fennel = require("fennel").install()
 fennel.path = fennel.path .. ";/home/markwoodhall/.config/nvim/fnl/?.fnl;/home/markwoodhall/.config/nvim/fnl/modules/?.fnl"
 pcall(require "init")
