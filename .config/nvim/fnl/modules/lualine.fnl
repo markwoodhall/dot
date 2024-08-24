@@ -1,6 +1,6 @@
 (local lualine (require :lualine))
 
-(local colors {:bg "#181825"
+(local colors {:bg "#1E1E2E"
                :blue "#74c7ec"
                :cyan "#94e2d5"
                :darkblue "#89b4fa"
@@ -34,7 +34,8 @@
    :options {:component_separators ""
              :globalStatus true
              :section_separators ""
-             :theme :catppuccin}
+             :theme :catppuccin
+             }
    :sections {:lualine_a {}
               :lualine_b {}
               :lualine_c {}
