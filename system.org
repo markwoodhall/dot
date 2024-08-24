@@ -139,29 +139,12 @@ else
    start_agent;
 fi 
 
-# fh - repeat history
-runcmd (){ perl -e 'ioctl STDOUT, 0x5412, $_ for split //, <>' ; }
-
-fh() {
-  ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -re 's/^\s*[0-9]+\s*//' | runcmd
-}
-
-# fhe - repeat history edit
-writecmd (){ perl -e 'ioctl STDOUT, 0x5412, $_ for split //, do{ chomp($_ = <>); $_ }' ; }
-
-fhe() {
-  ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -re 's/^\s*[0-9]+\s*//' | writecmd
-}
-
-fzfp() {
-fzf --preview '[[ $(file --mime {}) =~ binary ]] && 
-                 echo {} is a binary file ||
-                 (bat --style=numbers --color=always {} ||
-                  highlight -O ansi -l {} ||
-                  coderay {} ||
-                  rouify {} ||
-                  cat {}) 2> /dev/null | head -500'
-}
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#11111b,bg:#11111b,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#b4befe,fg+:#89b4fa,prompt:#cba6f7,hl+:#f38ba8 \
+--color=selected-bg:#45475a \
+--multi"
 #+end_src
 
 *** Pyenv
@@ -384,7 +367,7 @@ wintypes:
 
 #+begin_src bash :tangle ~/.config/gtk-3.0/settings.ini :mkdirp yes
 [Settings]
-gtk-theme-name=catppuccin-macchiato-lavender-standard+default
+gtk-theme-name=catppuccin-mocha-sapphire-standard+default
 gtk-icon-theme-name=Papirus-Dark
 gtk-font-name=System-ui 11
 gtk-cursor-theme-name=Adwaita
@@ -406,16 +389,16 @@ gtk-application-prefer-dark-theme=0
 
 ** Theme
 
-#+begin_src javascript :tangle ~/.local/share/rofi/themes/catppuccin-macchiato.rasi :mkdirp yes
- * {
-    bg-col:  #24273a;
-    bg-col-light: #24273a;
-    border-col: #24273a;
-    selected-col: #24273a;
-    blue: #8aadf4;
-    fg-col: #cad3f5;
-    fg-col2: #ed8796;
-    grey: #6e738d;
+#+begin_src javascript :tangle ~/.local/share/rofi/themes/catppuccin-mocha.rasi :mkdirp yes
+* {
+    bg-col:  #11111b;
+    bg-col-light: #11111b;
+    border-col: #11111b;
+    selected-col: #11111b;
+    blue: #89b4fa;
+    fg-col: #cdd6f4;
+    fg-col2: #f38ba8;
+    grey: #6c7086;
 
     width: 600;
     font: "System-ui 14";
@@ -539,7 +522,7 @@ configuration{
     sidebar-mode: true;
 }
 
-@theme "catppuccin-macchiato"
+@theme "catppuccin-mocha"
 #+end_src
 
 * Lebar

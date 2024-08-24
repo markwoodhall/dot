@@ -218,7 +218,7 @@
 (set naughty.config.defaults.max_height 130)
 (set naughty.config.defaults.position "top_middle")
 (set naughty.config.defaults.font "System-ui 11")
-(set naughty.config.defaults.bg "#1E1E2E")
+(set naughty.config.defaults.bg "#11111b")
 (set naughty.config.defaults.fg "#CDD6f4")
 
 (set naughty.config.padding (dpi 38))

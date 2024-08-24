@@ -4,7 +4,7 @@
      :color_overrides {:mocha {:base "#11111b"}}
      :background
      {:dark :mocha}
-     ;;:term_colors true
+     :term_colors true
      :dim_inactive
      {:enabled false
       :shade "dark"
