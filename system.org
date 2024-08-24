@@ -261,7 +261,7 @@ set-option -g automatic-rename off
 
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'catppuccin/tmux#latest'
-set -g @catppuccin_flavor 'macchiato' # latte,frappe, macchiato or mocha
+set -g @catppuccin_flavor 'mocha' # latte,frappe, macchiato or mocha
 set -g @catppuccin_window_default_text "#W" # use "#W" for application instead of directory
 set -g @catppuccin_window_current_text "#W" # use "#W" for application instead of directory
 
@@ -292,7 +292,7 @@ fade-in-step = 0.03;
 # Opacity change between steps while fading out. (0.01 - 1.0, defaults to 0.03)
 # fade-out-step = 0.03
 fade-out-step = 0.03;
-inactive-opacity = 0.96;
+inactive-opacity = 1.0;
 
 # Opacity of window titlebars and borders. (0.1 - 1.0, disabled by default)
 # frame-opacity = 1.0
@@ -306,7 +306,7 @@ frame-opacity = 1;
 inactive-opacity-override = true;
 
 # Default opacity for active windows. (0.0 - 1.0, defaults to 1.0)
-active-opacity = 0.96 
+active-opacity = 1.0
 # Specify the blur convolution kernel, with the following format:
 # example:
 #   blur-kern = "5,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1";
@@ -803,13 +803,13 @@ placement_strategy left
 
 # The basic colors
 foreground              #CDD6F4
-background              #1E1E2E
-selection_foreground    #1E1E2E
+background              #11111b
+selection_foreground    #11111b
 selection_background    #F5E0DC
 
 # Cursor colors
 cursor                  #F5E0DC
-cursor_text_color       #1E1E2E
+cursor_text_color       #11111b
 
 # URL underline color when hovering with mouse
 url_color               #F5E0DC
@@ -834,11 +834,11 @@ inactive_tab_background #181825
 tab_bar_background      #11111B
 
 # Colors for marks (marked text in the terminal)
-mark1_foreground #1E1E2E
+mark1_foreground #11111b
 mark1_background #B4BEFE
-mark2_foreground #1E1E2E
+mark2_foreground #11111b
 mark2_background #CBA6F7
-mark3_foreground #1E1E2E
+mark3_foreground #11111b
 mark3_background #74C7EC
 
 # The 16 terminal colors

@@ -44,7 +44,7 @@
 
 (set nvim.g.mapleader " ")
 (set nvim.g.maplocalleader ",")
-(nvim.ex.colorscheme :catppuccin-mocha)
+(vim.cmd "colorscheme catppuccin-mocha")
 (nvim.ex.set :list)
 
 (vim.cmd "autocmd TermOpen * setlocal scrollback=20000")
