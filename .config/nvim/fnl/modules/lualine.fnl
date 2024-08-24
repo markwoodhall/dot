@@ -1,6 +1,6 @@
 (local lualine (require :lualine))
 
-(local colors {:bg "#1E1E2E"
+(local colors {:bg "#11111b"
                :blue "#74c7ec"
                :cyan "#94e2d5"
                :darkblue "#89b4fa"
@@ -34,8 +34,7 @@
    :options {:component_separators ""
              :globalStatus true
              :section_separators ""
-             :theme :catppuccin
-             }
+             :theme :catppuccin-mocha}
    :sections {:lualine_a {}
               :lualine_b {}
               :lualine_c {}
@@ -121,11 +120,11 @@
                       {})
                      " nREPL:")})
 (ins-right {1 "o:encoding"
-            :color {:fg colors.green :gui :bold}
+            :color {:fg colors.grey :gui :bold}
             :cond conditions.hide_in_width
             :fmt string.upper})
 (ins-right {1 :fileformat
-            :color {:fg colors.green :gui :bold}
+            :color {:fg colors.grey :gui :bold}
             :fmt string.upper
             :icons_enabled false})
 (ins-right {1 :branch :color {:fg colors.violet :gui :bold} :icon ""})

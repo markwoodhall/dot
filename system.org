@@ -140,7 +140,7 @@ else
 fi 
 
 export FZF_DEFAULT_OPTS=" \
---color=bg+:#11111b,bg:#11111b,spinner:#f5e0dc,hl:#f38ba8 \
+--color=bg+:#1e1e2e,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
 --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
 --color=marker:#b4befe,fg+:#89b4fa,prompt:#cba6f7,hl+:#f38ba8 \
 --color=selected-bg:#45475a \
@@ -254,9 +254,9 @@ run '~/.tmux/plugins/tpm/tpm'
 * Picom
 
 #+begin_src bash :tangle ~/.config/picom/picom.conf :mkdirp yes
-corner-radius = 9.0;
+corner-radius = 8.6;
 shadow = true;
-shadow-radius = 12;
+shadow-radius = 14;
 shadow-offset-x = -6;
 shadow-offset-y = -6;
 shadow-exclude = [
@@ -391,10 +391,10 @@ gtk-application-prefer-dark-theme=0
 
 #+begin_src javascript :tangle ~/.local/share/rofi/themes/catppuccin-mocha.rasi :mkdirp yes
 * {
-    bg-col:  #11111b;
-    bg-col-light: #11111b;
-    border-col: #11111b;
-    selected-col: #11111b;
+    bg-col:  #1e1e2e;
+    bg-col-light: #1e1e2e;
+    border-col: #1e1e2e;
+    selected-col: #1e1e2e;
     blue: #89b4fa;
     fg-col: #cdd6f4;
     fg-col2: #f38ba8;
@@ -786,13 +786,13 @@ placement_strategy left
 
 # The basic colors
 foreground              #CDD6F4
-background              #11111b
-selection_foreground    #11111b
+background              #1e1e2e
+selection_foreground    #1e1e2e
 selection_background    #F5E0DC
 
 # Cursor colors
 cursor                  #F5E0DC
-cursor_text_color       #11111b
+cursor_text_color       #1e1e2e
 
 # URL underline color when hovering with mouse
 url_color               #F5E0DC
@@ -810,18 +810,18 @@ hide_titlebar yes
 x11_hide_window_decorations yes
 
 # Tab bar colors
-active_tab_foreground   #11111B
+active_tab_foreground   #1e1e2e
 active_tab_background   #CBA6F7
 inactive_tab_foreground #CDD6F4
 inactive_tab_background #181825
 tab_bar_background      #11111B
 
 # Colors for marks (marked text in the terminal)
-mark1_foreground #11111b
+mark1_foreground #1e1e2e
 mark1_background #B4BEFE
-mark2_foreground #11111b
+mark2_foreground #1e1e2e
 mark2_background #CBA6F7
-mark3_foreground #11111b
+mark3_foreground #1e1e2e
 mark3_background #74C7EC
 
 # The 16 terminal colors

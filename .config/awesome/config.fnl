@@ -177,8 +177,8 @@
        :properties {:tag :4}}
       {:rule {:class "Google-chrome"}
        :properties {:tag :3}}
-      {:properties {:border_color beautiful.border_normal
-                    :border_width beautiful.border_width
+      {:properties {:border_color "#11111b"
+                    :border_width 1
                     :focus awful.client.focus.filter
                     :keys clientkeys
                     :placement (+ awful.placement.no_overlap
@@ -218,7 +218,7 @@
 (set naughty.config.defaults.max_height 130)
 (set naughty.config.defaults.position "top_middle")
 (set naughty.config.defaults.font "System-ui 11")
-(set naughty.config.defaults.bg "#11111b")
+(set naughty.config.defaults.bg "#1e1e2e")
 (set naughty.config.defaults.fg "#CDD6f4")
 
 (set naughty.config.padding (dpi 38))

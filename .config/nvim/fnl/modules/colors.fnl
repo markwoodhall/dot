@@ -1,7 +1,6 @@
 (let [cat (require "catppuccin")]
   (cat.setup
     {:flavour :mocha
-     :color_overrides {:mocha {:base "#11111b"}}
      :background
      {:dark :mocha}
      :term_colors true

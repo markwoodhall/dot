@@ -130,8 +130,8 @@
   ;;(require :modules.vabel)
   )
 
-(vim.cmd "hi CodeLensReference guifg=#494D64 guibg=#11111b cterm=italic gui=italic")
-(vim.cmd "hi WinSeparator guifg=#11111b guibg=#11111b cterm=italic gui=italic")
+(vim.cmd "hi CodeLensReference guifg=#494D64 guibg=#1e1e2e cterm=italic gui=italic")
+(vim.cmd "hi WinSeparator guifg=#1e1e2e guibg=#1e1e2e cterm=italic gui=italic")
 
-(vim.cmd "hi NormalFloat guifg=#11111b guibg=#11111b")
-(vim.cmd "hi FloatBorder guifg=#11111b guibg=#11111b")
+(vim.cmd "hi NormalFloat guifg=#1e1e2e guibg=#1e1e2e")
+(vim.cmd "hi FloatBorder guifg=#1e1e2e guibg=#1e1e2e")
