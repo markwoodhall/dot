@@ -7,7 +7,7 @@
      :dim_inactive
      {:enabled false
       :shade "dark"
-      :percentage 0.05}
+      :percentage 0.35}
      :integrations
      {:cmp true
       :gitsigns true

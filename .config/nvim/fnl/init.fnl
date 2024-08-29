@@ -34,14 +34,14 @@
   (Plug "jaawerth/fennel.vim" {:for [:fennel]})
 
   ; Clojure
-  (Plug "tpope/vim-fireplace" {:for :clojure})
-  (set vim.g.fireplace_print_width 80)
-  (Plug "guns/vim-clojure-static" {:for :clojure})
+  ;;(Plug "tpope/vim-fireplace" {:for :clojure})
+  ;;(set vim.g.fireplace_print_width 80)
+  ;;(Plug "guns/vim-clojure-static" {:for :clojure})
   (Plug "clojure-vim/clojure.vim" {:for :clojure})
   (set vim.g.clojure_max_lines 1000)
-  (Plug "clojure-vim/async-clj-omni" {:for :clojure})
-  (Plug "markwoodhall/vim-aurepl" {:for :clojure})
-  (Plug "markwoodhall/vim-cljreloaded" {:for :clojure})
+  ;;(Plug "clojure-vim/async-clj-omni" {:for :clojure})
+  ;;(Plug "markwoodhall/vim-aurepl" {:for :clojure})
+  ;;(Plug "markwoodhall/vim-cljreloaded" {:for :clojure})
 
   ;; Projects
   (Plug "airblade/vim-rooter")
@@ -49,8 +49,8 @@
   (set vim.g.rooter_silent_chdir 1)
 
   ;; Version control
-  (Plug "tpope/vim-fugitive")
-  (Plug "tpope/vim-rhubarb")
+  (Plug "tpope/vim-fugitive" {:on :G})
+  ;;(Plug "tpope/vim-rhubarb")
 
   ;; Completion & LSP
   (Plug "neovim/nvim-lspconfig")
@@ -132,6 +132,6 @@
 
 (vim.cmd "hi CodeLensReference guifg=#494D64 guibg=#1e1e2e cterm=italic gui=italic")
 (vim.cmd "hi WinSeparator guifg=#1e1e2e guibg=#1e1e2e cterm=italic gui=italic")
-
-(vim.cmd "hi NormalFloat guifg=#1e1e2e guibg=#1e1e2e")
-(vim.cmd "hi FloatBorder guifg=#1e1e2e guibg=#1e1e2e")
+;;(vim.cmd "hi FloatBorder guibg=#11111b")
+;;(vim.cmd "hi NormalFloat guifg=#1e1e2e guibg=#1e1e2e")
+;;(vim.cmd "hi FloatBorder guifg=#1e1e2e guibg=#1e1e2e")

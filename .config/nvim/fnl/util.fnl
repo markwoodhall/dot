@@ -39,6 +39,10 @@
      (fn [c i]
        (table.move c 1 i 1 [])))
 
+(set util.rest 
+     (fn [c]
+       (table.move c 2 (- (length c) 1) 1 [])))
+
 (set util.take-after 
      (fn [c i after]
        (table.move c after i 1 [])))
@@ -209,7 +213,8 @@
                0 -1
                false
                (util.split content "\\n")))
-           (when (not= content "") (vim.cmd (.. "e " content)))))))
+           (when (not= content "") (vim.cmd (.. "e " content))))
+         win)))
 
 (set util.floating-terminal-command 
      (fn [command]

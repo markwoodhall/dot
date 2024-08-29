@@ -7,43 +7,6 @@ inoremap <silent> <c-k> <cmd>lua require'luasnip'.jump(-1)<Cr>
 snoremap <silent> <c-j> <cmd>lua require('luasnip').jump(1)<Cr>
 snoremap <silent> <c-k> <cmd>lua require('luasnip').jump(-1)<Cr>
 
-function! FireplaceConnected()
-  if exists('b:fireplace_connected_tries') && (b:fireplace_connected_tries > 1) == 1 && b:fireplace_connected == 0
-    return 'unknown'
-  endif
-  if &filetype == 'clojure'
-    if exists('b:fireplace_connected') && b:fireplace_connected == 1
-      return 'connected ' .. b:fireplace_connected_port[0]
-    endif
-
-    if exists('b:fireplace_connected') && b:fireplace_connected == 0 && exists('g:loaded_fireplace') && g:loaded_fireplace == 1
-      let result=''
-      try
-        let b:fireplace_connected_tries = b:fireplace_connected_tries + 1
-        let result = fireplace#session_eval('1')
-        try
-          let b:fireplace_connected_port = readfile('.nrepl-port')
-        catch
-          try
-            let b:fireplace_connected_port = readfile('.shadow-cljs/nrepl.port')
-          catch
-            let b:fireplace_connected_port = ''
-          endtry
-        endtry
-        let b:fireplace_connected = 1
-      catch
-        return 'not connected'
-      endtry
-    endif 
-  endif
-endfunction
-
-autocmd BufEnter *.clj,*.cljs if !exists('b:fireplace_connected') | let b:fireplace_connected = 0 | endif
-autocmd BufEnter *.clj,*.cljs if exists('b:fireplace_connected') | let b:fireplace_connected = 0 | endif
-
-autocmd BufEnter *.clj,*.cljs if !exists('b:fireplace_connected_tries') | let b:fireplace_connected_tries = 0 | endif
-autocmd BufEnter *.clj,*.cljs if exists('b:fireplace_connected_tries') | let b:fireplace_connected_tries = 0 | endif
-
 " Diff colours
 highlight DiffAdd cterm=none ctermfg=black ctermbg=Green
 highlight DiffDelete cterm=none ctermfg=black ctermbg=Red
@@ -74,8 +37,6 @@ inoremap <right> <nop>
 "terminal mappings
 tnoremap <Esc> <C-\><C-n>
 tnoremap <Esc><Esc> <C-\><C-n>:q<CR>
-
-command! -bang -nargs=* ShadowJack execute 'CljEval (shadow/repl :' .. <q-args> .. ')'
 
 autocmd BufWinEnter,WinEnter term://* normal G
 

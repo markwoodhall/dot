@@ -106,19 +106,6 @@
 (ins-left {1 active-lsp
            :color (fn [] (if (= (active-lsp) "No Active Lsp") {:fg colors.grey :gui :bold} {:fg colors.green :gui :bold}))
            :icon " LSP:"})
-(ins-left {1 (fn [] (vim.fn.call :FireplaceConnected {}))
-           :color (fn [] 
-                    (let [repl-state (vim.fn.call :FireplaceConnected {})]
-                      (if (or (= repl-state "unknown")
-                              (= repl-state 0)) 
-                        {:fg colors.grey :gui :bold} 
-                        {:fg colors.green :gui :bold})))
-           :cond (fn []
-                   (and true (= (vim.api.nvim_buf_get_option 0 :filetype)
-                                :clojure)))
-           :icon (.. ((. (require :nvim-web-devicons) :get_icon_by_filetype) :clojure
-                      {})
-                     " nREPL:")})
 (ins-right {1 "o:encoding"
             :color {:fg colors.grey :gui :bold}
             :cond conditions.hide_in_width
