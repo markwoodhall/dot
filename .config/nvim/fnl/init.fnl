@@ -116,6 +116,8 @@
   (require :modules.notes)
   (require :modules.oil)
   (require :modules.org)
+  (require :modules.npm)
+  (require :modules.docker)
   ;;(require :modules.clojure)
   ;;(require :modules.codelens)
   ;;(require :modules.csharp)

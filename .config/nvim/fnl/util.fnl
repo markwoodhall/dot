@@ -182,6 +182,7 @@
        (vim.fn.termopen command)
        (vim.cmd "setlocal norelativenumber")
        (vim.cmd "setlocal number")
+       (vim.cmd "setlocal nowrap")
        (vim.cmd "setlocal filetype=off")
        (vim.cmd "setlocal syntax=off")
        ;; (vim.fn.feedkeys "G")
