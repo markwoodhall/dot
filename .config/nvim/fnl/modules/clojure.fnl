@@ -27,7 +27,7 @@
 (set vim.g.clojure-window-timeout 30000)
 (set vim.g.clojure-window-options 
      {:relative :editor
-      :border :shadow
+      :border :single
       :anchor :NE
       :row 1
       :col (-> (vim.api.nvim_list_uis)
