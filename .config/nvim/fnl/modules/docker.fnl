@@ -16,13 +16,14 @@
       1 (if (< (util.count-matches c "%s") 2)
         (accumulate 
           [results []
-           _ v (ipairs [:run :exec :ps :build :pull :push :images :login
-                        :logout :search :version :info :builder :compose :container
-                        :context :image :manifest :network :plugin :system :trust
-                        :volume :swarm :attach :commit :cp :create :diff :events :export
-                        :history :import :inspect :kill :load :logs :pause :port :rename
-                        :restart :rm :rmi :save :start :stats :stop :tag :top 
-                        :unpause :update :wait])]
+           _ v (ipairs (table.sort 
+                         [:run :exec :ps :build :pull :push :images :login
+                          :logout :search :version :info :builder :compose :container
+                          :context :image :manifest :network :plugin :system :trust
+                          :volume :swarm :attach :commit :cp :create :diff :events :export
+                          :history :import :inspect :kill :load :logs :pause :port :rename
+                          :restart :rm :rmi :save :start :stats :stop :tag :top 
+                          :unpause :update :wait]))]
           (if (or (and (util.second c-parts) 
                        (> (util.count-matches v (util.second c-parts)) 0))
                   (not (util.second c-parts)))
