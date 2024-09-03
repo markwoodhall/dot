@@ -177,6 +177,8 @@
        :properties {:tag :4}}
       {:rule {:class "Google-chrome"}
        :properties {:tag :3}}
+      {:rule {:class "thunderbird"}
+       :properties {:tag :5}}
       {:properties {:border_color "#11111b"
                     :border_width 1
                     :focus awful.client.focus.filter
@@ -245,4 +247,5 @@
     (awful.spawn "kitty")
     (awful.spawn "slack")
     (awful.spawn "xscreensaver")
+    (awful.spawn "thunderbird")
     (awful.spawn "google-chrome-stable")))

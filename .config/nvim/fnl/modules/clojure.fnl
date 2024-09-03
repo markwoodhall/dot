@@ -8,6 +8,9 @@
   (util.first 
     (util.split (util.second (vim.fn.split (vim.fn.getline 1) " ")) ")")))
 
+(fn db-binding [bind action desc]
+  (util.m-binding (.. "d" bind) action desc))
+
 (fn reloaded-binding [bind action desc]
   (util.m-binding (.. "r" bind) action desc))
 
@@ -115,6 +118,16 @@
     (clojure.in-ns ns)
     ((. clojure.repl :send) (.. "(clojure.core/require '" ns " :reload-all)"))))
 
+(fn init-db []
+  (let [ns :dev]
+    (clojure.in-ns ns)
+    ((. clojure.repl :send) (.. "(use 'db) (db/init-schema)"))))
+
+(fn migrate-db []
+  (let [ns :dev]
+    (clojure.in-ns ns)
+    ((. clojure.repl :send) (.. "(use 'db) (db/migrate-schema)"))))
+
 (fn shadow-watch [build]
   ((. clojure.repl :send) (.. "(shadow/watch :" build ")")))
 
@@ -149,12 +162,17 @@
          (reloaded-binding "r" reload "require-ns-with-reload")
          (reloaded-binding "R" reload-all "require-ns-with-reload-all")
 
+
+         (db-binding "i" init-db "init-db")
+         (db-binding "m" migrate-db "migrate-db")
+
          (wk.add 
            [{1 " m" :group "mode"} 
             {1 " mr" :group "reloaded" :buffer (vim.api.nvim_get_current_buf)}
             {1 " me" :group "evaluation" :buffer (vim.api.nvim_get_current_buf)}
+            {1 " md" :group "database" :buffer (vim.api.nvim_get_current_buf)}
             {1 " mt" :group "test" :buffer (vim.api.nvim_get_current_buf)}
-            {1 " ms" :group "+sesman" :buffer (vim.api.nvim_get_current_buf)}])
+            {1 " ms" :group "sesman" :buffer (vim.api.nvim_get_current_buf)}])
 
          (paredit.setup))))
 
