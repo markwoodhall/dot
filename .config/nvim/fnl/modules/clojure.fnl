@@ -28,16 +28,78 @@
 
 (set vim.g.clojure-jump-to-window false)
 (set vim.g.clojure-window-timeout 30000)
-(set vim.g.clojure-window-options 
-     {:relative :editor
-      :border :single
-      :anchor :NE
-      :row 1
-      :col (-> (vim.api.nvim_list_uis)
-               (. 1)
-               (. :width)) 
-      :width 70 
-      :height 14})
+
+(fn flip [anchor]
+  (match anchor
+    :NE (set vim.g.clojure-window-options 
+             {:relative :editor
+              :border :single
+              :anchor :NE
+              :row 1
+              :col (-> (vim.api.nvim_list_uis)
+                       (. 1)
+                       (. :width)) 
+              :width (math.floor (+ (/ (-> (vim.api.nvim_list_uis)
+                                           (. 1)
+                                           (. :width)) 3) 0.5))
+              :height (math.floor (+ (/ (-> (vim.api.nvim_list_uis)
+                                            (. 1)
+                                            (. :height)) 3) 0.5))})
+    :SE (set vim.g.clojure-window-options 
+             {:relative :editor
+              :border :single
+              :anchor :SE
+              :row (- (-> (vim.api.nvim_list_uis)
+                          (. 1)
+                          (. :height)) 8)
+              :col (-> (vim.api.nvim_list_uis)
+                       (. 1)
+                       (. :width)) 
+              :width (math.floor (+ (/ (-> (vim.api.nvim_list_uis)
+                                           (. 1)
+                                           (. :width)) 3) 0.5))
+              :height (math.floor (+ (/ (-> (vim.api.nvim_list_uis)
+                                            (. 1)
+                                            (. :height)) 3) 0.5))})
+    :NW (set vim.g.clojure-window-options 
+         {:relative :editor
+          :border :single
+          :anchor :NW
+          :row 1
+          :col 1 
+          :width (math.floor (+ (/ (-> (vim.api.nvim_list_uis)
+                                       (. 1)
+                                       (. :width)) 3) 0.5))
+          :height (math.floor (+ (/ (-> (vim.api.nvim_list_uis)
+                                        (. 1)
+                                        (. :height)) 3) 0.5))})
+    :SW (set vim.g.clojure-window-options 
+         {:relative :editor
+          :border :single
+          :anchor :SW
+          :row (- (-> (vim.api.nvim_list_uis)
+                      (. 1)
+                      (. :height)) 8)
+          :col 1 
+          :width (math.floor (+ (/ (-> (vim.api.nvim_list_uis)
+                                       (. 1)
+                                       (. :width)) 3) 0.5))
+          :height (math.floor (+ (/ (-> (vim.api.nvim_list_uis)
+                                        (. 1)
+                                        (. :height)) 3) 0.5))})))
+
+(flip :NE)
+
+(fn hide-repl []
+  (if clojure.win
+    (pcall vim.api.nvim_win_hide (unpack [clojure.win]))))
+
+(fn show-repl [enter]
+  (set clojure.win 
+       (vim.api.nvim_open_win 
+         clojure.buf 
+         enter
+         vim.g.clojure-window-options)))
 
 (fn start-repl []
   (set clojure.last-ns nil)
@@ -61,8 +123,7 @@
     (set nvim.bo.syntax "clojure")
     {:job job
      :send (fn [data]
-             (if clojure.win
-               (pcall vim.api.nvim_win_hide (unpack [clojure.win])))
+             (hide-repl)
              (set clojure.win 
                   (vim.api.nvim_open_win 
                     clojure.buf 
@@ -74,7 +135,7 @@
                (vim.defer_fn 
                  (fn []
                    (when clojure.still-wants-hide 
-                     (pcall vim.api.nvim_win_hide (unpack [clojure.win])))
+                     (hide-repl))
                    (set clojure.still-wants-hide true)) 
                  vim.g.clojure-window-timeout)))}))
 
@@ -118,6 +179,16 @@
     (clojure.in-ns ns)
     ((. clojure.repl :send) (.. "(clojure.core/require '" ns " :reload-all)"))))
 
+(fn test []
+  (let [ns (current-ns)]
+    (clojure.in-ns ns)
+    ((. clojure.repl :send) (.. "(clojure.test/run-tests '" ns ")"))))
+
+(fn test-all []
+  (let [ns (current-ns)]
+    (clojure.in-ns ns)
+    ((. clojure.repl :send) (.. "(clojure.test/run-all-tests)"))))
+
 (fn init-db []
   (let [ns :dev]
     (clojure.in-ns ns)
@@ -142,12 +213,24 @@
 
          (ts.clojure)
 
+         (util.m-binding "sf" (fn []
+                                (hide-repl)
+                                (let [c (. vim.g.clojure-window-options :anchor)]
+                                  (case c
+                                    :NE (flip :SE)
+                                    :SE (flip :SW)
+                                    :SW (flip :NW)
+                                    :NW (flip :NE)))
+                                (show-repl false)) "flip-repl")
+         (util.m-binding "ss" (partial show-repl true) "jump-to-repl")
+         (util.m-binding "sh" hide-repl "hide-repl")
          (util.m-binding "sj" (partial shadow-jack :app)  "hook-into-shadow-repl")
          (util.m-binding "sw" (partial shadow-watch :app)  "start-shadow-build")
          (util.m-binding "si" (fn []
                                 (set clojure.repl (start-repl))) "list-jackable-repls")
 
-         (util.m-binding "tp" "RunTests" "Run project tests")
+         (util.m-binding "tb" test "Run buffer tests")
+         (util.m-binding "tp" test-all "Run project tests")
 
          (eval-binding "e" (fn []
                                 (let [e (root-expression)]
