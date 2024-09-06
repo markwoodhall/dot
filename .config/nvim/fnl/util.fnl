@@ -31,6 +31,10 @@
      (fn [c]
        (?. c (length c))))
 
+(set util.last-but-1
+     (fn [c]
+       (?. c (- (length c) 1))))
+
 (set util.empty 
      (fn [c]
        (= (length c) 0)))
