@@ -29,8 +29,7 @@
         "--profile" (if aws.default-profile [aws.default-profile] (profiles))
         "--start-time" ["`date -d '1 hour ago' +%s`000"
                         "`date -d '2 hour ago' +%s`000"
-                        "`date -d '24 hours ago' +%s`000"
-                        ]
+                        "`date -d '24 hours ago' +%s`000"]
         _ (with-defaults (completer (.. c "")))))))
 
 (vim.api.nvim_create_user_command
