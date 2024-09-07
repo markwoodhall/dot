@@ -79,33 +79,40 @@
        _ v (ipairs col)]
       [(string.gsub v "%s+" "") (unpack c)])))
 
+(fn for-service [c service f]
+  (match (get-primary-command c)
+    service (f c)
+    _ []))
+
+(fn for-command [c service command f]
+  (match (get-primary-command c)
+    service (match (get-sub-command c)
+              command (f c)
+              _ [])
+    _ []))
+
 (fn completion [_ c]
   (vim.fn.sort
     (let [c-parts (util.split c " ")
           with-defaults (fn [c] 
                           [(unpack c)])]
       (match (util.last c-parts)
-        "--log-group-name" (with-defaults (log-groups c))
-        "--queue-url" (with-defaults (sqs-queues c))
-        "--cluster" (match (get-primary-command c)
-                      "ecs" (with-defaults (ecs-clusters c))
-                      _ [])
-        "--service-name" (with-defaults (ecs-services c))
-        "--tasks" (with-defaults (ecs-tasks c))
+        "--log-group-name" (for-service c :logs log-groups) 
+        "--queue-url" (for-service c :sqs sqs-queues)
+        "--cluster" (for-service c :ecs ecs-clusters)
+        "--service-name" (for-service c :ecs ecs-services)
+        "--tasks" (for-service c :ecs ecs-tasks)
         "--db-instance-identifier" (with-defaults (db-instances c))
-        "--attribute-names" (match (get-primary-command c)
-                              "sqs" (match (get-sub-command c)
-                                     "get-queue-attributes" ["All"]
-                                     _ [(get-sub-command c)])
-                              _ [(get-primary-command c)])
+        "--attribute-names" (for-command c :sqs :get-queue-attributes (fn [_] ["All"])) 
         "--profile" (profiles)
-        "--start-time" ["`date -d \"5 minutes ago\" +%s000`"
-                        "`date -d \"15 minutes ago\" +%s000`"
-                        "`date -d \"30 minutes ago\" +%s000`"
-                        "`date -d \"45 minutes ago\" +%s000`"
-                        "`date -d \"1 hour ago\" +%s000`"
-                        "`date -d \"2 hour ago\" +%s000`"
-                        "`date -d \"24 hours ago\" +%s000`"]
+        "--start-time" (for-command c :logs :filter-log-events
+                                    (fn [_] ["`date -d \"5 minutes ago\" +%s000`"
+                                             "`date -d \"15 minutes ago\" +%s000`"
+                                             "`date -d \"30 minutes ago\" +%s000`"
+                                             "`date -d \"45 minutes ago\" +%s000`"
+                                             "`date -d \"1 hour ago\" +%s000`"
+                                             "`date -d \"2 hour ago\" +%s000`"
+                                             "`date -d \"24 hours ago\" +%s000`"])) 
         _ (match (get-last-switch c)
             "tasks" (with-defaults (ecs-tasks c))
             _ (with-defaults (completer (.. c ""))))))))
@@ -117,7 +124,7 @@
                  [s ""
                   _ v (ipairs (?. opts :fargs))]
                  (.. s " " v))]
-      (util.pane-terminal-command (.. "aws " args))))
+      (util.pane-terminal-command (.. "aws" args))))
   {:bang false :desc "AWS wrapper" :nargs "*"
    :complete completion})
 
