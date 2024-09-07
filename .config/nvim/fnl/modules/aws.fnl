@@ -10,6 +10,12 @@
 (fn get-last-switch [c]
   (util.first (util.split (util.last (util.split c (.. " --"))) " ")))
 
+(fn get-primary-command [c]
+  (util.second (util.split c " ")))
+
+(fn get-sub-command [c]
+  (util.nth (util.split c " ") 3))
+
 (local get-profile (partial get-command-value "--profile"))
 
 ;; logs
@@ -66,8 +72,12 @@
 
 (fn completer [command]
   (let [command (vim.fn.substitute command "Aws" "aws" "")
-        lgs (vim.fn.system (.. "COMMAND_LINE='"command "' aws_completer"))]
-    (util.split lgs "\n")))
+        lgs (vim.fn.system (.. "COMMAND_LINE='"command "' aws_completer"))
+        col (util.split lgs "\n")]
+    (accumulate 
+      [c []
+       _ v (ipairs col)]
+      [(string.gsub v "%s+" "") (unpack c)])))
 
 (fn completion [_ c]
   (vim.fn.sort
@@ -77,19 +87,25 @@
       (match (util.last c-parts)
         "--log-group-name" (with-defaults (log-groups c))
         "--queue-url" (with-defaults (sqs-queues c))
-        "--cluster" (with-defaults (ecs-clusters c))
+        "--cluster" (match (get-primary-command c)
+                      "ecs" (with-defaults (ecs-clusters c))
+                      _ [])
         "--service-name" (with-defaults (ecs-services c))
         "--tasks" (with-defaults (ecs-tasks c))
         "--db-instance-identifier" (with-defaults (db-instances c))
-        "--attribute-names" ["All"]
-        "--profile" (if aws.default-profile [aws.default-profile] (profiles))
-        "--start-time" ["`date -d '5 minutes ago' +%s`000"
-                        "`date -d '15 minutes ago' +%s`000"
-                        "`date -d '30 minutes ago' +%s`000"
-                        "`date -d '45 minutes ago' +%s`000"
-                        "`date -d '1 hour ago' +%s`000"
-                        "`date -d '2 hour ago' +%s`000"
-                        "`date -d '24 hours ago' +%s`000"]
+        "--attribute-names" (match (get-primary-command c)
+                              "sqs" (match (get-sub-command c)
+                                     "get-queue-attributes" ["All"]
+                                     _ [(get-sub-command c)])
+                              _ [(get-primary-command c)])
+        "--profile" (profiles)
+        "--start-time" ["`date -d \"5 minutes ago\" +%s000`"
+                        "`date -d \"15 minutes ago\" +%s000`"
+                        "`date -d \"30 minutes ago\" +%s000`"
+                        "`date -d \"45 minutes ago\" +%s000`"
+                        "`date -d \"1 hour ago\" +%s000`"
+                        "`date -d \"2 hour ago\" +%s000`"
+                        "`date -d \"24 hours ago\" +%s000`"]
         _ (match (get-last-switch c)
             "tasks" (with-defaults (ecs-tasks c))
             _ (with-defaults (completer (.. c ""))))))))
