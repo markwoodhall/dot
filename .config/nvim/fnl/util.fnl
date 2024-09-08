@@ -137,7 +137,7 @@
                (util.split content "\\n")))
            (when (not= content "") (vim.cmd (.. "e " content))))
          (vim.cmd "wincmd J")
-         (vim.cmd "12wincmd_"))))
+         (vim.cmd "15wincmd_"))))
 
 (var drawer-buf nil)
 (set util.drawer 

@@ -244,5 +244,6 @@
     (awful.spawn "/opt/lebar/lebardock")
     (awful.spawn "kitty")
     (awful.spawn "slack")
+    (awful.spawn "insync start")
     (awful.spawn "xscreensaver")
     (awful.spawn "qutebrowser")))
