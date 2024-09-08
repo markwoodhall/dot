@@ -44,7 +44,7 @@
     (vim.cmd (.. "silent !pandoc --standalone --template gtp.html -o " out-html " " file))))
 
 (fn note-window [note-file]
-  (util.floating-window "org" note-file true false)
+  (util.pane "org" note-file true false)
   (vim.fn.call "setpos" ["." (vim.fn.call "getpos" ["$"])]))
 
 (fn start-note [workspace note-file include-date]

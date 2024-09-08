@@ -119,6 +119,7 @@
   (require :modules.npm)
   (require :modules.docker)
   (require :modules.aws)
+  (require :modules.so)
   ;;(require :modules.clojure)
   ;;(require :modules.codelens)
   ;;(require :modules.csharp)

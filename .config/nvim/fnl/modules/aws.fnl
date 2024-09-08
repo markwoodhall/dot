@@ -72,7 +72,7 @@
 
 (fn completer [command]
   (let [command (vim.fn.substitute command "Aws" "aws" "")
-        lgs (vim.fn.system (.. "COMMAND_LINE='"command "' aws_completer"))
+        lgs (vim.fn.system (.. "COMMAND_LINE='" command "' aws_completer"))
         col (util.split lgs "\n")]
     (accumulate 
       [c []
