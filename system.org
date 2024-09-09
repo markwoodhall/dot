@@ -85,6 +85,7 @@ alias cd='cd -P'
 alias c='cd -P'
 alias mkdir='mkdir -p'
 alias cat='ccat'
+alias feh='feh -F'
 
 alias v='nvim'
 alias vi='nvim'
