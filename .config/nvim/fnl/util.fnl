@@ -67,6 +67,14 @@
                (table.insert t v))
              t)))))
 
+(set util.add-match 
+     (fn [s matchs col]
+       (if (or (and matchs
+                    (> (util.count-matches s matchs) 0))
+               (not matchs))
+         [s (unpack col)]
+         col)))
+
 (set util.fill-string 
      (fn [s n]
        (var x "")
