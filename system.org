@@ -879,3 +879,28 @@ input_delay 1
 \set HISTFILE ~/psql_history/.psql_history- :DBNAME
 \set QUIET 0
 #+end_src
+
+* Mime associations
+
+#+begin_src ini :tangle ~/.config/mimeapps.list
+[Default Applications]
+text/html=google-chrome.desktop
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/about=google-chrome.desktop
+x-scheme-handler/unknown=google-chrome.desktop
+x-scheme-handler/chrome=google-chrome.desktop
+application/x-extension-htm=google-chrome.desktop
+application/x-extension-html=google-chrome.desktop
+application/x-extension-shtml=google-chrome.desktop
+application/xhtml+xml=google-chrome.desktop
+application/x-extension-xhtml=google-chrome.desktop
+application/x-extension-xht=google-chrome.desktop
+
+
+[Added Associations]
+x-scheme-handler/http=google-chrome.desktop;
+x-scheme-handler/https=google-chrome.desktop;
+text/html=google-chrome.desktop;
+application/pdf=google-chrome.desktop;
+#+end_src
