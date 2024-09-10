@@ -175,7 +175,7 @@
        :properties {:floating true}}
       {:rule {:class :Slack}
        :properties {:tag :4}}
-      {:rule {:class "qutebrowser"}
+      {:rule {:class "Google-chrome"}
        :properties {:tag :3}}
       {:properties {:border_color "#11111b"
                     :border_width 1
@@ -246,4 +246,4 @@
     (awful.spawn "slack")
     (awful.spawn "insync start")
     (awful.spawn "xscreensaver")
-    (awful.spawn "qutebrowser")))
+    (awful.spawn "google-chrome-stable")))

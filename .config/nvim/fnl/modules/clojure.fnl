@@ -121,6 +121,7 @@
     (vim.cmd "setlocal nonumber")
     (set nvim.bo.filetype "clojure")
     (set nvim.bo.syntax "clojure")
+    (clojure.setup)
     {:job job
      :send (fn [data]
              (hide-repl)
