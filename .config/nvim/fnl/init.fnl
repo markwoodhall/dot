@@ -121,6 +121,7 @@
   (require :modules.aws)
   (require :modules.so)
   (require :modules.chatgpt)
+  (require :modules.bw)
   ;;(require :modules.clojure)
   ;;(require :modules.codelens)
   ;;(require :modules.csharp)
