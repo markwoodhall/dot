@@ -365,6 +365,46 @@ wintypes:
 
 * GTK
 
+#+begin_src ini :tangle ~/.icons/default/index.theme :mkdirp yes
+[Icon Theme]
+Name=Default
+Comment=Default Cursor Theme
+Inherits=Adwaita
+#+end_src
+
+#+begin_src bash :tangle ~/.config/xsettingsd/xsettingsd.conf :mkdirp yes
+Net/ThemeName "catppuccin-macchiato-sapphire-standard+default"
+Net/IconThemeName "Papirus-Dark"
+Gtk/CursorThemeName "Adwaita"
+Net/EnableEventSounds 1
+EnableInputFeedbackSounds 0
+Xft/Antialias 1
+Xft/Hinting 1
+Xft/HintStyle "hintslight"
+Xft/RGBA "rgb"
+#+end_src
+
+** GTK 2
+
+#+begin_src bash :tangle ~/.gtkrc-2.0
+include "/home/markwoodhall/.gtkrc-2.0.mine"
+gtk-theme-name="catppuccin-macchiato-sapphire-standard+default"
+gtk-icon-theme-name="Papirus-Dark"
+gtk-font-name="System-ui 11"
+gtk-cursor-theme-name="Adwaita"
+gtk-cursor-theme-size=24
+gtk-toolbar-style=GTK_TOOLBAR_ICONS
+gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
+gtk-button-images=0
+gtk-menu-images=0
+gtk-enable-event-sounds=1
+gtk-enable-input-feedback-sounds=0
+gtk-xft-antialias=1
+gtk-xft-hinting=1
+gtk-xft-hintstyle="hintslight"
+gtk-xft-rgba="rgb"
+#+end_src
+
 ** GTK 3
 
 #+begin_src bash :tangle ~/.config/gtk-3.0/settings.ini :mkdirp yes
@@ -884,23 +924,23 @@ input_delay 1
 
 #+begin_src ini :tangle ~/.config/mimeapps.list
 [Default Applications]
-text/html=google-chrome.desktop
-x-scheme-handler/http=google-chrome.desktop
-x-scheme-handler/https=google-chrome.desktop
-x-scheme-handler/about=google-chrome.desktop
-x-scheme-handler/unknown=google-chrome.desktop
-x-scheme-handler/chrome=google-chrome.desktop
-application/x-extension-htm=google-chrome.desktop
-application/x-extension-html=google-chrome.desktop
-application/x-extension-shtml=google-chrome.desktop
-application/xhtml+xml=google-chrome.desktop
-application/x-extension-xhtml=google-chrome.desktop
-application/x-extension-xht=google-chrome.desktop
+text/html=firefox.desktop
+x-scheme-handler/http=firefox.desktop
+x-scheme-handler/https=firefox.desktop
+x-scheme-handler/about=firefox.desktop
+x-scheme-handler/unknown=firefox.desktop
+x-scheme-handler/chrome=firefox.desktop
+application/x-extension-htm=firefox.desktop
+application/x-extension-html=firefox.desktop
+application/x-extension-shtml=firefox.desktop
+application/xhtml+xml=firefox.desktop
+application/x-extension-xhtml=firefox.desktop
+application/x-extension-xht=firefox.desktop
 
 
 [Added Associations]
-x-scheme-handler/http=google-chrome.desktop;
-x-scheme-handler/https=google-chrome.desktop;
-text/html=google-chrome.desktop;
-application/pdf=google-chrome.desktop;
+x-scheme-handler/http=firefox.desktop;
+x-scheme-handler/https=firefox.desktop;
+text/html=firefox.desktop;
+application/pdf=firefox.desktop;
 #+end_src
