@@ -24,11 +24,7 @@
                             :history :import :inspect :kill :load :logs :pause :port :rename
                             :restart :rm :rmi :save :start :stats :stop :tag :top 
                             :unpause :update :wait])]
-              (if (or (and (util.second c-parts) 
-                           (> (util.count-matches v (util.second c-parts)) 0))
-                      (not (util.second c-parts)))
-                [v (unpack results)]
-                results)))
+              (util.add-match v (util.second c-parts) results)))
         2 (match (util.second c-parts)
             "logs" (with-defaults (containers))
             "kill" (with-defaults (containers))

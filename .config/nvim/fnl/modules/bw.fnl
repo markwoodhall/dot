@@ -22,7 +22,7 @@
         2 (match (util.nth c-parts 2)
             "get" (accumulate 
                     [results []
-                     _ v (ipairs [:password])]
+                     _ v (ipairs [:password :item])]
                     (util.add-match v (util.nth c-parts 3) results))
             "list" (accumulate 
                       [results []
@@ -31,6 +31,7 @@
             _ (with-defaults []))
         3 (match (util.nth c-parts 3)
             "password" (with-defaults (items))
+            "item" (with-defaults (items))
             _ (with-defaults []))
         _ (with-defaults [])))))
 
