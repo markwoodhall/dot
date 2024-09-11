@@ -1,6 +1,5 @@
 (local util (require :util))
 (local nvim (require "nvim"))
-(local ts (require "modules.telescope"))
 (local notes (require "modules.notes"))
 
 (let [wk (require :which-key)]
@@ -37,6 +36,7 @@
 (util.nnoremap "fv" "vsplit $MYVIMRC" "split-open-vimrc")
 
 ;; git
+(util.nnoremap "gd" "Gvdiffsplit" "Diff")
 (util.nnoremap "gf" "Telescope git_files hidden=true" "Find git files")
 (util.nnoremap "gc" "Telescope git_commits" "Git commits")
 (util.nnoremap "gb" "Telescope git_branches" "Git branches")

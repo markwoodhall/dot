@@ -44,7 +44,7 @@
   (set vim.g.rooter_silent_chdir 1)
 
   ;; Version control
-  (Plug "tpope/vim-fugitive" {:on [:G :Git]})
+  (Plug "tpope/vim-fugitive" {:on [:G :Git :Gvdiffsplit]})
 
   ;; Completion & LSP
   (Plug "neovim/nvim-lspconfig")
@@ -72,7 +72,6 @@
   (Plug "tpope/vim-dispatch" {:on :Dispatch})
   (Plug "tpope/vim-eunuch")
   (Plug "radenling/vim-dispatch-neovim")
-  (Plug "mhinz/vim-signify")
   (Plug "lilydjwg/colorizer")
   (set vim.g.colorizer_nomap 1)
   (set vim.g.colorizer_maxlines 1000)
@@ -113,7 +112,8 @@
   (require :modules.aws)
   (require :modules.so)
   (require :modules.chatgpt)
-  (require :modules.bw))
+  (require :modules.bw)
+  (require "modules.telescope"))
 
 (vim.cmd "hi CodeLensReference guifg=#494D64 guibg=#1e1e2e cterm=italic gui=italic")
 (vim.cmd "hi WinSeparator guifg=#1e1e2e guibg=#1e1e2e cterm=italic gui=italic")
