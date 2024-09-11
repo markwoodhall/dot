@@ -25,7 +25,7 @@
         2 (if (= (util.second c-parts) "run")
             (let [runs (vim.fn.system "jq '.scripts|keys[]' package.json | sed 's/\\\"//g'")]
               (util.split runs "\n"))
-            [(util.second c-parts)])))))
+            [])))))
 
 (vim.api.nvim_create_user_command
   "Npm"

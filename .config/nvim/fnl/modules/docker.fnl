@@ -14,17 +14,16 @@
           with-defaults (fn [c] ["--format" (unpack c)])]
       (match (util.count-matches c "%s")
         0 []
-        1 (if (< (util.count-matches c "%s") 2)
-            (accumulate 
-              [results []
-               _ v (ipairs [:run :exec :ps :build :pull :push :images :login
-                            :logout :search :version :info :builder :compose :container
-                            :context :image :manifest :network :plugin :system :trust
-                            :volume :swarm :attach :commit :cp :create :diff :events :export
-                            :history :import :inspect :kill :load :logs :pause :port :rename
-                            :restart :rm :rmi :save :start :stats :stop :tag :top 
-                            :unpause :update :wait])]
-              (util.add-match v (util.second c-parts) results)))
+        1 (accumulate 
+            [results []
+             _ v (ipairs [:run :exec :ps :build :pull :push :images :login
+                          :logout :search :version :info :builder :compose :container
+                          :context :image :manifest :network :plugin :system :trust
+                          :volume :swarm :attach :commit :cp :create :diff :events :export
+                          :history :import :inspect :kill :load :logs :pause :port :rename
+                          :restart :rm :rmi :save :start :stats :stop :tag :top 
+                          :unpause :update :wait])]
+            (util.add-match v (util.second c-parts) results))
         2 (match (util.second c-parts)
             "logs" (with-defaults (containers))
             "kill" (with-defaults (containers))
