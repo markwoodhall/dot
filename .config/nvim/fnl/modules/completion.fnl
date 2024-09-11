@@ -16,11 +16,11 @@
 ;;                  (set client.server_capabilities.semanticTokensProvider true)))})
 
 (let [cmp (require :cmp)
-      lsp-kind (require :lspkind)
+      ;;lsp-kind (require :lspkind)
       luasnip (require "luasnip.loaders.from_vscode") ]
   (luasnip.lazy_load)
   (cmp.setup
-    {:formatting {:format (lsp-kind.cmp_format)}
+    {;;:formatting {:format (lsp-kind.cmp_format)}
      :mapping (cmp.mapping.preset.insert
                 {"<C-u>" (cmp.mapping.scroll_docs -4)
                  "<C-d>" (cmp.mapping.scroll_docs 4)
