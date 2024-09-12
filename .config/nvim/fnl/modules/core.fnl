@@ -84,3 +84,4 @@
            "kotlin" (cl.get-blocks nvim.bo.filetype nil)
            "fennel" (cl.get-blocks nvim.bo.filetype nil)
            _ (cl.get-blocks nvim.bo.filetype nil))))}))
+

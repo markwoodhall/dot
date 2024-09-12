@@ -113,6 +113,7 @@
   (require :modules.so)
   (require :modules.chatgpt)
   (require :modules.bw)
+  (require :modules.eunuchplus)
   (require "modules.telescope"))
 
 (vim.cmd "hi CodeLensReference guifg=#494D64 guibg=#1e1e2e cterm=italic gui=italic")

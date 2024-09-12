@@ -27,7 +27,6 @@
 (set clojure.buf nil)
 
 (set vim.g.clojure-jump-to-window false)
-(set vim.g.clojure-window-timeout 30000)
 
 (fn flip [anchor]
   (match anchor
@@ -130,15 +129,7 @@
                     clojure.buf 
                     vim.g.clojure-jump-to-window 
                     vim.g.clojure-window-options))
-             (vim.fn.chansend job (.. data "\n"))
-             (when (> vim.g.clojure-window-timeout 0)
-               (set clojure.still-wants-hide false)
-               (vim.defer_fn 
-                 (fn []
-                   (when clojure.still-wants-hide 
-                     (hide-repl))
-                   (set clojure.still-wants-hide true)) 
-                 vim.g.clojure-window-timeout)))}))
+             (vim.fn.chansend job (.. data "\n")))}))
 
 (fn root-expression []
   (let [value (ts-utils.get_node_at_cursor 0 true)

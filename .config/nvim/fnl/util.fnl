@@ -91,6 +91,10 @@
      (fn [path]
        (nvim.fn.glob path true true true)))
 
+(set util.globpath
+     (fn [path expression]
+       (nvim.fn.globpath path expression true true true)))
+
 (set util.exists? 
      (fn [path]
        (= (nvim.fn.filereadable path) 1)))
@@ -334,5 +338,12 @@
              [line2 _] (vim.fn.searchpos end-s "c")
              code (vim.fn.getline line1 line2)]
          code)))
-util
 
+
+(set util.gather-args 
+     (fn [opts] (accumulate 
+                  [s ""
+                   _ v (ipairs (?. opts :fargs))]
+                  (.. s " " v))))
+
+util

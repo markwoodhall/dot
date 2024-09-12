@@ -33,6 +33,7 @@
 (util.nnoremap "ff" "Telescope find_files hidden=true search_dirs={\"~/\"}" "telescope-find-files-home")
 (util.nnoremap "fr" "lua require'telescope.builtin'.oldfiles{}" "telescope-recent-files")
 (util.nnoremap "fg" "Telescope live_grep hidden=true" "telescope-live-grep")
+(util.nnoremap "fG" "Telescope live_grep --no-ignore" "telescope-live-grep")
 (util.nnoremap "fv" "vsplit $MYVIMRC" "split-open-vimrc")
 
 ;; git
