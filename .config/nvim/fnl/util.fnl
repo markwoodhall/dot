@@ -339,7 +339,6 @@
              code (vim.fn.getline line1 line2)]
          code)))
 
-
 (set util.gather-args 
      (fn [opts] (accumulate 
                   [s ""

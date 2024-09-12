@@ -38,10 +38,7 @@
 (vim.api.nvim_create_user_command
   "Bw"
   (fn [opts]
-    (let [args (accumulate 
-                 [s ""
-                  _ v (ipairs (?. opts :fargs))]
-                 (.. s " " v))]
+    (let [args (util.gather-args opts)]
       (vim.cmd (.. "!bw " args))))
   {:bang false :desc "BW wrapper" :nargs "*"
    :complete completion})

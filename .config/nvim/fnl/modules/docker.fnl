@@ -36,10 +36,7 @@
 (vim.api.nvim_create_user_command
   "Docker"
   (fn [opts]
-    (let [args (accumulate 
-                 [s ""
-                  _ v (ipairs (?. opts :fargs))]
-                 (.. s " " v))]
+    (let [args (util.gather-args opts)]
       (util.pane-terminal-command (.. "docker " args))))
   {:bang false :desc "Docker wrapper" :nargs "*"
    :complete completion})

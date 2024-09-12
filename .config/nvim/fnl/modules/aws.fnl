@@ -122,10 +122,7 @@
 (vim.api.nvim_create_user_command
   "Aws"
   (fn [opts]
-    (let [args (accumulate 
-                 [s ""
-                  _ v (ipairs (?. opts :fargs))]
-                 (.. s " " v))]
+    (let [args (util.gather-args opts)]
       (util.pane-terminal-command (.. "aws" args))))
   {:bang false :desc "AWS wrapper" :nargs "*"
    :complete completion})

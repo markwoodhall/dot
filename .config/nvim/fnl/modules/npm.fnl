@@ -30,10 +30,7 @@
 (vim.api.nvim_create_user_command
   "Npm"
   (fn [opts]
-    (let [args (accumulate 
-          [s ""
-           _ v (ipairs (?. opts :fargs))]
-          (.. s " " v))]
+    (let [args (util.gather-args opts)]
       (util.pane-terminal-command (.. "npm " args))))
   {:bang false :desc "NPM wrapper" :nargs "*"
    :complete completion})

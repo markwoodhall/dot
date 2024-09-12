@@ -11,10 +11,7 @@
 (vim.api.nvim_create_user_command
   "So"
   (fn [opts]
-    (let [args (accumulate 
-                 [s ""
-                  _ v (ipairs (?. opts :fargs))]
-                 (.. s " " v))]
+    (let [args (util.gather-args opts)]
       (util.pane-terminal-command (.. "so " args))))
   {:bang false :desc "So wrapper" :nargs "*"
    :complete completion})
