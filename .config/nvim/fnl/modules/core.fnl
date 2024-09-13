@@ -41,6 +41,8 @@
 (nvim.ex.set :list)
 (nvim.ex.set :relativenumber)
 (nvim.ex.set :termguicolors)
+(nvim.ex.set :ignorecase)
+(nvim.ex.set :smartcase)
 
 (set nvim.g.mapleader " ")
 (set nvim.g.maplocalleader ",")

@@ -23,7 +23,10 @@
   (Plug "nvim-treesitter/playground" {:on :TSPlaygroundToggle})
 
   ;; Org mode
-  (Plug "nvim-orgmode/orgmode" {:for :org})
+  ;; We should be able to do a :for :org here, but there
+  ;; is some kind of plugin issue which means it needs
+  ;; loaded always
+  (Plug "nvim-orgmode/orgmode")
   (Plug "akinsho/org-bullets.nvim" {:for :org})
   (Plug "dhruvasagar/vim-table-mode" {:for :org})
 
@@ -99,7 +102,6 @@
   (require :modules.core)
   (require :modules.treesitter)
   (require :modules.completion)
-  ;;(require :modules.dressing)
   (require :modules.keymap)
   (require :modules.lualine)
   (require :modules.notes)
@@ -111,8 +113,11 @@
   (require :modules.chatgpt)
   (require :modules.bw)
   (require :modules.eunuchplus)
-  ;;(require "modules.telescope")
-  )
+  ;; We shouldn't really need to this here
+  ;; as org module is loaded for org files, but there
+  ;; is some kind of plugin issue which means it needs
+  ;; loaded upfront
+  (require :modules.org))
 
 (vim.cmd "hi CodeLensReference guifg=#494D64 guibg=#1e1e2e cterm=italic gui=italic")
 (vim.cmd "hi WinSeparator guifg=#1e1e2e guibg=#1e1e2e cterm=italic gui=italic")
