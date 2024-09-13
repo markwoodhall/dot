@@ -199,44 +199,44 @@
              (clear-code-block start-line)
              (vim.fn.append end-line output))))))
 
-(let [snip (require :luasnip)
-      fmt (require "luasnip.extras.fmt")]
-  (snip.add_snippets 
-    "all"
-    [(snip.snippet
-      {:trig "vabel-sql" :descr "Create a vabel sql org mode code block"}
-      (fmt.fmta
-        "#+begin_src sql :dbuser <> :dbpassword <> :dbhost <> :dbpost <> :database <>
-<>
-#+end_src"
-        [(snip.i 1) (snip.i 2) (snip.i 3 "localhost") (snip.i 4 "5432") (snip.i 5) (snip.i 6)]))
-     (snip.snippet
-       {:trig "vabel-fennel" :descr "Create a vabel fennel org mode code block"}
-       (fmt.fmta
-         "#+begin_src fennel
-<>
-#+end_src"
-         [(snip.i 1)]))
-      (snip.snippet
-      {:trig "vabel-clojure" :descr "Create a vabel clojure org mode code block"}
-      (fmt.fmta
-        "#+begin_src clojure
-<>
-#+end_src"
-        [(snip.i 1)]))
-      (snip.snippet
-      {:trig "vabel-kotlin" :descr "Create a vabel kotlin org mode code block"}
-      (fmt.fmta
-        "#+begin_src kotlin
-<>
-#+end_src"
-        [(snip.i 1)]))
-      (snip.snippet
-      {:trig "vabel-bash" :descr "Create a vabel bash markdown code block"}
-      (fmt.fmta
-        "#+begin_src bash
-<>
-#+end_src"
-        [(snip.i 1)]))]))
+;;(let [snip (require :luasnip)
+;;      fmt (require "luasnip.extras.fmt")]
+;;  (snip.add_snippets 
+;;    "all"
+;;    [(snip.snippet
+;;      {:trig "vabel-sql" :descr "Create a vabel sql org mode code block"}
+;;      (fmt.fmta
+;;        "#+begin_src sql :dbuser <> :dbpassword <> :dbhost <> :dbpost <> :database <>
+;;<>
+;;#+end_src"
+;;        [(snip.i 1) (snip.i 2) (snip.i 3 "localhost") (snip.i 4 "5432") (snip.i 5) (snip.i 6)]))
+;;     (snip.snippet
+;;       {:trig "vabel-fennel" :descr "Create a vabel fennel org mode code block"}
+;;       (fmt.fmta
+;;         "#+begin_src fennel
+;;<>
+;;#+end_src"
+;;         [(snip.i 1)]))
+;;      (snip.snippet
+;;      {:trig "vabel-clojure" :descr "Create a vabel clojure org mode code block"}
+;;      (fmt.fmta
+;;        "#+begin_src clojure
+;;<>
+;;#+end_src"
+;;        [(snip.i 1)]))
+;;      (snip.snippet
+;;      {:trig "vabel-kotlin" :descr "Create a vabel kotlin org mode code block"}
+;;      (fmt.fmta
+;;        "#+begin_src kotlin
+;;<>
+;;#+end_src"
+;;        [(snip.i 1)]))
+;;      (snip.snippet
+;;      {:trig "vabel-bash" :descr "Create a vabel bash markdown code block"}
+;;      (fmt.fmta
+;;        "#+begin_src bash
+;;<>
+;;#+end_src"
+;;        [(snip.i 1)]))]))
 
 vabel

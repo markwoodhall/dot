@@ -20,7 +20,7 @@
 
   ;; Treesitter
   (Plug "nvim-treesitter/nvim-treesitter" {:do ":TSUpdate"})
-  (Plug "nvim-treesitter/playground" {:on :TSPlaygroundToggle})
+  ;;(Plug "nvim-treesitter/playground" {:on :TSPlaygroundToggle})
 
   ;; Org mode
   ;; We should be able to do a :for :org here, but there
@@ -56,14 +56,8 @@
   ;;(Plug "onsails/lspkind.nvim" {:for [:clojure :kotlin :sql :fennel :cs]})
   (Plug "hrsh7th/nvim-cmp")
   (Plug "hrsh7th/cmp-nvim-lsp")
-  (Plug "petertriho/cmp-git")
   (Plug "davidsierradz/cmp-conventionalcommits")
   (Plug "hrsh7th/cmp-path")
-
-  ;; Snippets
-  (Plug "saadparwaiz1/cmp_luasnip")
-  (Plug "L3MON4D3/LuaSnip")
-  (Plug "rafamadriz/friendly-snippets")
 
   ;; Interface
   (Plug "nvim-lualine/lualine.nvim")
@@ -73,13 +67,13 @@
   ;;(Plug "stevearc/dressing.nvim")
   (Plug "tpope/vim-surround")
   (Plug "tpope/vim-dispatch" {:on :Dispatch})
-  (Plug "tpope/vim-eunuch")
   (Plug "radenling/vim-dispatch-neovim")
-  (Plug "lilydjwg/colorizer")
+  (Plug "tpope/vim-eunuch" {:on :Remove})
+  (Plug "lilydjwg/colorizer" {:for [:clojure :org :html :javascript :css :less]})
   (set vim.g.colorizer_nomap 1)
   (set vim.g.colorizer_maxlines 1000)
 
-  (Plug "DataWraith/auto_mkdir")
+  ;;(Plug "DataWraith/auto_mkdir")
   (Plug "ekalinin/Dockerfile.vim")
   ;;(Plug "lukas-reineke/indent-blankline.nvim")
 

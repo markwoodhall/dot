@@ -1,12 +1,6 @@
 (local notes {})
 (local util (require :util))
-
-(var notes-path "notes")
-
-(fn setup [opts]
-  (each [_ path (pairs (. opts :paths))]
-    (when (util.dir-exists? path)
-      (set notes-path path))))
+(local notes-path "/home/markwoodhall/Insync/mark.woodhall@gmail.com/GoogleDrive/notes/markwoodhall")
 
 (set notes.get-notes-path (fn []
   notes-path))
@@ -157,8 +151,6 @@
       (insert-note-link n-id workspace)))
   {:bang false :desc "Insert Note Link" :nargs "*"
    :complete completion})
-
-(setup {:paths ["/home/markwoodhall/Insync/mark.woodhall@gmail.com/GoogleDrive/notes/markwoodhall" "/mnt/chromeos/GoogleDrive/MyDrive/notes"]})
 
 (vim.api.nvim_create_autocmd 
   "BufWritePost" 

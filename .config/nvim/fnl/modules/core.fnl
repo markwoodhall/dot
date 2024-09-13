@@ -62,6 +62,7 @@
 
 (vim.cmd "autocmd FileType qf wincmd J")
 (vim.cmd "autocmd FileType qf nmap <buffer> <cr> <cr>:lcl<cr>:ccl<cr>")
+(vim.cmd "au BufWritePre,FileWritePre * if @% !~# '\\(://\\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif")
 
 (vim.cmd "colorscheme catppuccin-mocha")
 (nvim.ex.set :list)

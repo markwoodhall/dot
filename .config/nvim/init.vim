@@ -1,18 +1,3 @@
-" press <Tab> to expand or jump in a snippet. These can also be mapped separately
-" via <Plug>luasnip-expand-snippet and <Plug>luasnip-jump-next.
-imap <silent><expr> <c-j> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<c-j>' 
-" -1 for jumping backwards.
-inoremap <silent> <c-k> <cmd>lua require'luasnip'.jump(-1)<Cr>
-
-snoremap <silent> <c-j> <cmd>lua require('luasnip').jump(1)<Cr>
-snoremap <silent> <c-k> <cmd>lua require('luasnip').jump(-1)<Cr>
-
-" Diff colours
-highlight DiffAdd cterm=none ctermfg=black ctermbg=Green
-highlight DiffDelete cterm=none ctermfg=black ctermbg=Red
-highlight DiffChange cterm=none ctermfg=black ctermbg=Yellow
-highlight DiffText cterm=none ctermfg=black ctermbg=Magenta
-
 autocmd BufNewFile,BufRead *.edn,*.cljx,*.cljc,*.cljs,*.cljd setlocal filetype=clojure
 
 " General mappings
