@@ -1,26 +1,30 @@
 (local aws {})
-(local util (require :util))
 
 (set aws.setup 
      (fn []))
 
 (fn get-command-value [v c]
-  (util.first (util.split (util.second (util.split c (.. v " "))) " ")))
+  (let [util (require :util)]
+    (util.first (util.split (util.second (util.split c (.. v " "))) " "))))
 
 (fn get-last-switch [c]
-  (util.first (util.split (util.last (util.split c (.. " --"))) " ")))
+  (let [util (require :util)]
+    (util.first (util.split (util.last (util.split c (.. " --"))) " "))))
 
 (fn get-primary-command [c]
-  (util.second (util.split c " ")))
+  (let [util (require :util)]
+    (util.second (util.split c " "))))
 
 (fn get-sub-command [c]
-  (util.nth (util.split c " ") 3))
+  (let [util (require :util)]
+    (util.nth (util.split c " ") 3)))
 
 (local get-profile (partial get-command-value "--profile"))
 
 ;; logs
 (fn log-groups [command]
-  (let [profile (get-profile command)]
+  (let [util (require :util) 
+        profile (get-profile command)]
     (if profile
       (let [lgs (vim.fn.system (.. "aws --profile " profile " logs describe-log-groups | jq '.logGroups[].logGroupName'"))]
         (util.split lgs "\n"))
@@ -28,7 +32,8 @@
 
 ;; sqs
 (fn sqs-queues [command]
-  (let [profile (get-profile command)]
+  (let [util (require :util)
+        profile (get-profile command)]
     (if profile
       (let [lgs (vim.fn.system (.. "aws --profile " profile " sqs list-queues | jq '.QueueUrls[]'"))]
         (util.split lgs "\n"))
@@ -36,14 +41,16 @@
 
 ;; ecs
 (fn ecs-clusters [command]
-  (let [profile (get-profile command)]
+  (let [util (require :util)
+        profile (get-profile command)]
     (if profile
       (let [lgs (vim.fn.system (.. "aws --profile " profile " ecs list-clusters | jq '.clusterArns[]'"))]
         (util.split lgs "\n"))
       [])))
 
 (fn ecs-services [command]
-  (let [profile (get-profile command)
+  (let [util (require :util)
+        profile (get-profile command)
         cluster (get-command-value "--cluster" command)]
     (if profile
       (let [lgs (vim.fn.system (.. "aws --profile " profile " ecs list-services --cluster " cluster " | jq '.serviceArns[]'"))]
@@ -51,7 +58,8 @@
       [])))
 
 (fn ecs-tasks [command]
-  (let [profile (get-profile command)
+  (let [util (require :util) 
+        profile (get-profile command)
         cluster (get-command-value "--cluster" command)]
     (if (and profile cluster)
       (let [lgs (vim.fn.system (.. "aws --profile " profile " ecs list-tasks --cluster " cluster " | jq '.taskArns[]'"))]
@@ -60,18 +68,21 @@
 
 ;; rds
 (fn db-instances [command]
-  (let [profile (get-profile command) ]
+  (let [util (require :util)
+        profile (get-profile command) ]
     (if profile
       (let [lgs (vim.fn.system (.. "aws --profile " profile " rds describe-db-instances | jq '.DBInstances[].DBInstanceIdentifier'"))]
         (util.split lgs "\n"))
       [])))
 
 (fn profiles []
-  (let [lgs (vim.fn.system "cat ~/.aws/config | grep '\\[profile ' | sed -e 's/\\[//g' -e 's/\\]//g' -e 's/profile //g'")]
+  (let [util (require :util)
+        lgs (vim.fn.system "cat ~/.aws/config | grep '\\[profile ' | sed -e 's/\\[//g' -e 's/\\]//g' -e 's/profile //g'")]
     (util.split lgs "\n")))
 
 (fn completer [command]
-  (let [command (vim.fn.substitute command "Aws" "aws" "")
+  (let [util (require :util)
+        command (vim.fn.substitute command "Aws" "aws" "")
         lgs (vim.fn.system (.. "COMMAND_LINE='" command "' aws_completer"))
         col (util.split lgs "\n")]
     (accumulate 
@@ -93,7 +104,8 @@
 
 (fn completion [_ c]
   (vim.fn.sort
-    (let [c-parts (util.split c " ")
+    (let [util (require :util)
+          c-parts (util.split c " ")
           with-defaults (fn [c] 
                           [(unpack c)])]
       (match (util.last c-parts)
@@ -122,7 +134,8 @@
 (vim.api.nvim_create_user_command
   "Aws"
   (fn [opts]
-    (let [args (util.gather-args opts)]
+    (let [util (require :util)
+          args (util.gather-args opts)]
       (util.pane-terminal-command (.. "aws" args))))
   {:bang false :desc "AWS wrapper" :nargs "*"
    :complete completion})

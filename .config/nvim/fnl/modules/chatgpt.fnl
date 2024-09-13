@@ -1,5 +1,4 @@
 (local chatgpt {})
-(local util (require :util))
 
 (set chatgpt.setup 
      (fn []))
@@ -11,7 +10,8 @@
 (vim.api.nvim_create_user_command
   "Chatgpt"
   (fn [opts]
-    (let [args (accumulate 
+    (let [util (require :util)
+          args (accumulate 
                  [s ""
                   _ v (ipairs (?. opts :fargs))]
                  (.. s " " v))

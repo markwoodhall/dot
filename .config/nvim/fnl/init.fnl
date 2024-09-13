@@ -5,7 +5,7 @@
 (do 
   (Plug "nvim-tree/nvim-web-devicons")
   (Plug "folke/which-key.nvim")
-  (Plug "hiphish/rainbow-delimiters.nvim")
+  (Plug "hiphish/rainbow-delimiters.nvim" {:for [:clojure :java :kotlin :sql :fennel :lua :vim :bash :javascript]})
 
   ;; Java / Kotlin
   (Plug "markwoodhall/vim-idea" {:for [:java :kotlin]})
@@ -15,11 +15,8 @@
   ;; Better Quick Fix
   (Plug "kevinhwang91/nvim-bqf")
 
-  ;; Directory manipulation
-  (Plug "stevearc/oil.nvim" {:on :Oil})
-
   ;; Treesitter
-  (Plug "nvim-treesitter/nvim-treesitter" {:do ":TSUpdate" :for [:clojure :fennel :lua :vim :bash :sql :kotlin :javascript :csharp]})
+  (Plug "nvim-treesitter/nvim-treesitter" {:do ":TSUpdate" :for [:clojure :fennel :lua :vim :bash :sql :kotlin :javascript :cs]})
   ;;(Plug "nvim-treesitter/playground" {:on :TSPlaygroundToggle})
 
   ;; Org mode
@@ -60,6 +57,7 @@
   (Plug "hrsh7th/cmp-path")
 
   ;; Interface
+  (Plug "tpope/vim-vinegar")
   (Plug "nvim-lualine/lualine.nvim")
 
   ;;(Plug "nvim-lua/plenary.nvim")
@@ -97,8 +95,6 @@
   (require :modules.completion)
   (require :modules.keymap)
   (require :modules.lualine)
-  (require :modules.notes)
-  (require :modules.oil)
   (require :modules.npm)
   (require :modules.docker)
   (require :modules.aws)

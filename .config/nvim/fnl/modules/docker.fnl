@@ -1,16 +1,17 @@
 (local docker {})
-(local util (require :util))
 
 (set docker.setup 
      (fn []))
 
 (fn containers []
-  (let [containers (vim.fn.system "docker ps --format \"{{json .}}\" | jq .Names    | sed 's/\\\"//g'")]
+  (let [util (require :util)
+        containers (vim.fn.system "docker ps --format \"{{json .}}\" | jq .Names    | sed 's/\\\"//g'")]
     (util.split containers "\n")))
 
 (fn completion [_ c]
   (vim.fn.sort
-    (let [c-parts (util.split c " ")
+    (let [util (require :util)
+          c-parts (util.split c " ")
           with-defaults (fn [c] ["--format" (unpack c)])]
       (match (util.count-matches c "%s")
         0 []
@@ -36,7 +37,8 @@
 (vim.api.nvim_create_user_command
   "Docker"
   (fn [opts]
-    (let [args (util.gather-args opts)]
+    (let [util (require :util)
+          args (util.gather-args opts)]
       (util.pane-terminal-command (.. "docker " args))))
   {:bang false :desc "Docker wrapper" :nargs "*"
    :complete completion})

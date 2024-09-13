@@ -1,6 +1,4 @@
-(local util (require :util))
 (local nvim (require "nvim"))
-;;(local notes (require "modules.notes"))
 
 (let [wk (require :which-key)]
   (wk.setup {:triggers [" "]})
@@ -17,31 +15,28 @@
      {1 " w" :group "window"}]))
 
 ;; buffers
-(util.nnoremap "bl" "Buffers" "list-buffers")
-(util.nnoremap "bh" "nohl" "no-highlight-search")
-(util.nnoremap "bn" "bn" "goto-next-buffer")
-(util.nnoremap "bp" "bp" "goto-previous-buffer")
-(util.nnoremap "bf" "grep " "grep-word-under-cursor")
-(util.nnoremap "bc" "set list!" "show-non-displayable-characters")
-(util.nnoremap "bx" "close" "close-buffer")
-(util.nnoremap "bX" "bd!" "delete-buffer")
+(vim.keymap.set "n" " ba" ":e #<CR>" {:desc "toggle-buffers"})
+(vim.keymap.set "n" " bl" ":Buffers<CR>" {:desc "list-buffers"})
+(vim.keymap.set "n" " bh" ":nohl<CR>" {:desc "no-highlight-search"})
+(vim.keymap.set "n" " bn" ":bn<CR>" {:desc "goto-next-buffer"})
+(vim.keymap.set "n" " bp" ":bp<CR>" {:desc "goto-previous-buffer"})
+(vim.keymap.set "n" " bx" ":close<CR>" {:desc "close-buffer"})
+(vim.keymap.set "n" " bX" ":bd!<CR>" {:desc "delete-buffer"})
 
 ;; find
-(util.nnoremap-wait "fg" "Rg" "live-grep")
-(util.nnoremap "fw" "grep <cword>" "find-word-under-cursor")
-(util.nnoremap "fr" "call setloclist(0, g:recent_files) <bar> lopen" "find-recent-files")
+(vim.keymap.set "n" " fw" ":grep <cword><CR>" {:desc "find-word"})
+(vim.keymap.set "n" " fr" ":call setloclist(0, g:recent_files) <bar> lopen<CR>" {:desc "find-recent"})
 
 ;; git
-(util.nnoremap "gd" "Gvdiffsplit" "git-diff")
-(util.nnoremap "gs" "G" "git-status")
-(util.nnoremap "gp" "Git pull --rebase=true" "git-pull-rebase")
-(util.nnoremap "gPp" "Git push" "git-push")
-(util.nnoremap "gPP" "Git push --force-with-lease" "git-push-force-with-lease")
+(vim.keymap.set "n" " gd" ":Gvdiffsplit<CR>" {:desc "git-diff"})
+(vim.keymap.set "n" " gs" ":G<CR>" {:desc "git-status"})
 
 ;; lsp
-(util.nnoremap "lda" "lua vim.lsp.buf.code_action()" "lsp-diagnostics-code-actions")
-(util.nnoremap "lf" "lua vim.lsp.buf.format()" "lsp-format-buffer")
-(util.nnoremap "lgd" "lua vim.lsp.buf.definition()" "lsp-definitions")
+(vim.keymap.set "n" " ldD" ":lua vim.diagnostic.setqflist()<CR>" {:desc "project-diagnostics"})
+(vim.keymap.set "n" " ldd" ":lua vim.diagnostic.setloclist()<CR>" {:desc "buffer-diagnostics"})
+(vim.keymap.set "n" " lda" ":lua vim.lsp.buf.code_action()<CR>" {:desc "code-actions"})
+(vim.keymap.set "n" " lf" ":lua vim.lsp.buf.format()<CR>" {:desc "format-buffer"})
+(vim.keymap.set "n" " lgd" ":lua vim.lsp.buf.definition()<CR>" {:desc "go-to-definition"})
 
 (nvim.set_keymap "n" "K" ":lua vim.lsp.buf.hover()<CR>" {:noremap true :silent true})
 
@@ -55,13 +50,18 @@
 (vim.keymap.set "n" " wm" "<c-w>|<c-w>_" {:desc "maximize-window"})
 (vim.keymap.set "n" " w=" "<c-w>=" {:desc "balance-windows"})
 
+(fn module-cmd [module cmd]
+  (let [_ (require module)]
+    (vim.fn.feedkeys (.. ":" cmd))))
+
+
 ;; notes
-(util.nnoremap "nn" "NewNote" "create-new-note")
+(vim.keymap.set "n" " nn" (partial module-cmd :modules.notes "NewNote") {:desc "create-new-note"})
 
 ;; terminal
-(util.nnoremap "tt" "Start" "start-new-tmux-window")
-(vim.keymap.set "n" " tn" util.pane-terminal-window {:desc "start-new-terminal"})
+(vim.keymap.set "n" " tn" (fn [] 
+                            (let [util (require :util)] 
+                              (util.pane-terminal-window))) {:desc "start-new-terminal"})
 
 (vim.keymap.set "n" "gF" ":aboveleft wincmd F<CR>")
 (vim.keymap.set "n" "<esc><esc>" ":close<CR>")
-(vim.keymap.set "n" "-" "<CMD>Oil<CR>" {:desc "browse-parent-directory" })

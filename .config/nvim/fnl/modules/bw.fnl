@@ -1,17 +1,18 @@
 ;;bw list items --session $(cat ~/.bwsession) | jq '.[].name'
 (local bw {})
-(local util (require :util))
 
 (set bw.setup 
      (fn []))
 
 (fn items []
-  (let [items (vim.fn.system "bw list items --session `cat ~/.bwsession` | jq '.[].name' | sed 's/\\\"//g'")]
+  (let [util (require :util) 
+        items (vim.fn.system "bw list items --session `cat ~/.bwsession` | jq '.[].name' | sed 's/\\\"//g'")]
     (util.split items "\n")))
 
 (fn completion [_ c]
   (vim.fn.sort
-    (let [c-parts (util.split c " ")
+    (let [util (require :util)
+          c-parts (util.split c " ")
           with-defaults (fn [c] ["--session $(cat ~/.bwsession)" (unpack c)])]
       (match (util.count-matches c "%s")
         0 []
@@ -38,7 +39,8 @@
 (vim.api.nvim_create_user_command
   "Bw"
   (fn [opts]
-    (let [args (util.gather-args opts)]
+    (let [util (require :util)
+          args (util.gather-args opts)]
       (vim.cmd (.. "!bw " args))))
   {:bang false :desc "BW wrapper" :nargs "*"
    :complete completion})

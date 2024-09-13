@@ -1,12 +1,12 @@
 (local npm {})
-(local util (require :util))
 
 (set npm.setup 
      (fn []))
 
 (fn completion [_ c]
   (vim.fn.sort
-    (let [c-parts (util.split c " ")]
+    (let [util (require :util)
+          c-parts (util.split c " ")]
       (match (util.count-matches c "%s")
         0 []
         1 (accumulate 
@@ -30,7 +30,8 @@
 (vim.api.nvim_create_user_command
   "Npm"
   (fn [opts]
-    (let [args (util.gather-args opts)]
+    (let [util (require :util)
+          args (util.gather-args opts)]
       (util.pane-terminal-command (.. "npm " args))))
   {:bang false :desc "NPM wrapper" :nargs "*"
    :complete completion})

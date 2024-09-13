@@ -79,7 +79,7 @@
        (let [wk (require :which-key)]
          (util.m-binding "ee" (fn []
                                 (let [e (root-expression)]
-                                  ((. fennel.repl :send) e))) "Current expression to repl")
+                                  ((. fennel.repl :send) e))) "expression-to-repl")
          (util.m-binding "si" (fn []
                                 (set fennel.repl (start-repl))) "list-jackable-repls")
          (wk.add 

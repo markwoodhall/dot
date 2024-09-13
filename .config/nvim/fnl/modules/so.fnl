@@ -1,5 +1,4 @@
 (local so {})
-(local util (require :util))
 
 (set so.setup 
      (fn []))
@@ -11,7 +10,8 @@
 (vim.api.nvim_create_user_command
   "So"
   (fn [opts]
-    (let [args (util.gather-args opts)]
+    (let [util (require :util)
+          args (util.gather-args opts)]
       (util.pane-terminal-command (.. "so " args))))
   {:bang false :desc "So wrapper" :nargs "*"
    :complete completion})

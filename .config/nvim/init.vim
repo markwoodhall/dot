@@ -1,9 +1,5 @@
 lua << EOF
 local disabled_built_ins = {
-    "netrw",
-    "netrwPlugin",
-    "netrwSettings",
-    "netrwFileHandlers",
     "gzip",
     "zip",
     "zipPlugin",

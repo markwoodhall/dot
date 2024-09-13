@@ -106,6 +106,7 @@
              tree (require :modules.treesitter)]
          (util.which-key-clear-major)
          (match nvim.bo.filetype
+           "sql" (tree.setup)
            "clojure" (let [clj (require :modules.clojure)] 
                        (tree.setup)
                        (clj.setup))

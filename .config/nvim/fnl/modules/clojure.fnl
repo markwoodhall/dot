@@ -217,8 +217,17 @@
          (util.m-binding "sh" hide-repl "hide-repl")
          (util.m-binding "sj" (partial shadow-jack :app)  "hook-into-shadow-repl")
          (util.m-binding "sw" (partial shadow-watch :app)  "start-shadow-build")
+         (util.m-binding "sx" (fn []
+                                (when clojure.repl
+                                  (do (hide-repl) (show-repl true)))
+                                (vim.cmd ":bd!")
+                                (set clojure.repl nil)
+                                (set clojure.win nil)
+                                (set clojure.buf nil)) "list-jackable-repls")
          (util.m-binding "si" (fn []
-                                (set clojure.repl (start-repl))) "list-jackable-repls")
+                                (if clojure.repl
+                                  (do (hide-repl) (show-repl true))
+                                  (set clojure.repl (start-repl)))) "list-jackable-repls")
 
          (util.m-binding "tb" test "Run buffer tests")
          (util.m-binding "tp" test-all "Run project tests")
@@ -226,7 +235,7 @@
          (eval-binding "e" (fn []
                                 (let [e (root-expression)]
                                   (clojure.in-ns)
-                                  ((. clojure.repl :send) e))) "Current expression to repl")
+                                  ((. clojure.repl :send) e))) "expression-to-repl")
 
          (reloaded-binding "d" dev "dev")
          (reloaded-binding "g" go  "reloaded-go")
