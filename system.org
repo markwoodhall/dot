@@ -726,7 +726,8 @@ Programming Languages and associated tools
 ** Kondo
 
 #+begin_src clojure :tangle ~/.config/clj-kondo/config.edn :mkdirp yes
-{:lint-as {day8.re-frame.tracing/fn-traced clojure.core/fn}
+{:lint-as {day8.re-frame.tracing/fn-traced clojure.core/fn
+           clova.core/defvalidator clj-kondo.lint-as/def-catch-all}
  :linters {:clojure-lsp/unused-public-var {:level :warning
                                            :exclude-regex #{".*events/.*"}}
            :unresolved-var {:exclude [clova.core/email?
