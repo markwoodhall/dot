@@ -65,7 +65,7 @@
   ;; Interface
   (Plug "nvim-lualine/lualine.nvim")
 
-  (Plug "nvim-lua/plenary.nvim")
+  ;;(Plug "nvim-lua/plenary.nvim")
   ;;(Plug "nvim-telescope/telescope.nvim")
   ;;(Plug "stevearc/dressing.nvim")
   (Plug "tpope/vim-surround")
