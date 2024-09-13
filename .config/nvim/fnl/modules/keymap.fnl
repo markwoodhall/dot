@@ -17,6 +17,7 @@
      {1 " w" :group "window"}]))
 
 ;; buffers
+(util.nnoremap "bl" "Buffers" "list-buffers")
 (util.nnoremap "bh" "nohl" "no-highlight-search")
 (util.nnoremap "bn" "bn" "goto-next-buffer")
 (util.nnoremap "bp" "bp" "goto-previous-buffer")
@@ -26,6 +27,7 @@
 (util.nnoremap "bX" "bd!" "delete-buffer")
 
 ;; find
+(util.nnoremap-wait "fg" "Rg" "live-grep")
 (util.nnoremap "fw" "grep <cword>" "find-word-under-cursor")
 (util.nnoremap "fr" "call setloclist(0, g:recent_files) <bar> lopen" "find-recent-files")
 

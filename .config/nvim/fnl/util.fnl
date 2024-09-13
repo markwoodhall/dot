@@ -124,6 +124,14 @@
          (.. ":" to "<cr>")
          {:noremap true :desc desc})))
 
+(set util.nnoremap-wait 
+     (fn [from to desc]
+       (nvim.set_keymap
+         :n
+         (.. "<leader>" from)
+         (.. ":" to)
+         {:noremap true :desc desc})))
+
 (set util.m-binding 
      (fn [bind action desc]
        (vim.keymap.set 

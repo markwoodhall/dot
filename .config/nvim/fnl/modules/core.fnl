@@ -47,15 +47,26 @@
 (vim.cmd "set path+=**")
 (vim.cmd "set wildignore+=**/node_modules/**")
 (vim.cmd "set wildignore+=**/.git/**")
+(vim.cmd "set wildignore+=**/.clj-kondo/**")
+(vim.cmd "set wildignore+=**/cljs-test-runner-out/**")
+(vim.cmd "set wildignore+=**/.cpcache/**")
+(vim.cmd "set wildignore+=**/.lsp/**")
 (vim.cmd "set wildignore+=**/oil:/**")
 (vim.cmd "set wildignore+=**/fugitive:/**")
 (vim.cmd "set wildignore+=**/target/**")
+
+(vim.cmd "set grepprg=rg\\ --vimgrep")
+(vim.cmd "set grepformat^=%f:%l:%c:%m")
+
+(vim.cmd "autocmd FileType qf wincmd J")
+(vim.cmd "autocmd FileType qf nmap <buffer> <cr> <cr>:lcl<cr>:ccl<cr>")
+
 (vim.cmd "colorscheme catppuccin-mocha")
 (nvim.ex.set :list)
 
 (vim.cmd "autocmd TermOpen * setlocal scrollback=20000")
 
-(set vim.g.recent_files nil)
+(set vim.g.recent_files [])
 
 (let [cg (vim.api.nvim_create_augroup "all" {:clear true})]
   (vim.api.nvim_create_autocmd 
@@ -77,11 +88,10 @@
      :desc "Setup recent files"
      :callback 
      (fn []
-       (when (not vim.g.recent_files)
-         (let [util (require :util)]
-           (set vim.g.recent_files (icollect [_ v (ipairs vim.v.oldfiles)]
-                                     (when (< (util.count-matches v "BqfPreview*") 1)
-                                       {:filename v :lnum 1 :text ""}))))))})
+       (let [util (require :util)]
+         (set vim.g.recent_files (icollect [_ v (ipairs vim.v.oldfiles)]
+                                   (when (< (util.count-matches v "BqfPreview*") 1)
+                                     {:filename v :lnum 1 :text ""})))))})
   (vim.api.nvim_create_autocmd 
     "BufWinEnter" 
     {:pattern "*.*"
