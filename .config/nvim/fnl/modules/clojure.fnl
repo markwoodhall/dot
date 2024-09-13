@@ -111,10 +111,12 @@
   (let [root (vim.fn.call "FindRootDirectory" [])
         project-clj (util.exists? (.. root "/project.clj"))
         shadow-cljs (util.exists? (.. root "/shadow-cljs.edn"))
-        command (if project-clj 
-                  "lein repl"
-                  (if shadow-cljs
-                    "npx shadow-cljs clj-repl"))
+        deps-edn  (util.exists? (.. root "/deps.edn"))
+        command (match [project-clj shadow-cljs deps-edn]
+                  [true false false] "lein repl"
+                  [false true false] "npx shadow-cljs clj-repl"
+                  [false false true] "clojure -A:dev:dev/nrepl"
+                  _ "lein repl")
         job (vim.fn.termopen command)]
     (vim.cmd "setlocal norelativenumber")
     (vim.cmd "setlocal nonumber")
