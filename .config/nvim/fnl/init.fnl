@@ -19,7 +19,7 @@
   (Plug "stevearc/oil.nvim" {:on :Oil})
 
   ;; Treesitter
-  (Plug "nvim-treesitter/nvim-treesitter" {:do ":TSUpdate"})
+  (Plug "nvim-treesitter/nvim-treesitter" {:do ":TSUpdate" :for [:clojure :fennel :lua :vim :bash :sql :kotlin :javascript :csharp]})
   ;;(Plug "nvim-treesitter/playground" {:on :TSPlaygroundToggle})
 
   ;; Org mode
@@ -94,7 +94,6 @@
 (do
   (require :modules.colors)
   (require :modules.core)
-  (require :modules.treesitter)
   (require :modules.completion)
   (require :modules.keymap)
   (require :modules.lualine)
