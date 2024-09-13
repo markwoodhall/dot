@@ -17,22 +17,10 @@ autocmd BufNewFile,BufRead *.edn,*.cljx,*.cljc,*.cljs,*.cljd setlocal filetype=c
 
 " General mappings
 nnoremap Q <nop>
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
 nnoremap <j> <j><g>
 nnoremap <k> <k><g>
 nnoremap ; :
 nnoremap <tab> %
-nnoremap <F1> <ESC>
-vnoremap <tab> %
-vnoremap <F1> <ESC>
-
-inoremap <F1> <ESC>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
 
 "terminal mappings
 tnoremap <Esc> <C-\><C-n>

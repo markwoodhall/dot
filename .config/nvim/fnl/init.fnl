@@ -23,7 +23,7 @@
   (Plug "nvim-treesitter/playground" {:on :TSPlaygroundToggle})
 
   ;; Org mode
-  (Plug "nvim-orgmode/orgmode")
+  (Plug "nvim-orgmode/orgmode" {:for :org})
   (Plug "akinsho/org-bullets.nvim" {:for :org})
   (Plug "dhruvasagar/vim-table-mode" {:for :org})
 
@@ -66,8 +66,8 @@
   (Plug "nvim-lualine/lualine.nvim")
 
   (Plug "nvim-lua/plenary.nvim")
-  (Plug "nvim-telescope/telescope.nvim")
-  (Plug "stevearc/dressing.nvim")
+  ;;(Plug "nvim-telescope/telescope.nvim")
+  ;;(Plug "stevearc/dressing.nvim")
   (Plug "tpope/vim-surround")
   (Plug "tpope/vim-dispatch" {:on :Dispatch})
   (Plug "tpope/vim-eunuch")
@@ -98,15 +98,12 @@
   (require :modules.colors)
   (require :modules.core)
   (require :modules.treesitter)
-  (require :modules.bbq)
-  (require :modules.paredit)
   (require :modules.completion)
-  (require :modules.dressing)
+  ;;(require :modules.dressing)
   (require :modules.keymap)
   (require :modules.lualine)
   (require :modules.notes)
   (require :modules.oil)
-  (require :modules.org)
   (require :modules.npm)
   (require :modules.docker)
   (require :modules.aws)
@@ -114,7 +111,8 @@
   (require :modules.chatgpt)
   (require :modules.bw)
   (require :modules.eunuchplus)
-  (require "modules.telescope"))
+  ;;(require "modules.telescope")
+  )
 
 (vim.cmd "hi CodeLensReference guifg=#494D64 guibg=#1e1e2e cterm=italic gui=italic")
 (vim.cmd "hi WinSeparator guifg=#1e1e2e guibg=#1e1e2e cterm=italic gui=italic")

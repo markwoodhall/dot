@@ -199,11 +199,8 @@
 
 (set clojure.setup 
      (fn []
-       (let [ts (require :modules.telescope)
-             wk (require :which-key)
+       (let [wk (require :which-key)
              paredit (require "modules.paredit")]
-
-         (ts.clojure)
 
          (util.m-binding "sf" (fn []
                                 (hide-repl)

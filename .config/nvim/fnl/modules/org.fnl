@@ -1,10 +1,9 @@
 (local org {})
-(local og (require "orgmode"))
 
 ;; Because orgmode internally manages its own treesitter
 ;; we need to activate it early, otherwise it will cause
 ;; issue with file previews
-(og.setup {:mappings {:disable_all true}})
+;;(og.setup {:mappings {:disable_all true}})
 
 (fn org-codelens []
   (let [cl (require :modules.codelens)]
@@ -16,8 +15,10 @@
      (fn []
        (let [wk (require :which-key)
              util (require :util)
+             og (require :orgmode)
              ob (require "org-bullets")
              vabel (require :modules.vabel)]
+         (og.setup {:mappings {:disable_all true}})
          (ob.setup)
          (wk.add
           [{1 " m" :group "mode"} 

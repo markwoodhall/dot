@@ -20,6 +20,14 @@
    :complete (partial completion "Tail")})
 
 (vim.api.nvim_create_user_command
+  "Grepp"
+  (fn [opts]
+    (let [args (util.gather-args opts)]
+      (util.pane-terminal-command (.. "rg " args))))
+  {:bang false :desc "Rg wrapper" :nargs "*"
+   :complete (partial completion "Grepp")})
+
+(vim.api.nvim_create_user_command
   "Logs"
   (fn [opts]
     (let [args (util.gather-args opts)]

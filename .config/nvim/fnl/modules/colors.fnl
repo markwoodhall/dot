@@ -10,13 +10,7 @@
       :percentage 0.35}
      :integrations
      {:cmp true
-      :gitsigns true
-      :nvimtree true
       :treesitter true
       :which_key true
       :semantic_tokens true
-      :rainbow_delimiters true
-      :telescope
-      {:enabled true}
-      :mini {:enabled true
-             :indentscope_color ""}}}))
+      :rainbow_delimiters true}}))

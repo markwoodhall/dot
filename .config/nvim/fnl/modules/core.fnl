@@ -44,12 +44,44 @@
 
 (set nvim.g.mapleader " ")
 (set nvim.g.maplocalleader ",")
+(vim.cmd "set path+=**")
+(vim.cmd "set wildignore+=**/node_modules/**")
+(vim.cmd "set wildignore+=**/.git/**")
+(vim.cmd "set wildignore+=**/oil:/**")
+(vim.cmd "set wildignore+=**/fugitive:/**")
+(vim.cmd "set wildignore+=**/target/**")
 (vim.cmd "colorscheme catppuccin-mocha")
 (nvim.ex.set :list)
 
 (vim.cmd "autocmd TermOpen * setlocal scrollback=20000")
 
+(set vim.g.recent_files nil)
+
 (let [cg (vim.api.nvim_create_augroup "all" {:clear true})]
+  (vim.api.nvim_create_autocmd 
+    "BufRead" 
+    {:pattern "*.*"
+     :group cg
+     :desc "Setup recent files"
+     :callback 
+     (fn []
+       (let [util (require :util)
+             old (icollect [_ v (ipairs vim.v.oldfiles)]
+                   (when (< (util.count-matches v "BqfPreview*") 1)
+                     {:filename v :lnum 1 :text ""}))
+             recent [(unpack vim.g.recent_files) (unpack old)]]
+         (set vim.g.recent_files [{:filename (vim.fn.expand "%:p") :lnum 1 :text ""} (unpack recent)])))})
+  (vim.api.nvim_create_autocmd 
+    "VimEnter" 
+    {:group cg
+     :desc "Setup recent files"
+     :callback 
+     (fn []
+       (when (not vim.g.recent_files)
+         (let [util (require :util)]
+           (set vim.g.recent_files (icollect [_ v (ipairs vim.v.oldfiles)]
+                                     (when (< (util.count-matches v "BqfPreview*") 1)
+                                       {:filename v :lnum 1 :text ""}))))))})
   (vim.api.nvim_create_autocmd 
     "BufWinEnter" 
     {:pattern "*.*"
