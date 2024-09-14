@@ -75,6 +75,7 @@
 (set vim.g.recent_files [])
 
 (let [cg (vim.api.nvim_create_augroup "all" {:clear true})]
+
   (vim.api.nvim_create_autocmd 
     "BufRead" 
     {:pattern "*.*"
@@ -88,6 +89,7 @@
                      {:filename v :lnum 1 :text ""}))
              recent [(unpack vim.g.recent_files) (unpack old)]]
          (set vim.g.recent_files [{:filename (vim.fn.expand "%:p") :lnum 1 :text ""} (unpack recent)])))})
+
   (vim.api.nvim_create_autocmd 
     "VimEnter" 
     {:group cg
@@ -98,6 +100,7 @@
          (set vim.g.recent_files (icollect [_ v (ipairs vim.v.oldfiles)]
                                    (when (< (util.count-matches v "BqfPreview*") 1)
                                      {:filename v :lnum 1 :text ""})))))})
+
   (vim.api.nvim_create_autocmd 
     "BufWinEnter" 
     {:pattern "*.*"
@@ -116,7 +119,9 @@
                       (fnl.setup))
            "org" (let [org (require :modules.org)] 
                    (tree.setup)
-                   (org.setup)))))})
+                   (org.setup))
+           "vim" (tree.setup))))})
+
   (vim.api.nvim_create_autocmd 
     ["BufWritePre"] 
     {:pattern "*.*"
@@ -125,6 +130,7 @@
      :callback 
      (fn []
        (vim.lsp.buf.format))})
+
   (vim.api.nvim_create_autocmd 
     ["BufWinEnter" "BufWritePost"] 
     {:pattern "*.*"
