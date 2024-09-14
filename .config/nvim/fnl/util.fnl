@@ -31,10 +31,6 @@
      (fn [c]
        (?. c (length c))))
 
-(set util.last-but-1
-     (fn [c]
-       (?. c (- (length c) 1))))
-
 (set util.empty 
      (fn [c]
        (= (length c) 0)))
@@ -102,10 +98,6 @@
 (set util.dir-exists? 
      (fn [path]
        (= (nvim.fn.isdirectory path) 1)))
-
-(set util.lua-file 
-     (fn [path]
-       (nvim.ex.luafile path)))
 
 (set util.count-matches 
      (fn [s pattern]
@@ -244,34 +236,9 @@
      (fn []
        (util.floating-terminal-command "zsh")))
 
-(set util.pane-repl 
-     (fn [c]
-       (util.pane-terminal-command c)
-       (set nvim.bo.filetype "clojure")
-       (set nvim.bo.syntax "clojure") ))
-
 (set util.pane-terminal-window 
      (fn []
        (util.pane-terminal-command "zsh")))
-
-(set util.floating-buf 
-     (fn [bufnum]
-       (let [ui (. (vim.api.nvim_list_uis) 1)
-             margin 50]
-         (vim.api.nvim_open_win
-           bufnum true {:relative "editor"
-                        :border "rounded"
-                        :row 1 
-                        :col (- (/ (. ui :width) 2) (/ (- (. ui :width) margin) 2))
-                        :width (- (. ui :width) margin) :height (- (. ui :height) 10)})
-         (vim.cmd ":0"))))
-
-(set util.pane-buf 
-     (fn [bufnum]
-       (vim.cmd "wincmd n")
-       (vim.cmd "wincmd J")
-       (vim.cmd "12wincmd_")
-       (vim.cmd (.. "buffer " bufnum))))
 
 (set util.current-project 
      (fn []
@@ -301,13 +268,6 @@
        (let [project (util.current-project)
              env (.. project "/.env")]
          (util.read-env env))))
-
-(set util.code-block
-     (fn [start-s end-s]
-       (let [[line1 _] (vim.fn.searchpos start-s "bc")
-             [line2 _] (vim.fn.searchpos end-s "c")
-             code (vim.fn.getline line1 line2)]
-         code)))
 
 (set util.gather-args 
      (fn [opts] (accumulate 

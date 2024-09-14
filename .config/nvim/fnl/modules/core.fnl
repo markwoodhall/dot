@@ -143,4 +143,3 @@
            "kotlin" (let [cl (require :modules.codelens)] (cl.get-blocks nvim.bo.filetype nil)) 
            "fennel" (let [cl (require :modules.codelens)] (cl.get-blocks nvim.bo.filetype nil)) 
            _ nil))}))
-
