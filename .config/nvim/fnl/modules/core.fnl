@@ -51,6 +51,9 @@
 (vim.cmd "set wildignore+=**/.git/**")
 (vim.cmd "set wildignore+=**/.clj-kondo/**")
 (vim.cmd "set wildignore+=**/cljs-test-runner-out/**")
+(vim.cmd "set wildignore+=**/.shadow-cljs/**")
+(vim.cmd "set wildignore+=**/.deployment-temp/**")
+(vim.cmd "set wildignore+=**/resources/public/js/compiled/**")
 (vim.cmd "set wildignore+=**/.cpcache/**")
 (vim.cmd "set wildignore+=**/.lsp/**")
 (vim.cmd "set wildignore+=**/oil:/**")
@@ -102,9 +105,7 @@
      :desc "Setup filetype"
      :callback 
      (fn []
-       (let [util (require :util)
-             tree (require :modules.treesitter)]
-         (util.which-key-clear-major)
+       (let [tree (require :modules.treesitter)]
          (match nvim.bo.filetype
            "sql" (tree.setup)
            "clojure" (let [clj (require :modules.clojure)] 

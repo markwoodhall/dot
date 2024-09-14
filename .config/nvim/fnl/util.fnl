@@ -182,7 +182,6 @@
          (vim.cmd "wincmd J")
          (vim.cmd "12wincmd_"))))
 
-(var last-drawer-command "")
 (set util.drawer-terminal-command 
      (fn [command]
        (util.drawer "" "" true true)
@@ -193,13 +192,8 @@
        (vim.cmd "setlocal filetype=off")
        (vim.cmd "setlocal syntax=off")
        ;; (vim.fn.feedkeys "G")
-       (set last-drawer-command command)))
+       ))
 
-(set util.rerun-last-drawer-command 
-     (fn []
-       (util.drawer-terminal-command last-drawer-command)))
-
-(var last-pane-command "")
 (set util.pane-terminal-command 
      (fn [command]
        (util.pane "" "" true true)
@@ -210,11 +204,7 @@
        (vim.cmd "setlocal filetype=off")
        (vim.cmd "setlocal syntax=off")
        ;; (vim.fn.feedkeys "G")
-       (set last-pane-command command)))
-
-(set util.rerun-last-pane-command 
-     (fn []
-       (util.pane-terminal-command last-pane-command)))
+       ))
 
 (set util.floating-window 
      (fn [filetype content listed scratch]
@@ -254,18 +244,6 @@
      (fn []
        (util.floating-terminal-command "zsh")))
 
-(set util.floating-psql 
-     (fn [username database port]
-       (util.floating-terminal-command (.. "psql -h 0.0.0.0 -U " username " -d " database " -p " port))
-       (set nvim.bo.filetype "sql")
-       (set nvim.bo.syntax "sql")))
-
-(set util.floating-repl 
-     (fn [c]
-       (util.floating-terminal-command c)
-       (set nvim.bo.filetype "clojure")
-       (set nvim.bo.syntax "clojure") ))
-
 (set util.pane-repl 
      (fn [c]
        (util.pane-terminal-command c)
@@ -275,12 +253,6 @@
 (set util.pane-terminal-window 
      (fn []
        (util.pane-terminal-command "zsh")))
-
-(set util.pane-sql 
-     (fn [username database port]
-       (util.pane-terminal-command (.. "psql -h 0.0.0.0 -U " username " -d " database " -p " port))
-       (set nvim.bo.filetype "sql")
-       (set nvim.bo.syntax "sql")))
 
 (set util.floating-buf 
      (fn [bufnum]
@@ -329,16 +301,6 @@
        (let [project (util.current-project)
              env (.. project "/.env")]
          (util.read-env env))))
-
-(set util.which-key-deregister 
-     (fn [_prefix _lhs]
-       ))
-
-(set util.which-key-clear-major 
-     (fn []
-       (util.which-key-deregister " "
-                                  [:ma :mb :mc :md :me :mf :mg :mh :mi :mj :mk :ml :mm :mn :mo :mp
-                                   :mq :mr :ms :mt :mu :mv :mx :my :mz])))
 
 (set util.code-block
      (fn [start-s end-s]

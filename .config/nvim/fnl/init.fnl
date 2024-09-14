@@ -16,7 +16,7 @@
   (Plug "kevinhwang91/nvim-bqf")
 
   ;; Treesitter
-  (Plug "nvim-treesitter/nvim-treesitter" {:do ":TSUpdate" :for [:clojure :fennel :lua :vim :bash :sql :kotlin :javascript :cs]})
+  (Plug "nvim-treesitter/nvim-treesitter" {:do ":TSUpdate" :for [:clojure :fennel :lua :vim :bash :sql :kotlin :javascript :cs :org]})
   ;;(Plug "nvim-treesitter/playground" {:on :TSPlaygroundToggle})
 
   ;; Org mode

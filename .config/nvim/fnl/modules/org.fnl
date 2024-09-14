@@ -15,7 +15,6 @@
 (set org.setup
      (fn []
        (let [wk (require :which-key)
-             util (require :util)
              ob (require "org-bullets")
              vabel (require :modules.vabel)]
          (ob.setup)
@@ -23,8 +22,8 @@
           [{1 " m" :group "mode"} 
            {1 " me" :group "evaluation"} 
            {1 " mt" :group "tangle"}])
-         (util.m-binding "ee" vabel.eval-code-block "eval-code-block")
-         (util.m-binding "tt" vabel.tangle-blocks "tangle-file"))))
+         (vim.keymap.set "n" " ee" vabel.eval-code-block  {:desc "eval-code-block"})
+         (vim.keymap.set "n" " tt" vabel.tangle-blocks {:desc "tangle-file"}))))
 
 (let [cg (vim.api.nvim_create_augroup "org" {:clear true})]
   (vim.api.nvim_create_autocmd 

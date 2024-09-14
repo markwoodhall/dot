@@ -732,11 +732,14 @@ Programming Languages and associated tools
                                            :exclude-regex #{".*events/.*"}}
            :unresolved-var {:exclude [clova.core/email?
                                       clova/=?
+                                      clova.core/not-nil?
                                       clova.core/required?
                                       clova.core/not-empty?
                                       clova.core/exists?
                                       clova.core/numeric?
                                       clova.core/one-of?
+                                      clova.core/post-code?
+                                      clova.core/gov-uk-post-code?
                                       clova.core/not-exists?]}}}
 #+end_src
 
