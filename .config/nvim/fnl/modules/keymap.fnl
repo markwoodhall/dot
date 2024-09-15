@@ -23,6 +23,12 @@
 (vim.keymap.set "n" " bx" ":close<CR>" {:desc "close-buffer"})
 (vim.keymap.set "n" " bX" ":bd!<CR>" {:desc "delete-buffer"})
 
+;; jumping
+(vim.keymap.set "n" " q" ":cnext<CR>" {:desc "next-quick-fix"})
+(vim.keymap.set "n" " Q" ":cprev<CR>" {:desc "previous-quick-fix"})
+(vim.keymap.set "n" " l" ":lnext<CR>" {:desc "next-location-list"})
+(vim.keymap.set "n" " L" ":lprev<CR>" {:desc "previous-location-list"})
+
 ;; find
 (vim.keymap.set "n" " fw" ":grep <cword><CR>" {:desc "find-word"})
 (vim.keymap.set "n" " fr" ":call setloclist(0, g:recent_files) <bar> lopen<CR>" {:desc "find-recent"})
