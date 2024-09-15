@@ -22,8 +22,8 @@
           [{1 " m" :group "mode"} 
            {1 " me" :group "evaluation"} 
            {1 " mt" :group "tangle"}])
-         (vim.keymap.set "n" " ee" vabel.eval-code-block  {:desc "eval-code-block"})
-         (vim.keymap.set "n" " tt" vabel.tangle-blocks {:desc "tangle-file"}))))
+         (vim.keymap.set "n" " mee" vabel.eval-code-block  {:desc "eval-code-block"})
+         (vim.keymap.set "n" " mtt" vabel.tangle-blocks {:desc "tangle-file"}))))
 
 (let [cg (vim.api.nvim_create_augroup "org" {:clear true})]
   (vim.api.nvim_create_autocmd 

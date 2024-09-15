@@ -51,7 +51,7 @@
 (vim.cmd "set wildignore+=**/.git/**")
 (vim.cmd "set wildignore+=**/.clj-kondo/**")
 (vim.cmd "set wildignore+=**/cljs-test-runner-out/**")
-(vim.cmd "set wildignore+=**/.shadow-cljs/**")
+;;(vim.cmd "set wildignore+=**/.shadow-cljs/**")
 (vim.cmd "set wildignore+=**/.deployment-temp/**")
 (vim.cmd "set wildignore+=**/resources/public/js/compiled/**")
 (vim.cmd "set wildignore+=**/.cpcache/**")
@@ -123,8 +123,7 @@
            ;; :e triggers attach to lsp, need to figure out
            ;; why this doesn't happen otherwise
            (when completion (do (completion.setup) (vim.cmd "e"))) 
-           (when lang (lang.setup))
-           (vim.cmd "e"))))})
+           (when lang (lang.setup)))))})
 
   (vim.api.nvim_create_autocmd 
     ["BufWritePre"] 
