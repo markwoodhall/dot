@@ -101,6 +101,13 @@
                                    (when (< (util.count-matches v "BqfPreview*") 1)
                                      {:filename v :lnum 1 :text ""})))))})
 
+  (local languages {:clojure {:ts true :module true :completion true} 
+                    :org {:ts true :module true :completion true} 
+                    :fennel {:ts true :module true :completion true} 
+                    :sql {:ts true :module true :completion true}
+                    :gitcommit {:completion true}
+                    :vim {:ts true}})
+
   (vim.api.nvim_create_autocmd 
     "BufWinEnter" 
     {:pattern "*.*"
@@ -108,19 +115,16 @@
      :desc "Setup filetype"
      :callback 
      (fn []
-       (let [tree (require :modules.treesitter)]
-         (match nvim.bo.filetype
-           "sql" (tree.setup)
-           "clojure" (let [clj (require :modules.clojure)] 
-                       (tree.setup)
-                       (clj.setup))
-           "fennel" (let [fnl (require :modules.fennel)] 
-                      (tree.setup)
-                      (fnl.setup))
-           "org" (let [org (require :modules.org)] 
-                   (tree.setup)
-                   (org.setup))
-           "vim" (tree.setup))))})
+       (when (. languages nvim.bo.filetype)
+         (let [tree (when (. (. languages nvim.bo.filetype) :ts) (require :modules.treesitter)) 
+               lang (when (. (. languages nvim.bo.filetype) :module) (require (.. "modules." nvim.bo.filetype)))
+               completion (when (. (. languages nvim.bo.filetype) :completion) (require :modules.completion))]
+           (when tree (tree.setup)) 
+           ;; :e triggers attach to lsp, need to figure out
+           ;; why this doesn't happen otherwise
+           (when completion (do (completion.setup) (vim.cmd "e"))) 
+           (when lang (lang.setup))
+           (vim.cmd "e"))))})
 
   (vim.api.nvim_create_autocmd 
     ["BufWritePre"] 

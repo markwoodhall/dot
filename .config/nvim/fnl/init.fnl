@@ -1,7 +1,7 @@
 (local Plug (. vim.fn "plug#"))
 (vim.call "plug#begin")
 
-(local languages [:clojure :fennel :lua :vim :bash :sql :kotlin :javascript :cs :org])
+(local languages [:clojure :fennel :lua :vim :bash :sql :kotlin :javascript :cs :org :gitcommit])
 
 ;; Install plugins
 (do 
@@ -49,11 +49,11 @@
   (Plug "tpope/vim-fugitive" {:on [:G :Git :Gvdiffsplit]})
 
   ;; Completion & LSP
-  (Plug "neovim/nvim-lspconfig")
-  (Plug "hrsh7th/nvim-cmp")
-  (Plug "hrsh7th/cmp-nvim-lsp")
-  (Plug "davidsierradz/cmp-conventionalcommits")
-  (Plug "hrsh7th/cmp-path")
+  (Plug "neovim/nvim-lspconfig" {:for languages})
+  (Plug "hrsh7th/nvim-cmp" {:for languages})
+  (Plug "hrsh7th/cmp-nvim-lsp" {:for languages})
+  (Plug "davidsierradz/cmp-conventionalcommits" {:for languages})
+  (Plug "hrsh7th/cmp-path" {:for languages})
 
   ;; Interface
   (Plug "tpope/vim-vinegar")
