@@ -30,7 +30,7 @@
    :complete (partial completion "Grep")})
 
 (vim.api.nvim_create_user_command
-  "Rg"
+  "Find"
   (fn [opts]
     (let [util (require :util) 
           args (util.gather-args opts)]
