@@ -105,7 +105,7 @@
                     :org {:ts true :module true :completion true} 
                     :fennel {:ts true :module true :completion true} 
                     :sql {:ts true :module true :completion true}
-                    :gitcommit {:completion true}
+                    :gitcommit {:completion true :ts true}
                     :vim {:ts true}})
 
   (vim.api.nvim_create_autocmd 
