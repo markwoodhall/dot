@@ -52,7 +52,6 @@
   (Plug "neovim/nvim-lspconfig" {:for languages})
   (Plug "hrsh7th/nvim-cmp" {:for languages})
   (Plug "hrsh7th/cmp-nvim-lsp" {:for languages})
-  (Plug "davidsierradz/cmp-conventionalcommits" {:for languages})
   (Plug "hrsh7th/cmp-path" {:for languages})
 
   ;; Interface

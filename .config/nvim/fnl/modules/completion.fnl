@@ -39,9 +39,7 @@
                                      {:name "buffer"}])})
     (cmp.setup.filetype 
       "gitcommit"
-      {:sources (cmp.config.sources [{:name "cmp_git"}
-                                     {:name "conventionalcommits"}
-                                     {:name "buffer"}])})
+      {:sources (cmp.config.sources [{:name "buffer"}])})
     (cmp.setup.filetype 
       "clojure"
       {:sources (cmp.config.sources [{:name "nvim_lsp" :keyword_length 2}
