@@ -1,11 +1,13 @@
 (local Plug (. vim.fn "plug#"))
 (vim.call "plug#begin")
 
+(local languages [:clojure :fennel :lua :vim :bash :sql :kotlin :javascript :cs :org])
+
 ;; Install plugins
 (do 
   (Plug "nvim-tree/nvim-web-devicons")
   (Plug "folke/which-key.nvim")
-  (Plug "hiphish/rainbow-delimiters.nvim" {:for [:clojure :java :kotlin :sql :fennel :lua :vim :bash :javascript]})
+  (Plug "hiphish/rainbow-delimiters.nvim" {:for languages})
 
   ;; Java / Kotlin
   (Plug "markwoodhall/vim-idea" {:for [:java :kotlin]})
@@ -16,7 +18,7 @@
   (Plug "kevinhwang91/nvim-bqf")
 
   ;; Treesitter
-  (Plug "nvim-treesitter/nvim-treesitter" {:do ":TSUpdate" :for [:clojure :fennel :lua :vim :bash :sql :kotlin :javascript :cs :org]})
+  (Plug "nvim-treesitter/nvim-treesitter" {:do ":TSUpdate" :for languages})
   ;;(Plug "nvim-treesitter/playground" {:on :TSPlaygroundToggle})
 
   ;; Org mode
@@ -48,9 +50,6 @@
 
   ;; Completion & LSP
   (Plug "neovim/nvim-lspconfig")
-  ;;(Plug "SmiteshP/nvim-navic" {:for [:clojure :kotlin :sql :fennel :cs]})
-  ;;(Plug "utilyre/barbecue.nvim" {:for [:clojure :kotlin :sql :fennel :cs]})
-  ;;(Plug "onsails/lspkind.nvim" {:for [:clojure :kotlin :sql :fennel :cs]})
   (Plug "hrsh7th/nvim-cmp")
   (Plug "hrsh7th/cmp-nvim-lsp")
   (Plug "davidsierradz/cmp-conventionalcommits")
@@ -60,14 +59,11 @@
   (Plug "tpope/vim-vinegar")
   (Plug "nvim-lualine/lualine.nvim")
 
-  ;;(Plug "nvim-lua/plenary.nvim")
-  ;;(Plug "nvim-telescope/telescope.nvim")
-  ;;(Plug "stevearc/dressing.nvim")
   (Plug "tpope/vim-surround")
   (Plug "tpope/vim-dispatch" {:on :Dispatch})
   (Plug "radenling/vim-dispatch-neovim")
   (Plug "tpope/vim-eunuch" {:on :Remove})
-  (Plug "lilydjwg/colorizer" {:for [:clojure :org :html :javascript :css :less]})
+  (Plug "lilydjwg/colorizer" {:for languages})
   (set vim.g.colorizer_nomap 1)
   (set vim.g.colorizer_maxlines 1000)
 
