@@ -73,7 +73,10 @@
   ;; Database
   (Plug "tpope/vim-dadbod" {:on :DBUI})
   (Plug "kristijanhusak/vim-dadbod-ui" {:on :DBUI})
-  (Plug "kristijanhusak/vim-dadbod-completion" {:on :DBUI})
+  ;; We need to load this for sql files, rather that on DBUI 
+  ;; because it relies on completion, which is also loaded
+  ;; and setup for sql files
+  (Plug "kristijanhusak/vim-dadbod-completion" {:for :sql})
   (set vim.g.db_ui_save_location "~/dotfiles")
 
   ;; Colors

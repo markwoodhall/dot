@@ -109,21 +109,21 @@
                     :vim {:ts true}})
 
   (vim.api.nvim_create_autocmd 
-    "BufWinEnter" 
-    {:pattern "*.*"
+    "FileType" 
+    {:pattern (icollect [k _ (ipairs languages)] k)
      :group cg
      :desc "Setup filetype"
      :callback 
      (fn []
-       (when (. languages nvim.bo.filetype)
-         (let [tree (when (. (. languages nvim.bo.filetype) :ts) (require :modules.treesitter)) 
-               lang (when (. (. languages nvim.bo.filetype) :module) (require (.. "modules." nvim.bo.filetype)))
-               completion (when (. (. languages nvim.bo.filetype) :completion) (require :modules.completion))]
-           (when tree (tree.setup)) 
-           ;; :e triggers attach to lsp, need to figure out
-           ;; why this doesn't happen otherwise
-           (when completion (do (completion.setup) (vim.cmd "e"))) 
-           (when lang (lang.setup)))))})
+       (vim.schedule
+         (fn []
+           (when (. languages nvim.bo.filetype)
+             (let [tree (when (. (. languages nvim.bo.filetype) :ts) (require :modules.treesitter)) 
+                   lang (when (. (. languages nvim.bo.filetype) :module) (require (.. "modules." nvim.bo.filetype)))
+                   completion (when (. (. languages nvim.bo.filetype) :completion) (require :modules.completion))]
+               (when tree (tree.setup)) 
+               (when lang (lang.setup))
+               (when completion (completion.setup)))))))})
 
   (vim.api.nvim_create_autocmd 
     ["BufWritePre"] 

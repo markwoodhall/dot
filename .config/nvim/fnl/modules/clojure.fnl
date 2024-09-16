@@ -100,6 +100,36 @@
          enter
          vim.g.clojure-window-options)))
 
+(fn connect-repl [connection]
+  (set clojure.last-ns nil)
+  (set clojure.buf (vim.api.nvim_create_buf true true))
+  (set clojure.win 
+       (vim.api.nvim_open_win 
+         clojure.buf 
+         true 
+         vim.g.clojure-window-options))
+  (let [root (vim.fn.call "FindRootDirectory" [])
+        project-clj (util.exists? (.. root "/project.clj"))
+        command (when project-clj (.. "lein repl :connect " connection))
+        job (when command (vim.fn.termopen command))]
+    (if job 
+      (do
+        (vim.cmd "setlocal norelativenumber")
+        (vim.cmd "setlocal nonumber")
+        (set nvim.bo.filetype "clojure")
+        (set nvim.bo.syntax "clojure")
+        (clojure.setup)
+        {:job job
+         :send (fn [data]
+                 (hide-repl)
+                 (set clojure.win 
+                      (vim.api.nvim_open_win 
+                        clojure.buf 
+                        vim.g.clojure-jump-to-window 
+                        vim.g.clojure-window-options))
+                 (vim.fn.chansend job (.. data "\n")))})
+      (print "Cannot find a repl to connect to for this project"))))
+
 (fn start-repl []
   (set clojure.last-ns nil)
   (set clojure.buf (vim.api.nvim_create_buf true true))
@@ -228,6 +258,7 @@
                                 (if clojure.repl
                                   (do (hide-repl) (show-repl true))
                                   (set clojure.repl (start-repl)))) "list-jackable-repls")
+         (util.m-binding "sc" "ClojureConnect" "connect-to-running-repl")
 
          (util.m-binding "tb" test "Run buffer tests")
          (util.m-binding "tp" test-all "Run project tests")
@@ -257,7 +288,17 @@
             {1 " mt" :group "test" :buffer (vim.api.nvim_get_current_buf)}
             {1 " ms" :group "sesman" :buffer (vim.api.nvim_get_current_buf)}])
 
-         (paredit.setup))))
+         (paredit.setup)
+         
+         (vim.api.nvim_create_user_command
+           "ClojureConnect"
+           (fn [opts]
+             (let [util (require :util)
+                   args (util.gather-args opts)]
+               (if clojure.repl
+                 (do (hide-repl) (show-repl true))
+                 (set clojure.repl (connect-repl args)))))
+           {:bang false :desc "Connect to repl" :nargs "*"}))))
 
 
 (set clojure.last-ns nil)
