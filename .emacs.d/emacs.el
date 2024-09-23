@@ -3,12 +3,11 @@
 (require 'package)
 (add-to-list 'package-archives
        '("melpa" . "https://melpa.org/packages/"))
-(when (not package-archive-contents)
-  (package-refresh-contents))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
+
 (setq use-package-always-ensure t)
 
 ;; Setting garbage collection threshold
@@ -24,12 +23,11 @@
                               (time-subtract after-init-time before-init-time)))
                      gcs-done)))
 
-;; Silence compiler warnings as they can be pretty disruptive (setq comp-async-report-warnings-errors nil)
-
 ;; Silence compiler warnings as they can be pretty disruptive
 (if (boundp 'comp-deferred-compilation)
     (setq comp-deferred-compilation nil)
     (setq native-comp-jit-compilation nil))
+
 ;; In noninteractive sessions, prioritize non-byte-compiled source files to
 ;; prevent the use of stale byte-code. Otherwise, it saves us a little IO time
 ;; to skip the mtime checks on every *.elc file.
@@ -40,8 +38,8 @@
 
 (use-package evil
   :ensure t
-  :init      ;; tweak evil's configuration before loading it
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  :init
+  (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
   (setq evil-vsplit-window-right t)
   (setq evil-split-window-below t)
@@ -85,6 +83,7 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (tooltip-mode nil)
+
 (setq frame-resize-pixelwise t)
 
 (setq-default display-line-numbers-type 'relative)
@@ -96,13 +95,29 @@
 (set-default 'truncate-lines t)
 (auto-fill-mode -1)
 
+(use-package all-the-icons)
+(use-package dashboard
+  :init
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-projects-backend 'projectile)
+  (setq dashboard-icon-type 'all-the-icons)
+  (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
+  (setq dashboard-startup-banner "~/.emacs.d/emacs.png")
+  (setq dashboard-center-content t)
+  (setq dashboard-vertically-center-content t)
+  (setq dashboard-items '((recents . 9)
+                          (projects . 5)))
+  :config
+  (dashboard-setup-startup-hook))
+
 (use-package doom-modeline
    :init
    (doom-modeline-mode 1))
 
-(use-package doom-themes)
-
-(load-theme 'doom-tokyo-night)
+(use-package doom-themes
+  :init
+  (load-theme 'doom-tokyo-night t))
 
 (setq switch-to-buffer-obey-display-actions t)
 
@@ -168,9 +183,6 @@
   :font "JetBrains Mono"
   :height 95
   :weight 'medium)
-;; Makes commented text and keywords italics.
-;; This is working in emacsclient but not emacs.
-;; Your font must have an italic face available.
 (set-face-attribute 'font-lock-comment-face nil
   :slant 'italic)
 (set-face-attribute 'font-lock-keyword-face nil
@@ -185,6 +197,7 @@
        "h r"   '(:which-key "reload")
        "h r e" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config"))
 
+(use-package smex)
 (use-package ivy
   :defer 0.1
   :diminish
@@ -194,9 +207,9 @@
    ("C-k" . ivy-previous-line)
    ("C-j" . ivy-next-line)
    :map ivy-minibuffer-map
-   ("TAB" . ivy-alt-done)
+   ("TAB" . ivy-partial)
    ("C-l" . ivy-alt-done)
-   ("C-j" . ivy-next-line)
+   ("C-j" . ivy-next-linae)
    ("C-k" . ivy-previous-line)
    :map ivy-switch-buffer-map
    ("C-k" . ivy-previous-line)
@@ -444,58 +457,29 @@ respectively."
   "m s" '(:which-key "sesman")
   "m s i" '(fennel-repl :which-key "Fennel REPL"))
 
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :config
-  (setq lsp-clojure-custom-server-command '("bash" "-c" "clojure-lsp"))
-  (dolist (m '(clojure-mode
-               clojurec-mode
-               clojurescript-mode
-               clojurex-mode))
-    (add-to-list 'lsp-language-id-configuration `(,m . "clojure")))
-  (add-to-list 'lsp-language-id-configuration '(fennel-mode . "fennel"))
-  (lsp-register-client (make-lsp-client
-                      :new-connection (lsp-stdio-connection "fennel-ls")
-                      :activation-fn (lsp-activate-on "fennel")
-                      :server-id 'fennel-ls))
-  (setq lsp-enable-indentation nil)
-  (setq lsp-semantic-tokens-enable nil)
-  (setq lsp-sqls-workspace-config-path nil)
-  (setq lsp-sqls-connections
-      '(((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=bags password=bags dbname=bags sslmode=disable"))
-       ((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=pelly password=pelly dbname=pelly sslmode=disable"))
-       ((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=abv password=abv dbname=abv sslmode=disable")))))
 
-(use-package lsp-ui
-  :after lsp)
+(use-package eglot
+  :init (add-hook 'clojure-mode-hook 'eglot-ensure))
 
-(use-package lsp-treemacs
-  :after lsp)
-
-(use-package lsp-ivy
-  :after lsp)
-
-(add-hook 'sql-mode-hook 'lsp)
-(add-hook 'clojure-mode-hook 'lsp)
-(add-hook 'clojurescript-mode-hook 'lsp)
-(add-hook 'clojurec-mode-hook 'lsp)
-(add-hook 'fennel-mode-hook 'lsp)
 (setq read-process-output-max (* 3 1024 1024))
 
-(nvmap :prefix ""
-  "K" '(lsp-ui-doc-glance :which-key "Lsp Documentation"))
+;;(nvmap :prefix ""
+;;  "K" '(lsp-ui-doc-glance :which-key "Lsp Documentation"))
+;;
+;;(nvmap :prefix "SPC"
+;;  "l"   '(:which-key "lsp")
+;;  "l g" '(:which-key "goto")
+;;  "l g d" '(lsp-find-definition :which-key "Find definition")
+;;  "l d" '(:which-key "diag")
+;;  "l d r" '(lsp-find-references :which-key "Find references")
+;;  "l d a" '(lsp-execute-code-action :which-key "LSP code actions")
+;;  "l d D" '(lsp-treemacs-errors-list :which-key "Diagnotics"))
 
-(nvmap :prefix "SPC"
-  "l"   '(:which-key "lsp")
-  "l g" '(:which-key "goto")
-  "l g d" '(lsp-find-definition :which-key "Find definition")
-  "l d" '(:which-key "diag")
-  "l d r" '(lsp-find-references :which-key "Find references")
-  "l d a" '(lsp-execute-code-action :which-key "LSP code actions")
-  "l d D" '(lsp-treemacs-errors-list :which-key "Diagnotics"))
+(use-package eldoc-box
+  :init (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t))
 
-(use-package flycheck
-  :init (global-flycheck-mode))
+(use-package flymake
+  :init (add-hook 'clojure-mode-hook 'flymake-mode))
 
 (use-package company)
 (global-company-mode)
