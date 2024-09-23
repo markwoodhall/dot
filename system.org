@@ -726,21 +726,41 @@ Programming Languages and associated tools
 ** Kondo
 
 #+begin_src clojure :tangle ~/.config/clj-kondo/config.edn :mkdirp yes
-{:lint-as {day8.re-frame.tracing/fn-traced clojure.core/fn
-           clova.core/defvalidator clj-kondo.lint-as/def-catch-all}
- :linters {:clojure-lsp/unused-public-var {:level :warning
-                                           :exclude-regex #{".*events/.*"}}
-           :unresolved-var {:exclude [clova.core/email?
-                                      clova/=?
-                                      clova.core/not-nil?
-                                      clova.core/required?
-                                      clova.core/not-empty?
-                                      clova.core/exists?
-                                      clova.core/numeric?
-                                      clova.core/one-of?
-                                      clova.core/post-code?
-                                      clova.core/gov-uk-post-code?
-                                      clova.core/not-exists?]}}}
+  {:lint-as {day8.re-frame.tracing/fn-traced clojure.core/fn
+             clova.core/defvalidator clj-kondo.lint-as/def-catch-all}
+   :linters {:clojure-lsp/unused-public-var {:level :warning
+                                             :exclude-regex #{".*events/.*"}}
+             :unresolved-var {:exclude [clova.core/email?
+                                        clova/=?
+                                        clova.core/before?
+                                        clova.core/stringy?
+                                        clova.core/longer?
+                                        clova.core/between?
+                                        clova.core/negative?
+                                        clova.core/positive?
+                                        clova.core/zip-code?
+                                        clova.core/url?
+                                        clova.core/matches?
+                                        clova.core/alphanumeric?
+                                        clova.core/after?
+                                        clova.core/date?
+                                        clova.core/=?
+                                        clova.core/all?
+                                        clova.core/lesser?
+                                        clova.core/greater?
+                                        clova.core/credit-card?
+                                        clova.core/not-nil?
+                                        clova.core/required?
+                                        clova.core/not-empty?
+                                        clova.core/=date?
+                                        clova.core/exists?
+                                        clova.core/numeric?
+                                        clova.core/length?
+                                        clova.core/shorter?
+                                        clova.core/one-of?
+                                        clova.core/post-code?
+                                        clova.core/gov-uk-post-code?
+                                        clova.core/not-exists?]}}}
 #+end_src
 
 ** lein
