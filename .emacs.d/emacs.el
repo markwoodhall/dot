@@ -252,12 +252,6 @@
   :config
   (counsel-mode 1))
 
-(use-package clojure-mode
-  :mode "\\.\\(clj\\|cljs\\|cljc\\)\\''")
-(use-package lua-mode
-  :mode "\\.lua\\'")
-(use-package markdown-mode
-  :mode "\\.md\\'")
 (use-package fennel-mode
   :mode "\\.fnl\\'")
 (use-package terraform-mode
@@ -277,21 +271,11 @@
   :init
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(use-package ansi-color
-  :hook (compilation-filter . ansi-color-compilation-filter))
-
-(setq compilation-scroll-output t)
-
-(defun mw/npm-run-target (target options)
-  "Run npm run TARGET with OPTIONS."
-  (interactive)
-  (compile
-   (mw/build-command " npm run " target options t t)))
-
-(defun mw/npm-run-watch-tailwind ()
-  "Run the mvn targets clean and compile."
-  (interactive)
-  (mw/npm-run-target "tailwindw" ""))
+(defun mw/named-vterm (name)
+  "Start a vterm and renames the buffer NAME."
+  (interactive "sTerminal name:")
+  (vterm)
+  (rename-buffer (concat "vterm-" name)))
 
 (use-package yaml
   :mode "\\.yml\\'")
@@ -395,56 +379,6 @@ respectively."
   "s w _"  '(wrap-with-underscores :which-key "Wrap with underscores")
   "s w `"  '(wrap-with-back-quotes :which-key "Wrap with backticks"))
 
-(use-package cider
-  :hook (cider-mode . clojure-mode))
-
-(defun mw/nrepl-reset ()
-  (interactive)
-  (cider-interactive-eval
-   "(dev/reset)"))
-
-(defun mw/nrepl-dev ()
-  (interactive)
-  (cider-interactive-eval
-   "(user/dev)"))
-
-(defun mw/nrepl-go ()
-  (interactive)
-  (cider-interactive-eval
-   "(dev/go)"))
-
-(defun mw/nrepl-init-db ()
-  (interactive)
-  (cider-interactive-eval
-   "(use 'db) (db/init-schema)"))
-
-(defun mw/nrepl-migrate-db ()
-  (interactive)
-  (cider-interactive-eval
-   "(use 'db) (db/migrate-schema)"))
-
-(nvmap :keymaps 'clojure-mode-map :prefix "SPC"
-  "m"   '(:which-key "major")
-  "m e" '(:which-key "evaluation")
-  "m r" '(:which-key "reloaded")
-
-  "m r g" '(mw/nrepl-go :which-key "Go")
-  "m r d" '(mw/nrepl-dev :which-key "Dev")
-  "m r r" '(mw/nrepl-reset :which-key "Reset")
-  "m r m" '(mw/nrepl-migrate-db :which-key "Migrate DB")
-  "m r i" '(mw/nrepl-init-db :which-key "Init DB")
-
-  "m e b" '(cider-eval-buffer :which-key "Cider eval buffer")
-  "m e e" '(cider-eval-defun-at-point :which-key "Cider eval root expressions")
-  "m e E" '(cider-eval-last-sexp :which-key "Cider eval expressions")
-
-  "m t" '(:which-key "test")
-  "m t p" '(cider-test-run-project-tests :which-key "Cider run project tests")
-  "m t n" '(cider-test-run-ns-tests :which-key "Cider run ns tests")
-
-  "m s" '(:which-key "sesman")
-  "m s I" '(cider-jack-in-cljs :which-key "Cider jack in cljs")
-  "m s i" '(cider-jack-in :which-key "Cider jack in"))
 
 (nvmap :keymaps 'fennel-mode-map :prefix "SPC"
   "m"   '(:which-key "major")
@@ -456,30 +390,6 @@ respectively."
 
   "m s" '(:which-key "sesman")
   "m s i" '(fennel-repl :which-key "Fennel REPL"))
-
-
-(use-package eglot
-  :init (add-hook 'clojure-mode-hook 'eglot-ensure))
-
-(setq read-process-output-max (* 3 1024 1024))
-
-;;(nvmap :prefix ""
-;;  "K" '(lsp-ui-doc-glance :which-key "Lsp Documentation"))
-;;
-;;(nvmap :prefix "SPC"
-;;  "l"   '(:which-key "lsp")
-;;  "l g" '(:which-key "goto")
-;;  "l g d" '(lsp-find-definition :which-key "Find definition")
-;;  "l d" '(:which-key "diag")
-;;  "l d r" '(lsp-find-references :which-key "Find references")
-;;  "l d a" '(lsp-execute-code-action :which-key "LSP code actions")
-;;  "l d D" '(lsp-treemacs-errors-list :which-key "Diagnotics"))
-
-(use-package eldoc-box
-  :init (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t))
-
-(use-package flymake
-  :init (add-hook 'clojure-mode-hook 'flymake-mode))
 
 (use-package company)
 (global-company-mode)
@@ -580,13 +490,6 @@ respectively."
        (slot . 0)))
 
 (add-to-list 'display-buffer-alist
-     '("\*Flymake\*"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
      '("\*cider-repl\*"
        (display-buffer-in-side-window)
        (window-height . 0.33)
@@ -643,6 +546,21 @@ respectively."
         which-key-separator " → " ))
 (which-key-mode)
 (which-key-setup-minibuffer)
+
+(load-file
+ (expand-file-name
+  "clojure.el"
+  user-emacs-directory))
+
+(load-file
+ (expand-file-name
+  "lsp.el"
+  user-emacs-directory))
+
+(load-file
+ (expand-file-name
+  "compilation.el"
+  user-emacs-directory))
 
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 5 1000 1000))
