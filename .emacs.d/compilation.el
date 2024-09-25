@@ -20,11 +20,15 @@ REPLACE-DOUBLE-QUOTES"
         no-double-quotes)
     ""))
 
-(defun mw/jq (file jq)
-  "Run JQ command against json FILE."
+(defun mw/bash (cmd)
+  "Run CMD using bash and return a seq of line output."
   (split-string
    (shell-command-to-string
-    (concat "bash -c \"jq -r '" jq "' " file "\"")) "\n"))
+    (concat "bash -c \"" cmd "\"")) "\n"))
+
+(defun mw/jq (file jq)
+  "Run JQ command against json FILE."
+  (mw/bash (concat "jq -r '" jq "' " file )))
 
 (defun mw/build-command (cmd target options change-dir dir read-env)
   "Buld a compilation command CMD with TARGET and OPTIONS.
@@ -46,6 +50,44 @@ READ-ENV will product a command prefixed with environment variables."
   (mw/build-command
    cmd target options change-dir (projectile-project-root) read-env))
 
+
+(defun mw/docker-compose (directory command)
+  (interactive
+   (list
+    (read-directory-name "Directory: ")
+    (completing-read "Command: " '("up" "down" "-f"))))
+  (let* ((file (if (string= command "-f")
+                   (read-file-name "Compose file: " directory "docker-compose.yml" t "docker-compose.yml")
+                 nil))
+         (option (if (string= command "-f")
+                     (concat file " "(completing-read "Option: " '("up" "down")))
+                   nil))
+         (compilation-buffer-name-function
+          (lambda (&rest _)
+            (concat "*compilation*" "-" directory "docker-compose-" command "-" option))))
+    (compile
+     (mw/build-command "docker compose" command option t directory nil))))
+
+(defun mw/docker-logs (container)
+  (interactive
+   (list
+    (completing-read "Container: " (mw/bash "docker ps --format '{{json .}}' | jq .Names"))))
+  (let* ((compilation-buffer-name-function
+          (lambda (&rest _)
+            (concat "*compilation*" "-docker-logs-" container))))
+    (compile
+     (mw/build-command "docker logs" container "--follow" nil nil nil))))
+
+;; docker
+(defun mw/docker (command)
+  (interactive
+   (list
+    (completing-read "Command: " '("compose" "logs"))))
+  (if (string= command "compose")
+      (call-interactively #'mw/docker-compose))
+  (if (string= command "logs")
+      (call-interactively #'mw/docker-logs)))
+
 ;; npm
 (defun mw/npm (directory command)
   (interactive
@@ -61,7 +103,7 @@ READ-ENV will product a command prefixed with environment variables."
                                    "set" "shrinkwrap" "star" "stars" "start" "stop" "team" "test"
                                    "token" "uninstall" "unpublish" "unstar" "update" "version" "view"
                                    "whoami"))))
-  (let ((option (if (string= command "run")
+  (let* ((option (if (string= command "run")
                     (completing-read "Option: " (mw/jq
                                                  (concat directory "package.json")
                                                  ".scripts|keys[]"))
