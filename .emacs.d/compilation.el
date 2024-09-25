@@ -20,6 +20,12 @@ REPLACE-DOUBLE-QUOTES"
         no-double-quotes)
     ""))
 
+(defun mw/jq (file jq)
+  "Run JQ command against json FILE."
+  (split-string
+   (shell-command-to-string
+    (concat "bash -c \"jq -r '" jq "' " file "\"")) "\n"))
+
 (defun mw/build-command (cmd target options change-dir dir read-env)
   "Buld a compilation command CMD with TARGET and OPTIONS.
 CHANGE-DIR will produce a command that runs in the DIR specified.
@@ -54,13 +60,14 @@ READ-ENV will product a command prefixed with environment variables."
                                    "query" "rebuild" "repo" "restart" "root" "run" "run-script" "search"
                                    "set" "shrinkwrap" "star" "stars" "start" "stop" "team" "test"
                                    "token" "uninstall" "unpublish" "unstar" "update" "version" "view"
-                                   "whoami"))
-    ))
-  ;; (shell-command-to-string command)
-  (let ((runs (shell-command-to-string (concat "/usr/bin/bash -c jq '.scripts|keys[]' " directory "package.json | sed 's/\\\"//g'")))
-        (option (completing-read "Option: " (cons runs '("" "watch-less" ))))
+                                   "whoami"))))
+  (let ((option (if (string= command "run")
+                    (completing-read "Option: " (mw/jq
+                                                 (concat directory "package.json")
+                                                 ".scripts|keys[]"))
+                  nil))
         (compilation-buffer-name-function
          (lambda (&rest _)
-           (concat "*compilation*" "-" directory "npm" command "-" option))))
+           (concat "*compilation*" "-" directory "npm-" command "-" option))))
     (compile
-     (mw/build-command " npm " command option t directory nil))))
+     (mw/build-command "npm" command option t directory nil))))

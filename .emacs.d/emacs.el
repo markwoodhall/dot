@@ -36,6 +36,14 @@
 (setq history-length 50)
 (savehist-mode 1)
 
+;; This sets $MANPATH, $PATH and exec-path from your shell,
+;; but only when executed in a GUI frame on OS X and Linux.
+(use-package exec-path-from-shell
+  :init
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
+
 (use-package evil
   :ensure t
   :init
