@@ -78,6 +78,7 @@
   :config
   (evil-set-undo-system 'undo-tree)
   (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+  (setq undo-tree-auto-save-history t)
   (global-undo-tree-mode 1))
 
 (global-set-key (kbd "<escape>") 'keyboard-quit)
@@ -135,6 +136,7 @@
    "b l"   '(counsel-switch-buffer :which-key "List buffers")
    "b n"   '(next-buffer :which-key "Next buffer")
    "b n"   '(rename-buffer :which-key "Rename buffer")
+   "b g"   '(swiper :which-key "Grep")
    "b p"   '(previous-buffer :which-key "Previous buffer"))
 
 (nvmap :prefix "SPC" :keymaps 'override
@@ -264,6 +266,11 @@
   :config
   (counsel-mode 1))
 
+(load-file
+ (expand-file-name
+  "clojure.el"
+  user-emacs-directory))
+
 (use-package fennel-mode
   :mode "\\.fnl\\'")
 (use-package terraform-mode
@@ -330,42 +337,15 @@
 (use-package smartparens
   :ensure t
   :diminish t
-  :init
-  (add-hook 'org-mode-hook #'smartparens-mode)
-  (add-hook 'clojure-mode-hook #'smartparens-mode)
-  (add-hook 'fennel-mode-hook #'smartparens-mode)
-  (add-hook 'cider-repl-mode-hook #'smartparens-mode)
-  (add-hook 'emacs-lisp-mode-hook #'smartparens-mode))
+  :config
+  ;; Sane defaults for smartparens, like do not double ' for lisp dialects
+  (require 'smartparens-config)
+  :hook ((clojure-mode . smartparens-strict-mode)
+         (fennel-mode . smartparens-strict-mode)
+         (cider-repl-mode . smartparens-strict-mode)
+         (emacs-lisp-mode . smartparens-strict-mode)))
 
-(defmacro def-pairs (pairs)
-  "Define functions for pairing. PAIRS is an alist of (NAME . STRING)
-conses, where NAME is the function name that will be created and
-STRING is a single-character string that marks the opening character.
-
-  (def-pairs ((paren . \"(\")
-              (bracket . \"[\"))
-
-defines the functions WRAP-WITH-PAREN and WRAP-WITH-BRACKET,
-respectively."
-  `(progn
-     ,@(cl-loop for (key . val) in pairs
-             collect
-             `(defun ,(read (concat
-                             "wrap-with-"
-                             (prin1-to-string key)
-                             "s"))
-                  (&optional arg)
-                (interactive "p")
-                (sp-wrap-with-pair ,val)))))
-
-(def-pairs ((paren . "(")
-            (bracket . "[")
-            (brace . "{")
-            (single-quote . "'")
-            (double-quote . "\"")
-            (back-quote . "`")))
-
-(nvmap :keymaps 'smartparens-mode-map :prefix "SPC"
+(nvmap :keymaps '(smartparens-mode-map smartparens-strict-mode-map) :prefix "SPC"
   "s"   '(:which-key "smartparens")
   "s s"   '(:which-key "slurp")
   "s s b" '(sp-backward-slurp-sexp :which-key "Backward slurp sexp")
@@ -390,7 +370,6 @@ respectively."
   "s w '"  '(wrap-with-single-quotes :which-key "Wrap with single quotes")
   "s w _"  '(wrap-with-underscores :which-key "Wrap with underscores")
   "s w `"  '(wrap-with-back-quotes :which-key "Wrap with backticks"))
-
 
 (nvmap :keymaps 'fennel-mode-map :prefix "SPC"
   "m"   '(:which-key "major")
@@ -459,6 +438,8 @@ respectively."
 
 (nvmap :keymaps 'override :prefix "SPC"
        "p"     '(:which-key "projects")
+       "p l"   '(projectile-switch-to-buffer :which-key "Buffer list")
+       "p r"   '(projectile-recentf :which-key "Recent files")
        "p f"   '(projectile-find-file :which-key "Find file"))
 
 (setq scroll-conservatively 101) ;; value greater than 100 gets rid of half page jumping
@@ -572,11 +553,6 @@ respectively."
         which-key-separator " → " ))
 (which-key-mode)
 (which-key-setup-minibuffer)
-
-(load-file
- (expand-file-name
-  "clojure.el"
-  user-emacs-directory))
 
 (load-file
  (expand-file-name
