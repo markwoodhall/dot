@@ -51,6 +51,7 @@ READ-ENV will product a command prefixed with environment variables."
    cmd target options change-dir (projectile-project-root) read-env))
 
 (defun mw/docker-compose (directory)
+  "Run docker compose in DIRECTORY"
   (interactive
    (list
     (read-directory-name "Directory: ")))
@@ -61,6 +62,7 @@ READ-ENV will product a command prefixed with environment variables."
     (pop-to-buffer (concat "*" buffer-name "*"))))
 
 (defun mw/docker-logs (container)
+  "Run docker logs for CONTAINER."
   (interactive
    (list
     (completing-read "Container: " (mw/bash "docker ps --format '{{json .}}' | jq -r .Names"))))
@@ -70,6 +72,7 @@ READ-ENV will product a command prefixed with environment variables."
 
 ;; docker
 (defun mw/docker (command)
+  "Run docker COMMAND."
   (interactive
    (list
     (completing-read "Command: " '("compose" "logs"))))
@@ -80,6 +83,7 @@ READ-ENV will product a command prefixed with environment variables."
 
 ;; npm
 (defun mw/npm (directory command)
+  "Run npm COMMAND in DIRECTORY."
   (interactive
    (list
     (read-directory-name "Directory: ")

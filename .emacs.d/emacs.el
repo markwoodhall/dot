@@ -3,6 +3,7 @@
 (require 'package)
 (add-to-list 'package-archives
        '("melpa" . "https://melpa.org/packages/"))
+(package-refresh-contents)
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -39,13 +40,20 @@
 ;; This sets $MANPATH, $PATH and exec-path from your shell,
 ;; but only when executed in a GUI frame on OS X and Linux.
 (use-package exec-path-from-shell
+  :functions exec-path-from-shell-initialize
   :init
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 
-
 (use-package evil
   :ensure t
+  :defines
+  evil-want-integration
+  evil-want-keybinding
+  evil-vsplit-window-right
+  evil-split-window-below
+  evil-search-module
+  :functions evil-mode
   :init
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
@@ -56,6 +64,8 @@
 
 (use-package evil-collection
   :after evil
+  :defines evil-collection-mode-list
+  :functions evil-collection-init
   :config
   (setq evil-collection-mode-list '(dashboard dired ibuffer))
   :custom (evil-collection-setup-minibuffer t)
@@ -63,17 +73,23 @@
 
 (use-package evil-goggles
   :after evil
+  :functions evil-goggles-mode
   :config
   (evil-goggles-mode))
 
 (use-package evil-surround
   :after evil
+  :functions global-evil-surround-mode
   :config
   (global-evil-surround-mode 1))
 
 (use-package undo-tree
   :ensure t
   :after evil
+  :defines
+  undo-tree-history-directory-alist
+  undo-tree-auto-save-history
+  :functions evil-set-undo-system global-undo-tree-mode
   :diminish
   :config
   (evil-set-undo-system 'undo-tree)
@@ -85,6 +101,8 @@
 
 (use-package general
   :ensure t
+  :functions
+  general-evil-setup
   :config
   (general-evil-setup t))
 
@@ -106,27 +124,41 @@
 
 (use-package all-the-icons)
 (use-package dashboard
+  :defines
+  dashboard-set-heading-icons
+  dashboard-set-file-icons
+  dashboard-projects-backend
+  dashboard-icon-type
+  dashboard-banner-logo-title
+  dashboard-startup-banner
+  dashboard-center-content
+  dashboard-vertically-center-content
+  dashboard-items
+  :functions dashboard-setup-startup-hook
   :init
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
   (setq dashboard-projects-backend 'projectile)
   (setq dashboard-icon-type 'all-the-icons)
-  (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
+  (setq dashboard-banner-logo-title "emacs!")
   (setq dashboard-startup-banner "~/.emacs.d/emacs.png")
   (setq dashboard-center-content t)
   (setq dashboard-vertically-center-content t)
-  (setq dashboard-items '((recents . 9)
-                          (projects . 5)))
+  (setq dashboard-items '((recents . 14)
+                          (projects . 9)))
   :config
   (dashboard-setup-startup-hook))
 
 (use-package doom-modeline
-   :init
-   (doom-modeline-mode 1))
-
-(use-package doom-themes
+  :functions doom-modeline-mode
   :init
-  (load-theme 'doom-tokyo-night t))
+  (doom-modeline-mode 1))
+
+(use-package doom-themes)
+(use-package ef-themes)
+(use-package catppuccin-theme
+  :init
+  (load-theme 'catppuccin :no-confirm))
 
 (setq switch-to-buffer-obey-display-actions t)
 
@@ -214,6 +246,12 @@
 (use-package smex)
 (use-package ivy
   :defer 0.1
+  :defines
+  evil-insert-state-map
+  ivy-minibuffer-map
+  ivy-switch-buffer-map
+  ivy-reverse-i-search-map
+  :functions ivy-mode
   :diminish
   :bind
   (("C-s" . swiper)
@@ -244,12 +282,19 @@
   (ivy-mode))
 
 (use-package ivy-rich
+  :functions ivy-rich-mode
   :after ivy
   :init
   (ivy-rich-mode 1)) ;; this gets us descriptions in M-x.
 
 (use-package ivy-xref
   :ensure t
+  :defines
+  xref-show-definitions-function
+  xref-show-xrefs-function
+  :functions
+  ivy-xref-show-xrefs
+  ivy-xref-show-defs
   :after ivy
   :init
   ;; xref initialization is different in Emacs 27 - there are two different
@@ -263,6 +308,7 @@
 
 (use-package counsel
   :commands (counsel-switch-buffer)
+  :functions counsel-mode
   :config
   (counsel-mode 1))
 
@@ -279,7 +325,7 @@
 (use-package highlight-indent-guides
   :ensure t
   :diminish t
-  :config
+  :custom
   (setq highlight-indent-guides-method 'column)
   :init
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
@@ -290,49 +336,10 @@
   :init
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(defun mw/named-vterm (name)
-  "Start a vterm and renames the buffer NAME."
-  (interactive "sTerminal name:")
-  (vterm)
-  (rename-buffer (concat "vterm-" name)))
-
 (use-package yaml
   :mode "\\.yml\\'")
 (use-package docker)
 (use-package dockerfile-mode)
-
-(nvmap :keymaps 'sql-mode-map :prefix "SPC"
-       "m p" '(:which-key "Connections")
-       "m p c" '(sql-postgres :which-key "Connect to postgres")
-       "m e r" '(sql-send-region :which-key "Eval sql region")
-       "m e e" '(sql-send-paragraph :which-key "Eval sql paragraph"))
-
-(setq sql-ms-program "sqlcmd")
-(setq sql-ms-options '())
-
-(setq sql-connection-alist
-      '((local (sql-product 'postgres)
-               (sql-port 5432)
-               (sql-server "localhost"))
-        (local5433 (sql-product 'postgres)
-                   (sql-port 5433)
-                   (sql-server "localhost"))))
-
-(defun ms-connect (connection)
-  (setq sql-product 'ms)
-  (sql-connect connection))
-
-(defun psql-connect (connection)
-  (setq sql-product 'postgres)
-  (sql-connect connection))
-
-(defun psql-local ()
-  (interactive)
-  (psql-connect 'local))
-
-(defun psql-local5433 ()
-  (interactive)
-  (psql-connect 'local5433))
 
 (use-package smartparens
   :ensure t
@@ -344,6 +351,11 @@
          (fennel-mode . smartparens-strict-mode)
          (cider-repl-mode . smartparens-strict-mode)
          (emacs-lisp-mode . smartparens-strict-mode)))
+
+(use-package evil-smartparens
+  :functions evil-smartparens-mode
+  :init
+  (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode))
 
 (nvmap :keymaps '(smartparens-mode-map smartparens-strict-mode-map) :prefix "SPC"
   "s"   '(:which-key "smartparens")
@@ -382,13 +394,18 @@
   "m s" '(:which-key "sesman")
   "m s i" '(fennel-repl :which-key "Fennel REPL"))
 
-(use-package company)
-(global-company-mode)
+(use-package company
+  :functions global-company-mode
+  :init
+  (global-company-mode))
 
-(use-package yasnippet)
-(yas-global-mode 1)
+(use-package yasnippet
+  :functions yas-global-mode
+  :init
+  (yas-global-mode 1))
 
 (use-package magit
+  :defines magit-display-buffer-function
   :commands (magit-status)
   :config
   (setq magit-display-buffer-function #'display-buffer))
@@ -401,8 +418,10 @@
   "g P" '(magit-push :which-key "Magit push")
   "g s" '(magit-status :which-key "Magit status"))
 
-(use-package git-gutter)
-(global-git-gutter-mode +1)
+(use-package git-gutter
+  :functions global-git-gutter-mode
+  :init
+  (global-git-gutter-mode +1))
 
 (use-package org
   :mode ("\\.org\\'" . org-mode))
@@ -410,6 +429,7 @@
 (add-hook 'org-mode-hook 'org-indent-mode)
 
 (use-package org-bullets
+  :functions org-bullets-mode
   :after org
   :mode ("\\.org\\'" . org-mode)
   :init (org-bullets-mode 1))
@@ -429,6 +449,12 @@
   "m e E" '(org-babel-execute-src-block :which-key "Execute source block"))
 
 (use-package projectile
+  :defines
+  projectile-project-search-path
+  projectile-switch-project-action
+  :functions
+  projectile-global-mode
+  projectile-dired
   :config
   (projectile-global-mode 1)
   :init
@@ -442,19 +468,15 @@
        "p r"   '(projectile-recentf :which-key "Recent files")
        "p f"   '(projectile-find-file :which-key "Find file"))
 
-(setq scroll-conservatively 101) ;; value greater than 100 gets rid of half page jumping
-(setq mouse-wheel-scroll-amount '(3 ((shift) . 3))) ;; how many lines at a time
-(setq mouse-wheel-progressive-speed t) ;; accelerate scrolling
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-
-(use-package vterm
-  :commands (vterm))
 
 (setq-default explicit-shell-file-name "/bin/zsh")
-
-(setq shell-file-name "/bin/zsh"
+(use-package vterm
+  :commands (vterm)
+  :custom
+  (setq shell-file-name "/bin/zsh"
       vterm-shell "/bin/zsh"
-      vterm-max-scrollback 9000)
+      vterm-max-scrollback 9000))
+
 
 (nvmap :keymaps '(override vterm-map-mode) :prefix "C-c"
   "C-c"   '(vterm--self-insert :which-key "Literal Ctrl C"))
@@ -538,6 +560,23 @@
        "w w"   '(evil-window-next :which-key "Goto next window"))
 
 (use-package which-key
+  :defines
+  which-key-side-window-location
+  which-key-sort-order
+  which-key-sort-uppercase-first
+  which-key-add-column-padding
+  which-key-max-display-columns
+  which-key-min-display-lines
+  which-key-side-window-slot
+  which-key-side-window-max-height
+  which-key-idle-delay
+  which-key-max-description-length
+  which-key-allow-imprecise-window-fit
+  which-key-separator
+  :functions
+  which-key-key-order-alpha
+  which-key-mode
+  which-key-setup-minibuffer
   :init
   (setq which-key-side-window-location 'bottom
         which-key-sort-order #'which-key-key-order-alpha
@@ -550,9 +589,9 @@
         which-key-idle-delay 0.8
         which-key-max-description-length 25
         which-key-allow-imprecise-window-fit t
-        which-key-separator " → " ))
-(which-key-mode)
-(which-key-setup-minibuffer)
+        which-key-separator " → " )
+  (which-key-mode)
+  (which-key-setup-minibuffer))
 
 (load-file
  (expand-file-name

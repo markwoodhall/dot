@@ -1,6 +1,15 @@
 (use-package lsp-mode
   :hook ((clojure-mode . lsp-deferred)
          (fennel-mode . lsp-deferred))
+  :defines
+  lsp-language-id-configuration
+  lsp-enable-indentation
+  lsp-enable-completion-at-point
+  :functions
+  lsp-register-client
+  make-lsp-client
+  lsp-stdio-connection
+  lsp-activate-on
   :config
   (add-to-list 'lsp-language-id-configuration '(fennel-mode . "fennel"))
   (lsp-register-client (make-lsp-client
@@ -36,4 +45,5 @@
 (setq read-process-output-max (* 3 1024 1024))
 
 (use-package flycheck
+  :functions global-flycheck-mode
   :init (global-flycheck-mode))

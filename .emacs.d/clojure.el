@@ -5,26 +5,31 @@
   :hook (cider-mode . clojure-mode))
 
 (defun mw/nrepl-reset ()
+  "Run nrepl dev/reset."
   (interactive)
   (cider-interactive-eval
    "(dev/reset)"))
 
 (defun mw/nrepl-dev ()
+  "Run nrepl dev."
   (interactive)
   (cider-interactive-eval
    "(user/dev)"))
 
 (defun mw/nrepl-go ()
+  "Run nrepl dev/go."
   (interactive)
   (cider-interactive-eval
    "(dev/go)"))
 
 (defun mw/nrepl-init-db ()
+  "Run nrepl DB init."
   (interactive)
   (cider-interactive-eval
    "(use 'db) (db/init-schema)"))
 
 (defun mw/nrepl-migrate-db ()
+  "Run nrepl DB migrate."
   (interactive)
   (cider-interactive-eval
    "(use 'db) (db/migrate-schema)"))
