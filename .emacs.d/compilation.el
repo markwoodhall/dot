@@ -50,33 +50,23 @@ READ-ENV will product a command prefixed with environment variables."
   (mw/build-command
    cmd target options change-dir (projectile-project-root) read-env))
 
-
-(defun mw/docker-compose (directory command)
+(defun mw/docker-compose (directory)
   (interactive
    (list
-    (read-directory-name "Directory: ")
-    (completing-read "Command: " '("up" "down" "-f"))))
-  (let* ((file (if (string= command "-f")
-                   (read-file-name "Compose file: " directory "docker-compose.yml" t "docker-compose.yml")
-                 nil))
-         (option (if (string= command "-f")
-                     (concat file " "(completing-read "Option: " '("up" "down")))
-                   nil))
-         (compilation-buffer-name-function
-          (lambda (&rest _)
-            (concat "*compilation*" "-" directory "docker-compose-" command "-" option))))
-    (compile
-     (mw/build-command "docker compose" command option t directory nil))))
+    (read-directory-name "Directory: ")))
+  (let* ((file (read-file-name "Compose file: " directory "docker-compose.yml" t "docker-compose.yml"))
+         (command (completing-read "Option: " '("up" "down")))
+         (buffer-name (concat "docker compose " command)))
+    (make-comint buffer-name "docker" nil "compose" "-f" file command)
+    (pop-to-buffer (concat "*" buffer-name "*"))))
 
 (defun mw/docker-logs (container)
   (interactive
    (list
-    (completing-read "Container: " (mw/bash "docker ps --format '{{json .}}' | jq .Names"))))
-  (let* ((compilation-buffer-name-function
-          (lambda (&rest _)
-            (concat "*compilation*" "-docker-logs-" container))))
-    (compile
-     (mw/build-command "docker logs" container "--follow" nil nil nil))))
+    (completing-read "Container: " (mw/bash "docker ps --format '{{json .}}' | jq -r .Names"))))
+  (let ((buffer-name (concat "docker logs " container)))
+    (make-comint buffer-name nil "logs" container "--follow")
+    (pop-to-buffer (concat "*" buffer-name "*"))))
 
 ;; docker
 (defun mw/docker (command)

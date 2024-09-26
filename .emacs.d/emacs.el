@@ -137,6 +137,10 @@
    "b n"   '(rename-buffer :which-key "Rename buffer")
    "b p"   '(previous-buffer :which-key "Previous buffer"))
 
+(nvmap :prefix "SPC" :keymaps 'override
+   "c"     '(:which-key "processes")
+   "c l"   '(list-processes :which-key "List processes"))
+
 (setq-default indent-tabs-mode nil)
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode))
@@ -512,7 +516,21 @@ respectively."
        (slot . 0)))
 
 (add-to-list 'display-buffer-alist
+     '("\*Process List\*"
+       (display-buffer-in-side-window)
+       (window-height . 0.33)
+       (side . bottom)
+       (slot . 0)))
+
+(add-to-list 'display-buffer-alist
      '("\*sqls results\*"
+       (display-buffer-in-side-window)
+       (window-height . 0.33)
+       (side . bottom)
+       (slot . 0)))
+
+(add-to-list 'display-buffer-alist
+     '("\*docker"
        (display-buffer-in-side-window)
        (window-height . 0.33)
        (side . bottom)
