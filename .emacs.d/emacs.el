@@ -586,6 +586,13 @@
        (slot . 0)))
 
 (add-to-list 'display-buffer-alist
+     '("\*aws"
+       (display-buffer-in-side-window)
+       (window-height . 0.33)
+       (side . bottom)
+       (slot . 0)))
+
+(add-to-list 'display-buffer-alist
      '("\*SQL\*"
        (display-buffer-in-side-window)
        (window-height . 0.33)
@@ -653,6 +660,16 @@
 (load-file
  (expand-file-name
   "compilation.el"
+  user-emacs-directory))
+
+(load-file
+ (expand-file-name
+  "sql.el"
+  user-emacs-directory))
+
+(load-file
+ (expand-file-name
+  "aws.el"
   user-emacs-directory))
 
 ;; Make gc pauses faster by decreasing the threshold.

@@ -67,7 +67,7 @@ READ-ENV will product a command prefixed with environment variables."
    (list
     (completing-read "Container: " (mw/bash "docker ps --format '{{json .}}' | jq -r .Names"))))
   (let ((buffer-name (concat "docker logs " container)))
-    (make-comint buffer-name nil "logs" container "--follow")
+    (make-comint buffer-name "docker" nil "logs" container "--follow")
     (pop-to-buffer (concat "*" buffer-name "*"))))
 
 ;; docker
