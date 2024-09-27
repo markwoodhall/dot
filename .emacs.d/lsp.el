@@ -5,6 +5,7 @@
   lsp-language-id-configuration
   lsp-enable-indentation
   lsp-enable-completion-at-point
+  lsp-ui-doc-show-with-mouse
   :functions
   lsp-register-client
   make-lsp-client
@@ -16,6 +17,7 @@
                         :new-connection (lsp-stdio-connection "fennel-ls")
                         :activation-fn (lsp-activate-on "fennel")
                         :server-id 'fennel-ls))
+  (setq lsp-ui-doc-show-with-mouse nil)
   (setq lsp-enable-indentation nil)
   (setq lsp-enable-completion-at-point nil)
   :commands (lsp lsp-deferred))

@@ -51,7 +51,7 @@ READ-ENV will product a command prefixed with environment variables."
    cmd target options change-dir (projectile-project-root) read-env))
 
 (defun mw/docker-compose (directory)
-  "Run docker compose in DIRECTORY"
+  "Run docker compose in DIRECTORY."
   (interactive
    (list
     (read-directory-name "Directory: ")))
@@ -107,3 +107,12 @@ READ-ENV will product a command prefixed with environment variables."
            (concat "*compilation*" "-" directory "npm-" command "-" option))))
     (compile
      (mw/build-command "npm" command option t directory nil))))
+
+(defun mw/tail (file)
+  "Run tail -f on FILE."
+  (interactive
+   (list
+    (read-file-name "File: ")))
+  (let* ((buffer-name (concat "tail " file)))
+    (make-comint buffer-name "tail" nil "-f" file)
+    (pop-to-buffer (concat "*" buffer-name "*"))))

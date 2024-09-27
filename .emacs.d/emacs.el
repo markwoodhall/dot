@@ -3,13 +3,8 @@
 (require 'package)
 (add-to-list 'package-archives
        '("melpa" . "https://melpa.org/packages/"))
-(package-refresh-contents)
+;;(package-refresh-contents)
 (package-initialize)
-
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
-(setq use-package-always-ensure t)
 
 ;; Setting garbage collection threshold
 (setq gc-cons-threshold 5002653184
@@ -41,6 +36,7 @@
 ;; but only when executed in a GUI frame on OS X and Linux.
 (use-package exec-path-from-shell
   :functions exec-path-from-shell-initialize
+  :ensure t
   :init
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
@@ -55,14 +51,15 @@
   evil-search-module
   :functions evil-mode
   :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-vsplit-window-right t)
-  (setq evil-split-window-below t)
-  (setq evil-search-module 'evil-search)
+  (setq evil-want-integration t
+        evil-want-keybinding nil
+        evil-vsplit-window-right t
+        evil-split-window-below t
+        evil-search-module 'evil-search)
   (evil-mode 1))
 
 (use-package evil-collection
+  :ensure t
   :after evil
   :defines evil-collection-mode-list
   :functions evil-collection-init
@@ -72,12 +69,14 @@
   :init (evil-collection-init))
 
 (use-package evil-goggles
+  :ensure t
   :after evil
   :functions evil-goggles-mode
   :config
   (evil-goggles-mode))
 
 (use-package evil-surround
+  :ensure t
   :after evil
   :functions global-evil-surround-mode
   :config
@@ -122,8 +121,11 @@
 (set-default 'truncate-lines t)
 (auto-fill-mode -1)
 
-(use-package all-the-icons)
+(use-package all-the-icons
+  :ensure t)
+
 (use-package dashboard
+  :ensure t
   :defines
   dashboard-set-heading-icons
   dashboard-set-file-icons
@@ -136,27 +138,26 @@
   dashboard-items
   :functions dashboard-setup-startup-hook
   :init
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-projects-backend 'projectile)
-  (setq dashboard-icon-type 'all-the-icons)
-  (setq dashboard-banner-logo-title "emacs!")
-  (setq dashboard-startup-banner "~/.emacs.d/emacs.png")
-  (setq dashboard-center-content t)
-  (setq dashboard-vertically-center-content t)
-  (setq dashboard-items '((recents . 14)
+  (setq dashboard-set-heading-icons t
+        dashboard-set-file-icons t
+        dashboard-projects-backend 'projectile
+        dashboard-icon-type 'nerd-icons
+        dashboard-banner-logo-title "emacs!"
+        dashboard-startup-banner "~/.emacs.d/emacs.png"
+        dashboard-center-content t
+        dashboard-vertically-center-content t
+        dashboard-items '((recents . 14)
                           (projects . 9)))
-  :config
   (dashboard-setup-startup-hook))
 
 (use-package doom-modeline
+  :ensure t
   :functions doom-modeline-mode
   :init
   (doom-modeline-mode 1))
 
-(use-package doom-themes)
-(use-package ef-themes)
 (use-package catppuccin-theme
+  :ensure t
   :init
   (load-theme 'catppuccin :no-confirm))
 
@@ -176,7 +177,9 @@
    "c l"   '(list-processes :which-key "List processes"))
 
 (setq-default indent-tabs-mode nil)
+
 (use-package ws-butler
+  :ensure t
   :hook (prog-mode . ws-butler-mode))
 (add-hook 'prog-mode-hook #'ws-butler-mode)
 
@@ -215,19 +218,20 @@
        "f U"   '(sudo-edit :which-key "Sudo edit file"))
 
 (use-package sudo-edit
-  :commands (sudo-edit sudo-edit-find-file sudo-edit)) ;; Utilities for opening files with sudo
+  :ensure t
+  :commands (sudo-edit sudo-edit-find-file sudo-edit))
 
 (set-face-attribute 'default nil
   :font "JetBrains Mono"
-  :height 95
+  :height 92
   :weight 'medium)
 (set-face-attribute 'variable-pitch nil
   :font "JetBrains Mono"
-  :height 95
+  :height 92
   :weight 'medium)
 (set-face-attribute 'fixed-pitch nil
   :font "JetBrains Mono"
-  :height 95
+  :height 92
   :weight 'medium)
 (set-face-attribute 'font-lock-comment-face nil
   :slant 'italic)
@@ -243,8 +247,10 @@
        "h r"   '(:which-key "reload")
        "h r e" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config"))
 
-(use-package smex)
+(use-package smex
+  :ensure t)
 (use-package ivy
+  :ensure t
   :defer 0.1
   :defines
   evil-insert-state-map
@@ -273,15 +279,16 @@
    ("C-j" . ivy-next-line)
    ("C-d" . ivy-reverse-i-search-kill))
   :custom
-  (setq ivy-count-format "(%d/%d) ")
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
+  (setq ivy-count-format "(%d/%d) "
+        ivy-use-virtual-buffers t
+        enable-recursive-minibuffers t)
   (add-to-list 'ivy-sort-functions-alist
                '(counsel-recentf . file-newer-than-file-p))
   :config
   (ivy-mode))
 
 (use-package ivy-rich
+  :ensure t
   :functions ivy-rich-mode
   :after ivy
   :init
@@ -307,6 +314,7 @@
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
 (use-package counsel
+  :ensure t
   :commands (counsel-switch-buffer)
   :functions counsel-mode
   :config
@@ -318,8 +326,11 @@
   user-emacs-directory))
 
 (use-package fennel-mode
+  :ensure t
   :mode "\\.fnl\\'")
+
 (use-package terraform-mode
+  :ensure t
   :mode "\\.tf\\'")
 
 (use-package highlight-indent-guides
@@ -337,9 +348,14 @@
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (use-package yaml
+  :ensure t
   :mode "\\.yml\\'")
-(use-package docker)
-(use-package dockerfile-mode)
+
+(use-package docker
+  :ensure t)
+
+(use-package dockerfile-mode
+  :ensure t)
 
 (use-package smartparens
   :ensure t
@@ -348,11 +364,12 @@
   ;; Sane defaults for smartparens, like do not double ' for lisp dialects
   (require 'smartparens-config)
   :hook ((clojure-mode . smartparens-strict-mode)
+         (cider-repl-mode . smartparens-mode)
          (fennel-mode . smartparens-strict-mode)
-         (cider-repl-mode . smartparens-strict-mode)
          (emacs-lisp-mode . smartparens-strict-mode)))
 
 (use-package evil-smartparens
+  :ensure t
   :functions evil-smartparens-mode
   :init
   (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode))
@@ -387,24 +404,27 @@
   "m"   '(:which-key "major")
   "m e" '(:which-key "evaluation")
 
-  "m e b" '(fennel-reload :which-key "Cider eval buffer")
-  "m e e" '(fennel-eval-toplevel-form :which-key "Cider eval root expressions")
-  "m e E" '(fennel-eval-last-sexp :which-key "Cider eval expressions")
+  "m e b" '(fennel-reload :which-key "Fennel eval buffer")
+  "m e e" '(fennel-eval-toplevel-form :which-key "Fennel eval root expressions")
+  "m e E" '(fennel-eval-last-sexp :which-key "Fennel eval expressions")
 
   "m s" '(:which-key "sesman")
   "m s i" '(fennel-repl :which-key "Fennel REPL"))
 
 (use-package company
+  :ensure t
   :functions global-company-mode
   :init
   (global-company-mode))
 
 (use-package yasnippet
+  :ensure t
   :functions yas-global-mode
   :init
   (yas-global-mode 1))
 
 (use-package magit
+  :ensure t
   :defines magit-display-buffer-function
   :commands (magit-status)
   :config
@@ -419,16 +439,19 @@
   "g s" '(magit-status :which-key "Magit status"))
 
 (use-package git-gutter
+  :ensure t
   :functions global-git-gutter-mode
   :init
   (global-git-gutter-mode +1))
 
 (use-package org
+  :ensure t
   :mode ("\\.org\\'" . org-mode))
 
 (add-hook 'org-mode-hook 'org-indent-mode)
 
 (use-package org-bullets
+  :ensure t
   :functions org-bullets-mode
   :after org
   :mode ("\\.org\\'" . org-mode)
@@ -449,6 +472,7 @@
   "m e E" '(org-babel-execute-src-block :which-key "Execute source block"))
 
 (use-package projectile
+  :ensure t
   :defines
   projectile-project-search-path
   projectile-switch-project-action
@@ -471,11 +495,12 @@
 
 (setq-default explicit-shell-file-name "/bin/zsh")
 (use-package vterm
+  :ensure t
   :commands (vterm)
   :custom
   (setq shell-file-name "/bin/zsh"
-      vterm-shell "/bin/zsh"
-      vterm-max-scrollback 9000))
+        vterm-shell "/bin/zsh"
+        vterm-max-scrollback 9000))
 
 
 (nvmap :keymaps '(override vterm-map-mode) :prefix "C-c"
@@ -505,6 +530,13 @@
        (slot . 0)))
 
 (add-to-list 'display-buffer-alist
+     '("\*Help\*"
+       (display-buffer-in-side-window)
+       (window-height . 0.33)
+       (side . bottom)
+       (slot . 0)))
+
+(add-to-list 'display-buffer-alist
      '("\*cider-repl\*"
        (display-buffer-in-side-window)
        (window-height . 0.33)
@@ -519,6 +551,13 @@
        (slot . 0)))
 
 (add-to-list 'display-buffer-alist
+     '("\*Org-Babel Error Output\*"
+       (display-buffer-in-side-window)
+       (window-height . 0.33)
+       (side . bottom)
+       (slot . 0)))
+
+(add-to-list 'display-buffer-alist
      '("\*Process List\*"
        (display-buffer-in-side-window)
        (window-height . 0.33)
@@ -527,6 +566,13 @@
 
 (add-to-list 'display-buffer-alist
      '("\*sqls results\*"
+       (display-buffer-in-side-window)
+       (window-height . 0.33)
+       (side . bottom)
+       (slot . 0)))
+
+(add-to-list 'display-buffer-alist
+     '("\*tail"
        (display-buffer-in-side-window)
        (window-height . 0.33)
        (side . bottom)
@@ -560,6 +606,7 @@
        "w w"   '(evil-window-next :which-key "Goto next window"))
 
 (use-package which-key
+  :ensure t
   :defines
   which-key-side-window-location
   which-key-sort-order
@@ -577,7 +624,7 @@
   which-key-key-order-alpha
   which-key-mode
   which-key-setup-minibuffer
-  :init
+  :config
   (setq which-key-side-window-location 'bottom
         which-key-sort-order #'which-key-key-order-alpha
         which-key-sort-uppercase-first nil
@@ -590,8 +637,13 @@
         which-key-max-description-length 25
         which-key-allow-imprecise-window-fit t
         which-key-separator " → " )
+  :init
   (which-key-mode)
   (which-key-setup-minibuffer))
+
+(use-package nerd-icons-dired
+  :ensure t
+  :hook (dired-mode . nerd-icons-dired-mode))
 
 (load-file
  (expand-file-name

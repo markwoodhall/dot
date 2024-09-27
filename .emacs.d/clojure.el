@@ -2,7 +2,9 @@
   :mode "\\.\\(clj\\|cljs\\|cljc\\)\\''")
 
 (use-package cider
-  :hook (cider-mode . clojure-mode))
+  :functions
+  cider-interactive-eval
+  :defer t)
 
 (defun mw/nrepl-reset ()
   "Run nrepl dev/reset."
@@ -40,7 +42,7 @@
   "m d" '(:which-key "database")
   "m r" '(:which-key "reloaded")
 
-  "m r r" '(cider-ns-refresh :which-key "Cider refresh")
+  "m r r" '(cider-ns-reload-all :which-key "Cider refresh")
   "m r g" '(mw/nrepl-go :which-key "Go")
   "m r d" '(mw/nrepl-dev :which-key "Dev")
   "m r x" '(mw/nrepl-reset :which-key "Reset")
@@ -56,5 +58,6 @@
   "m t n" '(cider-test-run-ns-tests :which-key "Cider run ns tests")
 
   "m s" '(:which-key "sesman")
+  "m s X" '(cider-quit :which-key "Cider quit")
   "m s I" '(cider-jack-in-cljs :which-key "Cider jack in cljs")
   "m s i" '(cider-jack-in :which-key "Cider jack in"))
