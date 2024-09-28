@@ -70,9 +70,22 @@
 
 (use-package evil-goggles
   :ensure t
-  :after evil
+  :after evil-cleverparens
   :functions evil-goggles-mode
+  :defines evil-goggles--commands
   :config
+  (add-to-list 'evil-goggles--commands '(evil-cp-yank :face evil-goggles-yank-face :switch evil-goggles-enable-yank :advice evil-goggles--generic-async-advice))
+  (add-to-list 'evil-goggles--commands '(evil-cp-yank-line :face evil-goggles-yank-face :switch evil-goggles-enable-yank :advice evil-goggles--generic-async-advice))
+  (add-to-list 'evil-goggles--commands '(evil-cp-yank-sexp :face evil-goggles-yank-face :switch evil-goggles-enable-yank :advice evil-goggles--generic-async-advice))
+  (add-to-list 'evil-goggles--commands '(evil-cp-yank :face evil-goggles-yank-face :switch evil-goggles-enable-yank :advice evil-goggles--generic-async-advice))
+  (add-to-list 'evil-goggles--commands '(evil-cp-yank :face evil-goggles-yank-face :switch evil-goggles-enable-yank :advice evil-goggles--generic-async-advice))
+  (add-to-list 'evil-goggles--commands '(evil-cp-delete :face evil-goggles-delete-face :switch evil-goggles-enable-delete :advice evil-goggles--delete-line-advice))
+  (add-to-list 'evil-goggles--commands '(evil-cp-delete-line :face evil-goggles-delete-face :switch evil-goggles-enable-delete :advice evil-goggles--delete-line-advice))
+  (add-to-list 'evil-goggles--commands '(evil-cp-change :face evil-goggles-change-face :switch evil-goggles-enable-change :advice evil-goggles--generic-blocking-advice))
+  (add-to-list 'evil-goggles--commands '(evil-cp-change-line :face evil-goggles-change-face :switch evil-goggles-enable-change :advice evil-goggles--generic-blocking-advice))
+  (add-to-list 'evil-goggles--commands '(evil-cp-change-sexp :face evil-goggles-change-face :switch evil-goggles-enable-change :advice evil-goggles--generic-blocking-advice))
+  (add-to-list 'evil-goggles--commands '(evil-cp-change-enclosing :face evil-goggles-change-face :switch evil-goggles-enable-change :advice evil-goggles--generic-blocking-advice))
+  (add-to-list 'evil-goggles--commands '(evil-cp-change-whole-line :face evil-goggles-change-face :switch evil-goggles-enable-change :advice evil-goggles--generic-blocking-advice))
   (evil-goggles-mode))
 
 (use-package evil-surround
@@ -368,11 +381,11 @@
          (fennel-mode . smartparens-strict-mode)
          (emacs-lisp-mode . smartparens-strict-mode)))
 
-(use-package evil-smartparens
+(use-package evil-cleverparens
   :ensure t
-  :functions evil-smartparens-mode
+  :functions evil-cleverparens-mode
   :init
-  (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode))
+  (add-hook 'smartparens-enabled-hook #'evil-cleverparens-mode))
 
 (nvmap :keymaps '(smartparens-mode-map smartparens-strict-mode-map) :prefix "SPC"
   "s"   '(:which-key "smartparens")
