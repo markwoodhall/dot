@@ -203,7 +203,7 @@
 (set beautiful.font "System-ui 12")
 
 ;; Gaps
-(set beautiful.useless_gap 30)
+(set beautiful.useless_gap 0)
 
 ;; Notifications settings
 (set naughty.config.defaults.ontop true)
