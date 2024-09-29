@@ -375,10 +375,9 @@
 (use-package highlight-indent-guides
   :ensure t
   :diminish t
-  :custom
-  (setq highlight-indent-guides-method 'column)
-  :init
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+  :defines highlight-indent-guides-method
+  :hook (prog-mode . highlight-indent-guides-mode)
+  :custom (highlight-indent-guides-method 'column))
 
 (use-package rainbow-delimiters
   :ensure t
