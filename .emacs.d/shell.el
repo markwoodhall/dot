@@ -24,6 +24,7 @@
 ;; Boston, MA 02110-1301, USA.
 
 ;;; Code:
+
 (defun mw/bash (cmd)
   "Run CMD using bash and return a seq of line output."
   (split-string
@@ -33,7 +34,5 @@
 (defun mw/jq (file jq)
   "Run JQ command against json FILE."
   (mw/bash (concat "jq -r '" jq "' " file )))
-
-(provide 'shell)
 
 ;;; shell.el ends here

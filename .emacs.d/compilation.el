@@ -20,16 +20,6 @@ REPLACE-DOUBLE-QUOTES"
         no-double-quotes)
     ""))
 
-(defun mw/bash (cmd)
-  "Run CMD using bash and return a seq of line output."
-  (split-string
-   (shell-command-to-string
-    (concat "bash -c \"" cmd "\"")) "\n"))
-
-(defun mw/jq (file jq)
-  "Run JQ command against json FILE."
-  (mw/bash (concat "jq -r '" jq "' " file )))
-
 (defun mw/build-command (cmd target options change-dir dir read-env)
   "Buld a compilation command CMD with TARGET and OPTIONS.
 CHANGE-DIR will produce a command that runs in the DIR specified.
