@@ -31,10 +31,17 @@
 (use-package lsp-ivy
   :after lsp)
 
+(use-package consult-lsp
+  :ensure t
+  :commands (consult-lsp-diagnostics consult-lsp-symbols))
+
 (nvmap :keymaps '(lsp-mode-map) :prefix ""
   "K" '(lsp-ui-doc-glance :which-key "Lsp Documentation"))
 (nvmap :prefix "SPC"
   "l"   '(:which-key "lsp")
+  "l f" '(:which-key "find")
+  "l f s" '(consult-lsp-file-symbols :which-key "File symbols")
+  "l f S" '(consult-lsp-symbols :which-key "Symbols")
   "l r" '(:which-key "refactor")
   "l r r" '(lsp-rename :which-key "Rename")
   "l g" '(:which-key "goto")
@@ -42,7 +49,7 @@
   "l d" '(:which-key "diag")
   "l d r" '(lsp-find-references :which-key "Find references")
   "l d a" '(lsp-execute-code-action :which-key "LSP code actions")
-  "l d D" '(lsp-treemacs-errors-list :which-key "Diagnotics"))
+  "l d D" '(consult-lsp-diagnostics :which-key "Diagnotics"))
 
 (setq read-process-output-max (* 3 1024 1024))
 
