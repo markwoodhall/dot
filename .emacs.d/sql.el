@@ -21,6 +21,7 @@
 (nvmap :keymaps 'sql-mode-map :prefix "SPC"
        "m c" '(:which-key "Connections")
        "m c p" '(sql-postgres :which-key "Connect to postgres")
+       "m c m" '(sql-postgres :which-key "Connect to mssql")
        "m c b" '(sql-set-sqli-buffer :which-key "Connect to SQLi buffer")
        "m e r" '(sql-send-region :which-key "Eval sql region")
        "m e e" '(sql-send-paragraph :which-key "Eval sql paragraph"))
