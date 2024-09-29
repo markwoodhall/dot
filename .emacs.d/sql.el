@@ -19,7 +19,11 @@
   (mw/psql-connect 'postgres 'local-5433))
 
 (nvmap :keymaps 'sql-mode-map :prefix "SPC"
-       "m p" '(:which-key "Connections")
-       "m p c" '(sql-postgres :which-key "Connect to postgres")
+       "m c" '(:which-key "Connections")
+       "m c p" '(sql-postgres :which-key "Connect to postgres")
+       "m c b" '(sql-set-sqli-buffer :which-key "Connect to SQLi buffer")
        "m e r" '(sql-send-region :which-key "Eval sql region")
        "m e e" '(sql-send-paragraph :which-key "Eval sql paragraph"))
+
+(setq sql-ms-program "sqlcmd")
+(setq sql-ms-options '())
