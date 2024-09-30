@@ -58,6 +58,16 @@
 (setq history-length 50)
 (savehist-mode 1)
 
+;;(use-package catppuccin-theme
+;;  :ensure t
+;;  :init
+;;  (load-theme 'catppuccin :no-confirm))
+
+(use-package ef-themes
+  :ensure t
+  :init
+  (load-theme 'ef-frost :no-confirm))
+
 ;; This sets $MANPATH, $PATH and exec-path from your shell,
 ;; but only when executed in a GUI frame on OS X and Linux.
 (use-package exec-path-from-shell
@@ -195,11 +205,6 @@
   :init
   (doom-modeline-mode 1))
 
-(use-package catppuccin-theme
-  :ensure t
-  :init
-  (load-theme 'catppuccin :no-confirm))
-
 (setq switch-to-buffer-obey-display-actions t)
 
 (nvmap :prefix "SPC" :keymaps 'override
@@ -262,15 +267,15 @@
 
 (set-face-attribute 'default nil
   :font "Iosevka Comfy"
-  :height 100
+  :height 108
   :weight 'regular)
 (set-face-attribute 'variable-pitch nil
   :font "Iosevka Comfy"
-  :height 100
+  :height 108
   :weight 'regular)
 (set-face-attribute 'fixed-pitch nil
   :font "Iosevka Comfy Fixed"
-  :height 92
+  :height 108
   :weight 'regular)
 (set-face-attribute 'font-lock-comment-face nil
   :slant 'italic)
