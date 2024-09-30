@@ -195,18 +195,10 @@
   :init
   (doom-modeline-mode 1))
 
-;;(use-package catppuccin-theme
-;;  :ensure t
-;;  :init
-;;  (load-theme 'catppuccin :no-confirm))
-
-(use-package ef-themes
+(use-package catppuccin-theme
   :ensure t
-  :functions doom-modeline-mode
-  :defines ef-themes-common-palette-overrides
-  :config
-  (load-theme 'ef-light :no-confirm))
-
+  :init
+  (load-theme 'catppuccin :no-confirm))
 
 (setq switch-to-buffer-obey-display-actions t)
 
@@ -269,17 +261,17 @@
   :commands (sudo-edit sudo-edit-find-file sudo-edit))
 
 (set-face-attribute 'default nil
-  :font "JetBrains Mono"
-  :height 92
-  :weight 'medium)
+  :font "Iosevka Comfy"
+  :height 100
+  :weight 'regular)
 (set-face-attribute 'variable-pitch nil
-  :font "JetBrains Mono"
-  :height 92
-  :weight 'medium)
+  :font "Iosevka Comfy"
+  :height 100
+  :weight 'regular)
 (set-face-attribute 'fixed-pitch nil
-  :font "JetBrains Mono"
+  :font "Iosevka Comfy Fixed"
   :height 92
-  :weight 'medium)
+  :weight 'regular)
 (set-face-attribute 'font-lock-comment-face nil
   :slant 'italic)
 (set-face-attribute 'font-lock-keyword-face nil
@@ -296,6 +288,7 @@
 
 (use-package smex
   :ensure t)
+
 (use-package ivy
   :ensure t
   :defer 0.1
