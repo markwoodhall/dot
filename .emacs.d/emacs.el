@@ -195,10 +195,18 @@
   :init
   (doom-modeline-mode 1))
 
-(use-package catppuccin-theme
+;;(use-package catppuccin-theme
+;;  :ensure t
+;;  :init
+;;  (load-theme 'catppuccin :no-confirm))
+
+(use-package ef-themes
   :ensure t
-  :init
-  (load-theme 'catppuccin :no-confirm))
+  :functions doom-modeline-mode
+  :defines ef-themes-common-palette-overrides
+  :config
+  (load-theme 'ef-light :no-confirm))
+
 
 (setq switch-to-buffer-obey-display-actions t)
 
