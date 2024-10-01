@@ -826,10 +826,10 @@ Programming Languages and associated tools
    Kitty is the terminal of choice, configured with JetBrains Mono and Catppuccin colors.
 
 #+begin_src bash :tangle ~/.config/kitty/kitty.conf :mkdirp yes
-font_family      JetBrains Mono Nerd Font
-bold_font        JetBrains Mono Bold Nerd Font Complete
-italic_font      JetBrains Mono Italic Nerd Font Complete
-bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
+font_family      Iosevka Comfy
+bold_font        Iosevka Comfy Bold
+italic_font      Iosevka Comfy Italic
+bold_italic_font Iosevka Comfy Bold Italic
 font_size 9.3
 
 placement_strategy left
