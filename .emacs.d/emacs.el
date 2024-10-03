@@ -499,7 +499,7 @@
   :functions org-bullets-mode
   :after org
   :mode ("\\.org\\'" . org-mode)
-  :init (org-bullets-mode 1))
+  :init (org-bullets-mode))
 
 (require 'ob-clojure)
 (setq org-babel-clojure-backend 'babashka)

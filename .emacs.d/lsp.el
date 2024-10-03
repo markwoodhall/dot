@@ -1,11 +1,14 @@
 (use-package lsp-mode
   :hook ((clojure-mode . lsp-deferred)
-         (fennel-mode . lsp-deferred))
+         (fennel-mode . lsp-deferred)
+         (sql-mode . lsp-deferred))
   :defines
   lsp-language-id-configuration
   lsp-enable-indentation
   lsp-enable-completion-at-point
   lsp-ui-doc-show-with-mouse
+  lsp-sqls-workspace-config-path
+  lsp-sqls-connections
   :functions
   lsp-register-client
   make-lsp-client
@@ -17,9 +20,13 @@
                         :new-connection (lsp-stdio-connection "fennel-ls")
                         :activation-fn (lsp-activate-on "fennel")
                         :server-id 'fennel-ls))
+
+  (setq lsp-sqls-workspace-config-path nil)
+  (setq lsp-sqls-connections
+        '(((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=abv password=abv dbname=abv sslmode=disable"))))
   (setq lsp-ui-doc-show-with-mouse nil)
   (setq lsp-enable-indentation nil)
-  (setq lsp-enable-completion-at-point nil)
+  (setq lsp-enable-completion-at-point t)
   :commands (lsp lsp-deferred))
 
 (use-package lsp-ui

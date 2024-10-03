@@ -830,7 +830,7 @@ font_family      Iosevka Comfy
 bold_font        Iosevka Comfy Bold
 italic_font      Iosevka Comfy Italic
 bold_italic_font Iosevka Comfy Bold Italic
-font_size 9.3
+font_size 9.9
 
 placement_strategy left
 
