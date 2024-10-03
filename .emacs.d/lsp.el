@@ -5,7 +5,6 @@
   :defines
   lsp-language-id-configuration
   lsp-enable-indentation
-  lsp-enable-completion-at-point
   lsp-ui-doc-show-with-mouse
   lsp-sqls-workspace-config-path
   lsp-sqls-connections
@@ -26,7 +25,6 @@
         '(((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=abv password=abv dbname=abv sslmode=disable"))))
   (setq lsp-ui-doc-show-with-mouse nil)
   (setq lsp-enable-indentation nil)
-  (setq lsp-enable-completion-at-point t)
   :commands (lsp lsp-deferred))
 
 (use-package lsp-ui

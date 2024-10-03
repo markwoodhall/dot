@@ -4,7 +4,9 @@
 (use-package cider
   :functions
   cider-interactive-eval
-  :defer t)
+  :defer t
+  :config
+  (setq-local lsp-completion-enable nil))
 
 (defun mw/nrepl-reset ()
   "Run nrepl dev/reset."

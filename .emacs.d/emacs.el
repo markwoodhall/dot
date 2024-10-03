@@ -498,7 +498,6 @@
   :ensure t
   :functions org-bullets-mode
   :after org
-  :mode ("\\.org\\'" . org-mode)
   :init (org-bullets-mode))
 
 (require 'ob-clojure)
