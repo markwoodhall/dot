@@ -512,7 +512,7 @@
 (nvmap :keymaps 'org-mode-map :prefix "SPC"
   "m"   '(:which-key "major")
   "m e" '(:which-key "evaluation")
-  "m e E" '(org-babel-execute-src-block :which-key "Execute source block"))
+  "m e s" '(org-babel-execute-src-block :which-key "Execute source block"))
 
 (use-package projectile
   :ensure t
