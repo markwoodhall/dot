@@ -1,3 +1,30 @@
+;;; clojure.el --- My EMACS Clojure setup  -*- lexical-binding: t -*-
+
+;; Copyright © 2024-2024 Mark Woodhall and contributors
+
+;;; Commentary:
+
+;; Setup cider and various other clojure related bindings and funtions
+
+;;; License:
+
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License
+;; as published by the Free Software Foundation; either version 3
+;; of the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;;; Code:
+
 (use-package clojure-mode
   :mode "\\.\\(clj\\|cljs\\|cljc\\)\\''")
 
@@ -51,9 +78,10 @@
   "m d m" '(mw/nrepl-migrate-db :which-key "Migrate DB")
   "m d i" '(mw/nrepl-init-db :which-key "Init DB")
 
-  "m e b" '(cider-eval-buffer :which-key "Cider eval buffer")
-  "m e e" '(cider-eval-defun-at-point :which-key "Cider eval root expressions")
-  "m e E" '(cider-eval-last-sexp :which-key "Cider eval expressions")
+  "m e b" '(cider-load-buffer :which-key "Cider load buffer")
+  "m e i" '(cider-interrupt :which-key "Cider eval interrupt")
+  "m e E" '(cider-eval-defun-at-point :which-key "Cider eval root expression")
+  "m e e" '(cider-eval-last-sexp :which-key "Cider eval expression")
 
   "m t" '(:which-key "test")
   "m t p" '(cider-test-run-project-tests :which-key "Cider run project tests")
@@ -63,3 +91,5 @@
   "m s X" '(cider-quit :which-key "Cider quit")
   "m s I" '(cider-jack-in-cljs :which-key "Cider jack in cljs")
   "m s i" '(cider-jack-in :which-key "Cider jack in"))
+
+;;; clojure.el ends here
