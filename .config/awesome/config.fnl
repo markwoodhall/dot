@@ -175,7 +175,7 @@
        :properties {:floating true}}
       {:rule {:class :Slack}
        :properties {:tag :4}}
-      {:rule {:class "firefox"}
+      {:rule {:class "vivaldi-stable"}
        :properties {:tag :3}}
       {:properties {:border_color "#11111b"
                     :border_width 1
@@ -246,4 +246,4 @@
     (awful.spawn "slack")
     (awful.spawn "insync start")
     (awful.spawn "xscreensaver")
-    (awful.spawn "firefox")))
+    (awful.spawn "vivaldi")))
