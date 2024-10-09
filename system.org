@@ -932,23 +932,23 @@ input_delay 1
 
 #+begin_src ini :tangle ~/.config/mimeapps.list
 [Default Applications]
-text/html=firefox.desktop
-x-scheme-handler/http=firefox.desktop
-x-scheme-handler/https=firefox.desktop
-x-scheme-handler/about=firefox.desktop
-x-scheme-handler/unknown=firefox.desktop
-x-scheme-handler/chrome=firefox.desktop
-application/x-extension-htm=firefox.desktop
-application/x-extension-html=firefox.desktop
-application/x-extension-shtml=firefox.desktop
-application/xhtml+xml=firefox.desktop
-application/x-extension-xhtml=firefox.desktop
-application/x-extension-xht=firefox.desktop
+text/html=vivaldi.desktop
+x-scheme-handler/http=vivaldi.desktop
+x-scheme-handler/https=vivaldi.desktop
+x-scheme-handler/about=vivaldi.desktop
+x-scheme-handler/unknown=vivaldi.desktop
+x-scheme-handler/chrome=vivaldi.desktop
+application/x-extension-htm=vivaldi.desktop
+application/x-extension-html=vivaldi.desktop
+application/x-extension-shtml=vivaldi.desktop
+application/xhtml+xml=vivaldi.desktop
+application/x-extension-xhtml=vivaldi.desktop
+application/x-extension-xht=vivaldi.desktop
 
 
 [Added Associations]
-x-scheme-handler/http=firefox.desktop;
-x-scheme-handler/https=firefox.desktop;
-text/html=firefox.desktop;
-application/pdf=firefox.desktop;
+x-scheme-handler/http=vivaldi.desktop;
+x-scheme-handler/https=vivaldi.desktop;
+text/html=vivaldi.desktop;
+application/pdf=vivaldi.desktop;
 #+end_src
