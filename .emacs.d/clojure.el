@@ -92,12 +92,4 @@
   "m s I" '(cider-jack-in-cljs :which-key "Cider jack in cljs")
   "m s i" '(cider-jack-in :which-key "Cider jack in"))
 
-;; lsp
-
-(defun mw/clojure-before-save-hook ()
-  (when (eq major-mode 'clojure-mode)
-    (lsp-format-buffer)))
-
-(add-hook 'before-save-hook 'mw/clojure-before-save-hook)
-
 ;;; clojure.el ends here

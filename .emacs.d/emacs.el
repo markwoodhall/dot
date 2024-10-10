@@ -58,15 +58,23 @@
 (setq history-length 50)
 (savehist-mode 1)
 
+(use-package doom-themes
+  :ensure t
+  :init
+  (load-theme 'doom-moonlight :no-confirm)
+  )
+
 (use-package catppuccin-theme
   :ensure t
   :init
-  (load-theme 'catppuccin :no-confirm))
+  ;;(load-theme 'catppuccin :no-confirm)
+  )
 
-;;(use-package ef-themes
-;;  :ensure t
-;;  :init
-;;  (load-theme 'ef-frost :no-confirm))
+(use-package ef-themes
+  :ensure t
+  :init
+  ;;(load-theme 'ef-night :no-confirm)
+  )
 
 ;; This sets $MANPATH, $PATH and exec-path from your shell,
 ;; but only when executed in a GUI frame on OS X and Linux.
@@ -512,7 +520,7 @@
 (nvmap :keymaps 'org-mode-map :prefix "SPC"
   "m"   '(:which-key "major")
   "m e" '(:which-key "evaluation")
-  "m e s" '(org-babel-execute-src-block :which-key "Execute source block"))
+  "m e e" '(org-babel-execute-src-block :which-key "Execute source block"))
 
 (use-package projectile
   :ensure t

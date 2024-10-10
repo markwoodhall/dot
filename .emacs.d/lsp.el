@@ -61,3 +61,9 @@
 (use-package flycheck
   :functions global-flycheck-mode
   :init (global-flycheck-mode))
+
+(defun mw/lsp-before-save-hook ()
+  (when lsp-mode
+    (lsp-format-buffer)))
+
+(add-hook 'before-save-hook 'mw/lsp-before-save-hook)
