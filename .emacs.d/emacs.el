@@ -58,6 +58,27 @@
 (setq history-length 50)
 (savehist-mode 1)
 
+
+;; Make a range of UI change to get rid of various toolbars
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(tooltip-mode nil)
+
+;; With some window managers you may have to set this to non-nil in order
+;; to set the size of a frame in pixels, to maximize frames or to make them
+;; fullscreen.
+(setq frame-resize-pixelwise t)
+
+(setq-default display-line-numbers-type 'relative)
+
+(add-hook 'prog-mode-hook (lambda() (display-line-numbers-mode 1)))
+(add-hook 'text-mode-hook (lambda() (display-line-numbers-mode 1)))
+
+(global-visual-line-mode -1)
+(set-default 'truncate-lines t)
+(auto-fill-mode -1)
+
 (use-package doom-themes
   :ensure t
   :init
@@ -65,16 +86,10 @@
   )
 
 (use-package catppuccin-theme
-  :ensure t
-  :init
-  ;;(load-theme 'catppuccin :no-confirm)
-  )
+  :ensure t)
 
 (use-package ef-themes
-  :ensure t
-  :init
-  ;;(load-theme 'ef-night :no-confirm)
-  )
+  :ensure t)
 
 ;; This sets $MANPATH, $PATH and exec-path from your shell,
 ;; but only when executed in a GUI frame on OS X and Linux.
@@ -161,22 +176,6 @@
   general-evil-setup
   :config
   (general-evil-setup t))
-
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(tooltip-mode nil)
-
-(setq frame-resize-pixelwise t)
-
-(setq-default display-line-numbers-type 'relative)
-
-(add-hook 'prog-mode-hook (lambda() (display-line-numbers-mode 1)))
-(add-hook 'text-mode-hook (lambda() (display-line-numbers-mode 1)))
-
-(global-visual-line-mode -1)
-(set-default 'truncate-lines t)
-(auto-fill-mode -1)
 
 (use-package all-the-icons
   :ensure t)
