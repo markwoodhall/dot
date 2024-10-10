@@ -641,12 +641,12 @@
        (side . bottom)
        (slot . 0)))
 
-(add-to-list 'display-buffer-alist
-     '("magit"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
+;;(add-to-list 'display-buffer-alist
+;;     '("magit"
+;;       (display-buffer-in-side-window)
+;;       (window-height . 0.33)
+;;       (side . bottom)
+;;       (slot . 0)))
 
 (add-to-list 'display-buffer-alist
      '("\*SQL\*"
