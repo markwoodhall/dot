@@ -503,9 +503,9 @@
 
 (use-package org-bullets
   :ensure t
-  :functions org-bullets-mode
-  :after org
-  :init (org-bullets-mode))
+  :after org)
+
+(add-hook 'org-mode-hook 'org-bullets-mode)
 
 (require 'ob-clojure)
 (setq org-babel-clojure-backend 'babashka)
