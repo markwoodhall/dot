@@ -915,6 +915,19 @@ repaint_delay 5
 input_delay 1
 #+end_src
 
+* Wezterm
+
+** Config
+
+Fennel is used to configure wezterm, this lua is used to bootstrap that. The fennel can be found in .config/.wezterm.
+
+#+begin_src fennel :tangle ~/.config/wezterm/wezterm.lua :mkdirp yes
+debug = {traceback = function() end}
+local fennel = require("./fennel").install()
+fennel.path = fennel.path .. ";.config/wezterm/?.fnl"
+return require("config")
+#+end_src
+
 * Postgres
 
 ** Config
