@@ -8,6 +8,13 @@
 (local beautiful (require :beautiful))
 (local naughty (require :naughty))
 
+(fn hostname []
+  (let [f (io.popen "/bin/hostname")
+        host (or (f:read "*a") "")
+        host (string.gsub host "\n$" "")]
+    (f:close)
+    host))
+
 ;; Set up error handling
 (when awesome.startup_errors
   (naughty.notify {:preset naughty.config.presets.critical
@@ -175,7 +182,7 @@
        :properties {:floating true}}
       {:rule {:class :Slack}
        :properties {:tag :4}}
-      {:rule {:class "vivaldi-stable"}
+      {:rule {:class "firefox"}
        :properties {:tag :3}}
       {:properties {:border_color "#11111b"
                     :border_width 1
@@ -228,6 +235,9 @@
 ;; Change caps lock to control
 (awful.spawn "setxkbmap -option caps:ctrl_modifier")
 
+(when (= (hostname) "minis")
+  (awful.spawn "xrandr --output DisplayPort-0 --set TearFree on"))
+
 (awful.spawn "picom")
 
 (local restart?
@@ -246,4 +256,4 @@
     (awful.spawn "slack")
     (awful.spawn "insync start")
     (awful.spawn "xscreensaver")
-    (awful.spawn "vivaldi")))
+    (awful.spawn "firefox")))

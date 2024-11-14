@@ -245,7 +245,7 @@ set -g status-position top
 set-option -g automatic-rename off
 
 set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'catppuccin/tmux#latest'
+set -g @plugin 'catppuccin/tmux#v0.3.0'
 set -g @catppuccin_flavor 'mocha' # latte,frappe, macchiato or mocha
 set -g @catppuccin_window_default_text "#W" # use "#W" for application instead of directory
 set -g @catppuccin_window_current_text "#W" # use "#W" for application instead of directory
@@ -688,9 +688,15 @@ Lebar is a system toolbar configured with fennel
                blocks.separator
                blocks.cpu
                blocks.separator
-               {:load (partial (. blocks.free-disk-space :load) "/dev/nvme0n1p2" "ssd")
-                :draw (partial (. blocks.free-disk-space :draw) "/dev/nvme0n1p2" "ssd" "/ ")}
-               blocks.separator
+              (when (= (hostname) "minis")
+                 {:load (partial (. blocks.free-disk-space :load) "/" "root")
+                  :draw (partial (. blocks.free-disk-space :draw) "/" "root" "/ ")})
+              (when (= (hostname) "minis")
+                 {:load (partial (. blocks.free-disk-space :load) "/home" "home")
+                  :draw (partial (. blocks.free-disk-space :draw) "/home" "home" "/home ")})
+              (when (= (hostname) "minis")
+                 {:load (partial (. blocks.free-disk-space :load) "/mnt/data" "data")
+                  :draw (partial (. blocks.free-disk-space :draw) "/mnt/data" "data" "DATA ")})
                (when (= (hostname) "thinker")
                  {:load (partial (. blocks.free-disk-space :load) "/home" "data")
                   :draw (partial (. blocks.free-disk-space :draw) "/home" "data" "/home ")})
