@@ -832,11 +832,11 @@ Programming Languages and associated tools
    Kitty is the terminal of choice, configured with JetBrains Mono and Catppuccin colors.
 
 #+begin_src bash :tangle ~/.config/kitty/kitty.conf :mkdirp yes
-font_family      Iosevka Comfy
-bold_font        Iosevka Comfy Bold
-italic_font      Iosevka Comfy Italic
-bold_italic_font Iosevka Comfy Bold Italic
-font_size 10.6
+font_family      JetBrains Mono Nerd Font
+bold_font        JetBrains Mono Bold Nerd Font Complete
+italic_font      JetBrains Mono Italic Nerd Font Complete
+bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
+font_size 9.0
 
 placement_strategy left
 
@@ -951,23 +951,23 @@ return require("config")
 
 #+begin_src ini :tangle ~/.config/mimeapps.list
 [Default Applications]
-text/html=vivaldi.desktop
-x-scheme-handler/http=vivaldi.desktop
-x-scheme-handler/https=vivaldi.desktop
-x-scheme-handler/about=vivaldi.desktop
-x-scheme-handler/unknown=vivaldi.desktop
-x-scheme-handler/chrome=vivaldi.desktop
-application/x-extension-htm=vivaldi.desktop
-application/x-extension-html=vivaldi.desktop
-application/x-extension-shtml=vivaldi.desktop
-application/xhtml+xml=vivaldi.desktop
-application/x-extension-xhtml=vivaldi.desktop
-application/x-extension-xht=vivaldi.desktop
+text/html=google-chrome.desktop
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/about=google-chrome.desktop
+x-scheme-handler/unknown=google-chrome.desktop
+x-scheme-handler/chrome=google-chrome.desktop
+application/x-extension-htm=google-chrome.desktop
+application/x-extension-html=google-chrome.desktop
+application/x-extension-shtml=google-chrome.desktop
+application/xhtml+xml=google-chrome.desktop
+application/x-extension-xhtml=google-chrome.desktop
+application/x-extension-xht=google-chrome.desktop
 
 
 [Added Associations]
-x-scheme-handler/http=vivaldi.desktop;
-x-scheme-handler/https=vivaldi.desktop;
-text/html=vivaldi.desktop;
-application/pdf=vivaldi.desktop;
+x-scheme-handler/http=google-chrome.desktop;
+x-scheme-handler/https=google-chrome.desktop;
+text/html=google-chrome.desktop;
+application/pdf=google-chrome.desktop;
 #+end_src

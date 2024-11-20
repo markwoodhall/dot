@@ -182,7 +182,7 @@
        :properties {:floating true}}
       {:rule {:class :Slack}
        :properties {:tag :4}}
-      {:rule {:class "firefox"}
+      {:rule {:class "google-chrome"}
        :properties {:tag :3}}
       {:properties {:border_color "#11111b"
                     :border_width 1
@@ -236,7 +236,9 @@
 (awful.spawn "setxkbmap -option caps:ctrl_modifier")
 
 (when (= (hostname) "minis")
-  (awful.spawn "xrandr --output DisplayPort-0 --set TearFree on"))
+  (awful.spawn "xrandr --output DisplayPort-0 --set TearFree on")
+  (awful.spawn "xrandr --output DisplayPort-1 --set TearFree on")
+  (awful.spawn "xrandr --output DisplayPort-2 --set TearFree on"))
 
 (awful.spawn "picom")
 
@@ -256,4 +258,4 @@
     (awful.spawn "slack")
     (awful.spawn "insync start")
     (awful.spawn "xscreensaver")
-    (awful.spawn "firefox")))
+    (awful.spawn "google-chrome-stable")))

@@ -59,6 +59,7 @@
 (setq read-process-output-max (* 3 1024 1024))
 
 (use-package flycheck
+  :ensure t
   :functions global-flycheck-mode
   :init (global-flycheck-mode))
 
