@@ -88,6 +88,10 @@
                (fn [] (awful.client.swap.byidx (- 1)))
                {:description "swap with previous client by index"
                 :group :client})
+    (awful.key [modkey :Shift] :o
+               (fn [] (awful.client.movetoscreen))
+               {:description "move to screen"
+                :group :client})
     (awful.key [modkey] :Return
                (fn [] (awful.spawn terminal))
                {:description "open a terminal"
@@ -99,11 +103,11 @@
                {:description "quit awesome"
                 :group :awesome})
     (awful.key [modkey] :space
-               (fn [] (awful.layout.inc 1))
+               (fn [] (awful.screen.focus_relative 1))
                {:description "select next"
                 :group :layout})
     (awful.key [modkey :Shift] :space
-               (fn [] (awful.layout.inc (- 1)))
+               (fn [] (awful.screen.focus_relative -1))
                {:description "select previous"
                 :group :layout})
     (awful.key [modkey] :d

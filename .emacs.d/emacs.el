@@ -29,8 +29,11 @@
 (require 'package)
 (add-to-list 'package-archives
        '("melpa" . "https://melpa.org/packages/"))
-;;(package-refresh-contents)
+(add-to-list 'package-archives
+             '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
+
 (package-initialize)
+(package-refresh-contents)
 
 ;; Setting garbage collection threshold
 (setq gc-cons-threshold 5002653184
@@ -757,6 +760,14 @@
      (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
      (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
      (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+(use-package claude-code-ide
+  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+  :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
+  :ensure t
+  :config
+  (setq claude-code-ide-prevent-reflow-glitch nil)
+  (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
 
 ;;; emacs.el ends here
 

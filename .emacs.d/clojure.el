@@ -26,9 +26,11 @@
 ;;; Code:
 
 (use-package clojure-mode
+  :ensure t
   :mode "\\.\\(clj\\|cljs\\|cljc\\)\\''")
 
 (use-package cider
+  :ensure t
   :functions
   cider-interactive-eval
   :defer t
