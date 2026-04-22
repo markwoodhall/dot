@@ -2,6 +2,12 @@
       '((local (sql-product 'postgres)
                (sql-port 5432)
                (sql-server "localhost"))
+        (local-5431 (sql-product 'postgres)
+                    (sql-port 5431)
+                    (sql-server "localhost"))
+        (local-5432 (sql-product 'postgres)
+                    (sql-port 5432)
+                    (sql-server "localhost"))
         (local-5433 (sql-product 'postgres)
                    (sql-port 5433)
                    (sql-server "localhost"))))
@@ -13,6 +19,14 @@
 (defun mw/psql-local ()
   (interactive)
   (mw/psql-connect 'postgres 'local))
+
+(defun mw/psql-local-5431 ()
+  (interactive)
+  (mw/psql-connect 'postgres 'local-5431))
+
+(defun mw/psql-local-5432 ()
+  (interactive)
+  (mw/psql-connect 'postgres 'local-5432))
 
 (defun mw/psql-local-5433 ()
   (interactive)

@@ -753,16 +753,6 @@ Programming Languages and associated tools
                                         clova.core/not-exists?]}}}
 #+end_src
 
-** lein
-#+begin_src clojure :tangle ~/.lein/profiles.clj :mkdirp yes
-{:user
- {:plugins [[nrepl "1.3.0"]
-            [cider/cider-nrepl "0.49.3"]
-            [refactor-nrepl "3.6.0"]]
-  :dependencies [[org.clojure/tools.namespace "1.3.0"]
-                 [org.clojure/tools.reader "1.3.6"]]}}
- #+end_src
-
 ** shadow
 #+begin_src clojure :tangle ~/.shadow-cljs/config.edn :mkdirp yes
 ;; shadow-cljs configuration
