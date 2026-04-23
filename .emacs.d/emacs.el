@@ -474,7 +474,12 @@
   :ensure t
   :functions global-company-mode
   :init
-  (global-company-mode))
+  (global-company-mode)
+  :config
+  (setq company-minimum-prefix-length 1
+        company-idle-delay 0.1
+        company-tooltip-align-annotations t
+        company-selection-wrap-around t))
 
 (use-package yasnippet
   :ensure t

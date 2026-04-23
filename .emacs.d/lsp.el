@@ -41,7 +41,7 @@
   :commands (consult-lsp-diagnostics consult-lsp-symbols))
 
 (nvmap :keymaps '(lsp-mode-map) :prefix ""
-  "K" '(lsp-ui-doc-glance :which-key "Lsp Documentation"))
+  "K" '(mw/doc-at-point :which-key "Documentation"))
 (nvmap :prefix "SPC"
   "l"   '(:which-key "lsp")
   "l f" '(:which-key "find")
@@ -50,7 +50,7 @@
   "l r" '(:which-key "refactor")
   "l r r" '(lsp-rename :which-key "Rename")
   "l g" '(:which-key "goto")
-  "l g d" '(lsp-find-definition :which-key "Find definition")
+  "l g d" '(mw/find-definition-at-point :which-key "Find definition")
   "l d" '(:which-key "diag")
   "l d r" '(lsp-find-references :which-key "Find references")
   "l d a" '(lsp-execute-code-action :which-key "LSP code actions")

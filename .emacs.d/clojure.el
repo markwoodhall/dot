@@ -33,9 +33,39 @@
   :ensure t
   :functions
   cider-interactive-eval
+  cider-connected-p
   :defer t
   :config
-  (setq-local lsp-completion-enable nil))
+  (setq cider-completion-style 'flex
+        cider-eldoc-display-for-symbol-at-point t
+        cider-repl-display-help-banner nil))
+
+(defun mw/clojure-lsp-tune ()
+  "Let CIDER own REPL-driven UI; keep LSP for diagnostics + refactoring."
+  (setq-local lsp-completion-enable nil
+              lsp-signature-auto-activate nil
+              lsp-enable-symbol-highlighting nil
+              lsp-eldoc-enable-hover nil
+              lsp-modeline-code-actions-enable nil
+              lsp-modeline-diagnostics-enable nil))
+
+(add-hook 'clojure-mode-hook #'mw/clojure-lsp-tune)
+(add-hook 'clojurescript-mode-hook #'mw/clojure-lsp-tune)
+(add-hook 'clojurec-mode-hook #'mw/clojure-lsp-tune)
+
+(defun mw/doc-at-point ()
+  "CIDER doc when a REPL is connected, else LSP doc."
+  (interactive)
+  (if (and (derived-mode-p 'clojure-mode) (cider-connected-p))
+      (cider-doc)
+    (lsp-ui-doc-glance)))
+
+(defun mw/find-definition-at-point ()
+  "CIDER jump-to-var when a REPL is connected, else LSP find-definition."
+  (interactive)
+  (if (and (derived-mode-p 'clojure-mode) (cider-connected-p))
+      (cider-find-var)
+    (lsp-find-definition)))
 
 (defun mw/nrepl-reset ()
   "Run nrepl dev/reset."
