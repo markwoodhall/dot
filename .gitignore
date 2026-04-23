@@ -1,1 +1,12 @@
 /.config/nvim/
+
+# Emacs generated state
+/.emacs.d/.lsp-session-v1
+/.emacs.d/eln-cache/
+/.emacs.d/elpa/
+/.emacs.d/history
+/.emacs.d/projectile-bookmarks.eld
+/.emacs.d/projects
+/.emacs.d/recentf
+/.emacs.d/smex-items
+/.emacs.d/transient/
