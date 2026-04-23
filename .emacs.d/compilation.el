@@ -103,6 +103,12 @@ READ-ENV will product a command prefixed with environment variables."
   (interactive
    (list
     (read-file-name "File: ")))
-  (let* ((buffer-name (concat "tail " file)))
-    (make-comint buffer-name "tail" nil "-f" file)
-    (pop-to-buffer (concat "*" buffer-name "*"))))
+  (let* ((file (expand-file-name file))
+         (buffer-name (concat "tail " file))
+         (buffer (make-comint buffer-name "tail" nil "-f" file)))
+    (with-current-buffer buffer
+      (compilation-shell-minor-mode 1)
+      (highlight-regexp "ERROR" 'hi-red-b)
+      (highlight-regexp "WARN" 'hi-yellow)
+      (evil-local-set-key 'normal (kbd "q") #'quit-window))
+    (pop-to-buffer buffer)))
