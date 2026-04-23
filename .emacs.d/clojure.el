@@ -27,7 +27,7 @@
 
 (use-package clojure-mode
   :ensure t
-  :mode "\\.\\(clj\\|cljs\\|cljc\\)\\''")
+  :mode "\\.clj[sc]?\\'")
 
 (use-package cider
   :ensure t
