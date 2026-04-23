@@ -32,9 +32,6 @@
 (use-package lsp-treemacs
   :after lsp)
 
-(use-package lsp-ivy
-  :after lsp)
-
 (use-package consult-lsp
   :ensure t
   :commands (consult-lsp-diagnostics consult-lsp-symbols))

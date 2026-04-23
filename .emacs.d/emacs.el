@@ -33,7 +33,8 @@
              '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
 
 (package-initialize)
-(package-refresh-contents)
+(unless package-archive-contents
+  (package-refresh-contents))
 
 ;; Setting garbage collection threshold
 (setq gc-cons-threshold 5002653184
@@ -48,10 +49,8 @@
                               (time-subtract after-init-time before-init-time)))
                      gcs-done)))
 
-;; Silence compiler warnings as they can be pretty disruptive
-(if (boundp 'comp-deferred-compilation)
-    (setq comp-deferred-compilation nil)
-    (setq native-comp-jit-compilation nil))
+;; Quiet native-compilation warnings without disabling native comp itself.
+(setq native-comp-async-report-warnings-errors 'silent)
 
 ;; In noninteractive sessions, prioritize non-byte-compiled source files to
 ;; prevent the use of stale byte-code. Otherwise, it saves us a little IO time
@@ -60,13 +59,14 @@
 
 (setq history-length 50)
 (savehist-mode 1)
+(recentf-mode 1)
 
 
 ;; Make a range of UI change to get rid of various toolbars
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(tooltip-mode nil)
+(tooltip-mode -1)
 
 ;; With some window managers you may have to set this to non-nil in order
 ;; to set the size of a frame in pixels, to maximize frames or to make them
@@ -78,9 +78,7 @@
 (add-hook 'prog-mode-hook (lambda() (display-line-numbers-mode 1)))
 (add-hook 'text-mode-hook (lambda() (display-line-numbers-mode 1)))
 
-(global-visual-line-mode -1)
 (set-default 'truncate-lines t)
-(auto-fill-mode -1)
 
 (use-package doom-themes
   :ensure t
@@ -220,10 +218,10 @@
 (nvmap :prefix "SPC" :keymaps 'override
    "b"     '(:which-key "buffers")
    "b x"   '((lambda () (interactive) (kill-this-buffer) (evil-window-delete)) :which-key "Kill buffer")
-   "b l"   '(counsel-switch-buffer :which-key "List buffers")
+   "b l"   '(consult-buffer :which-key "List buffers")
    "b n"   '(next-buffer :which-key "Next buffer")
    "b n"   '(rename-buffer :which-key "Rename buffer")
-   "b g"   '(swiper :which-key "Grep")
+   "b g"   '(consult-line :which-key "Search buffer")
    "b p"   '(previous-buffer :which-key "Previous buffer"))
 
 (nvmap :prefix "SPC" :keymaps 'override
@@ -235,7 +233,6 @@
 (use-package ws-butler
   :ensure t
   :hook (prog-mode . ws-butler-mode))
-(add-hook 'prog-mode-hook #'ws-butler-mode)
 
 (defun mw/named-vterm (name)
   "Start a vterm and renames the buffer NAME."
@@ -260,9 +257,9 @@
 
 (nvmap :states '(normal visual) :keymaps 'override :prefix "SPC"
        "f"     '(:which-key "files")
-       "f f"   '(counsel-find-file :which-key "Find file")
-       "f g"   '(counsel-rg :which-key "Grep files")
-       "f r"   '(counsel-recentf :which-key "Recent files")
+       "f f"   '(find-file :which-key "Find file")
+       "f g"   '(consult-ripgrep :which-key "Grep files")
+       "f r"   '(consult-recent-file :which-key "Recent files")
        "f s"   '(save-buffer :which-key "Save file")
        "f u"   '(sudo-edit-find-file :which-key "Sudo find file")
        "f C"   '(copy-file :which-key "Copy file")
@@ -293,87 +290,71 @@
   :slant 'italic)
 
 ;; changes certain keywords to symbols, such as lamda!
-(setq global-prettify-symbols-mode t)
+(global-prettify-symbols-mode 1)
 
 (nvmap :keymaps 'override :prefix "SPC"
-       "SPC"   '(counsel-M-x :which-key "All commands (M-x)")
+       "SPC"   '(execute-extended-command :which-key "All commands (M-x)")
        "h"     '(:which-key "help")
        "h r"   '(:which-key "reload")
        "h r e" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config"))
 
-(use-package smex
-  :ensure t)
-
-(use-package ivy
+(use-package vertico
   :ensure t
-  :defer 0.1
-  :defines
-  evil-insert-state-map
-  ivy-minibuffer-map
-  ivy-switch-buffer-map
-  ivy-reverse-i-search-map
-  :functions ivy-mode
-  :diminish
-  :bind
-  (("C-s" . swiper)
-   :map evil-insert-state-map
-   ("C-k" . ivy-previous-line)
-   ("C-j" . ivy-next-line)
-   :map ivy-minibuffer-map
-   ("TAB" . ivy-partial)
-   ("C-l" . ivy-alt-done)
-   ("C-j" . ivy-next-linae)
-   ("C-k" . ivy-previous-line)
-   :map ivy-switch-buffer-map
-   ("C-k" . ivy-previous-line)
-   ("C-j" . ivy-next-line)
-   ("C-l" . ivy-done)
-   ("C-d" . ivy-switch-buffer-kill)
-   :map ivy-reverse-i-search-map
-   ("C-k" . ivy-previous-line)
-   ("C-j" . ivy-next-line)
-   ("C-d" . ivy-reverse-i-search-kill))
+  :functions vertico-mode
+  :init
+  (vertico-mode)
   :custom
-  (setq ivy-count-format "(%d/%d) "
-        ivy-use-virtual-buffers t
-        enable-recursive-minibuffers t)
-  (add-to-list 'ivy-sort-functions-alist
-               '(counsel-recentf . file-newer-than-file-p))
+  (vertico-cycle t)
+  :bind
+  (:map vertico-map
+        ("C-j" . vertico-next)
+        ("C-k" . vertico-previous)
+        ("C-l" . vertico-insert)
+        ("TAB" . vertico-insert))
   :config
-  (ivy-mode))
+  (with-eval-after-load 'evil
+    (evil-define-key '(normal insert) vertico-map
+      (kbd "C-j") 'vertico-next
+      (kbd "C-k") 'vertico-previous
+      (kbd "C-l") 'vertico-insert)))
 
-(use-package ivy-rich
+(use-package orderless
   :ensure t
-  :functions ivy-rich-mode
-  :after ivy
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
+
+(use-package marginalia
+  :ensure t
+  :functions marginalia-mode
   :init
-  (ivy-rich-mode 1)) ;; this gets us descriptions in M-x.
+  (marginalia-mode))
 
-(use-package ivy-xref
+(use-package consult
   :ensure t
-  :defines
-  xref-show-definitions-function
-  xref-show-xrefs-function
-  :functions
-  ivy-xref-show-xrefs
-  ivy-xref-show-defs
-  :after ivy
+  :defines xref-show-xrefs-function xref-show-definitions-function
+  :bind
+  (("C-s" . consult-line))
   :init
-  ;; xref initialization is different in Emacs 27 - there are two different
-  ;; variables which can be set rather than just one
-  (when (>= emacs-major-version 27)
-    (setq xref-show-definitions-function #'ivy-xref-show-defs))
-  ;; Necessary in Emacs <27. In Emacs 27 it will affect all xref-based
-  ;; commands other than xref-find-definitions (e.g. project-find-regexp)
-  ;; as well
-  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
+  (setq xref-show-xrefs-function       #'consult-xref
+        xref-show-definitions-function #'consult-xref
+        completion-in-region-function  #'consult-completion-in-region)
+  :custom
+  (consult-narrow-key "<")
+  (enable-recursive-minibuffers t))
 
-(use-package counsel
+(use-package embark
   :ensure t
-  :commands (counsel-switch-buffer)
-  :functions counsel-mode
-  :config
-  (counsel-mode 1))
+  :bind
+  (("C-." . embark-act)
+   ("C-;" . embark-dwim)
+   ("C-h B" . embark-bindings)))
+
+(use-package embark-consult
+  :ensure t
+  :after (embark consult)
+  :hook (embark-collect-mode . consult-preview-at-point-mode))
 
 (load-file
  (expand-file-name
@@ -496,7 +477,7 @@
 
 (nvmap :prefix "SPC" :keymaps 'override
   "g"   '(:which-key "git")
-  "g g" '(counsel-git-grep :which-key "Grep git files")
+  "g g" '(consult-git-grep :which-key "Grep git files")
   "g f" '(magit-find-file :which-key "Git files")
   "g F" '(magit-pull :which-key "Magit pull -rebase")
   "g P" '(magit-push :which-key "Magit push")
@@ -560,7 +541,7 @@
 (use-package vterm
   :ensure t
   :commands (vterm)
-  :custom
+  :config
   (setq shell-file-name "/bin/zsh"
         vterm-shell "/bin/zsh"
         vterm-max-scrollback 9000))

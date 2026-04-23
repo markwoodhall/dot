@@ -9,16 +9,16 @@
      "4594d6b9753691142f02e67b8eb0fda7d12f6cc9f1299a49b819312d6addad1d"
      default))
  '(package-selected-packages
-   '(all-the-icons catppuccin-theme company consult-lsp copilot counsel
+   '(all-the-icons catppuccin-theme company consult consult-lsp copilot
                    dashboard docker dockerfile-mode doom-modeline
-                   doom-themes eat ef-themes evil-cleverparens
-                   evil-collection evil-goggles evil-surround
-                   exec-path-from-shell fennel-mode flycheck general
-                   git-gutter highlight-indent-guides ivy-rich
-                   ivy-xref lsp-ivy lsp-treemacs lsp-ui magit
-                   nerd-icons-dired org-bullets projectile
-                   rainbow-delimiters smex sudo-edit terraform-mode
-                   undo-tree vterm weather-scout ws-butler yaml
+                   doom-themes eat ef-themes embark embark-consult
+                   evil-cleverparens evil-collection evil-goggles
+                   evil-surround exec-path-from-shell fennel-mode
+                   flycheck general git-gutter highlight-indent-guides
+                   lsp-treemacs lsp-ui magit marginalia nerd-icons-dired
+                   orderless org-bullets projectile rainbow-delimiters
+                   smartparens sudo-edit terraform-mode undo-tree
+                   vertico vterm weather-scout ws-butler yaml
                    yasnippet))
  '(safe-local-variable-values
    '((cider-shadow-default-options . "app")
