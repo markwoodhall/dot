@@ -21,8 +21,7 @@
                         :server-id 'fennel-ls))
 
   (setq lsp-sqls-workspace-config-path nil)
-  (setq lsp-sqls-connections
-        '(((driver . "postgresql") (dataSourceName . "host=127.0.0.1 port=5432 user=abv password=abv dbname=abv sslmode=disable"))))
+  (put 'lsp-sqls-connections 'safe-local-variable #'listp)
   (setq lsp-ui-doc-show-with-mouse nil)
   (setq lsp-enable-indentation nil)
   :commands (lsp lsp-deferred))
