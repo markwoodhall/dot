@@ -1,4 +1,5 @@
 (use-package lsp-mode
+  :ensure t
   :hook ((clojure-mode . lsp-deferred)
          (fennel-mode . lsp-deferred)
          (sql-mode . lsp-deferred))
@@ -27,9 +28,11 @@
   :commands (lsp lsp-deferred))
 
 (use-package lsp-ui
+  :ensure t
   :after lsp)
 
 (use-package lsp-treemacs
+  :ensure t
   :after lsp)
 
 (use-package consult-lsp

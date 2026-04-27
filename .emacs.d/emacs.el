@@ -73,10 +73,11 @@
 ;; fullscreen.
 (setq frame-resize-pixelwise t)
 
-(setq-default display-line-numbers-type 'relative)
-
-(add-hook 'prog-mode-hook (lambda() (display-line-numbers-mode 1)))
-(add-hook 'text-mode-hook (lambda() (display-line-numbers-mode 1)))
+;; Try life without relative line numbers for a week. Re-enable by
+;; restoring the two hooks and switching the type back to 'relative.
+(setq-default display-line-numbers-type t
+              display-line-numbers-width 4
+              display-line-numbers-grow-only t)
 
 (set-default 'truncate-lines t)
 
@@ -379,7 +380,7 @@
   :diminish t
   :defines highlight-indent-guides-method
   :hook (prog-mode . highlight-indent-guides-mode)
-  :custom (highlight-indent-guides-method 'column))
+  :custom (highlight-indent-guides-method 'character))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -483,11 +484,18 @@
   "g P" '(magit-push :which-key "Magit push")
   "g s" '(magit-status :which-key "Magit status"))
 
-(use-package git-gutter
+(use-package diff-hl
   :ensure t
-  :functions global-git-gutter-mode
+  :functions
+  global-diff-hl-mode
+  diff-hl-flydiff-mode
+  diff-hl-magit-pre-refresh
+  diff-hl-magit-post-refresh
+  :hook ((magit-pre-refresh . diff-hl-magit-pre-refresh)
+         (magit-post-refresh . diff-hl-magit-post-refresh))
   :init
-  (global-git-gutter-mode +1))
+  (global-diff-hl-mode)
+  (diff-hl-flydiff-mode))
 
 (use-package org
   :ensure t

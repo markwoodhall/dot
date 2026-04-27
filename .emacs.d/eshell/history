@@ -1,0 +1,13 @@
+(ls)
+ls 
+ls 
+ls *.el(.)
+echo (+ 1 2 3)
+echo (buffer-name)
+*ls -l 
+top 
+find-file (car (split-string (ls)))
+git status
+git --version
+git 
+ls
