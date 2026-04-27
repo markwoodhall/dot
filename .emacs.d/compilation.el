@@ -40,13 +40,13 @@ READ-ENV will product a command prefixed with environment variables."
   (mw/build-command
    cmd target options change-dir (projectile-project-root) read-env))
 
-(defun mw/docker-compose (directory)
-  "Run docker compose in DIRECTORY."
+(defun mw/docker-compose (file)
+  "Run docker compose using FILE."
   (interactive
    (list
-    (read-directory-name "Directory: ")))
-  (let* ((file (read-file-name "Compose file: " directory "docker-compose.yml" t "docker-compose.yml"))
-         (command (completing-read "Option: " '("up" "down")))
+    (read-file-name "Compose File: " (projectile-project-root) "docker-compose.yml" t "docker-compose.yml")))
+  (let* ((file (expand-file-name file))
+         (command (completing-read "Option: " '("up" "down" file)))
          (buffer-name (concat "docker compose " command)))
     (make-comint buffer-name "docker" nil "compose" "-f" file command)
     (pop-to-buffer (concat "*" buffer-name "*"))))
