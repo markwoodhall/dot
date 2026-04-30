@@ -61,7 +61,6 @@
 (savehist-mode 1)
 (recentf-mode 1)
 
-
 ;; Make a range of UI change to get rid of various toolbars
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -523,10 +522,10 @@
   projectile-project-search-path
   projectile-switch-project-action
   :functions
-  projectile-global-mode
+  projectile-mode
   projectile-dired
   :config
-  (projectile-global-mode 1)
+  (projectile-mode 1)
   :init
   (when (file-directory-p "~/src")
     (setq projectile-project-search-path '("~/src")))
@@ -534,6 +533,7 @@
 
 (nvmap :keymaps 'override :prefix "SPC"
        "p"     '(:which-key "projects")
+       "p p"   '(projectile-switch-project :which-key "Swtich project")
        "p l"   '(projectile-switch-to-buffer :which-key "Buffer list")
        "p r"   '(projectile-recentf :which-key "Recent files")
        "p f"   '(projectile-find-file :which-key "Find file"))
@@ -552,104 +552,6 @@
   "C-c"   '(vterm--self-insert :which-key "Literal Ctrl C"))
 
 (winner-mode 1)
-
-(add-to-list 'display-buffer-alist
-     '("\*vterm\*"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*compilation\*"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*Compile-Log\*"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*Help\*"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*cider-repl\*"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*Fennel REPLl\*"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*Org-Babel Error Output\*"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*Process List\*"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*sqls results\*"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*tail"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*docker"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*aws"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
-
-;;(add-to-list 'display-buffer-alist
-;;     '("magit"
-;;       (display-buffer-in-side-window)
-;;       (window-height . 0.33)
-;;       (side . bottom)
-;;       (slot . 0)))
-
-(add-to-list 'display-buffer-alist
-     '("\*SQL\*"
-       (display-buffer-in-side-window)
-       (window-height . 0.33)
-       (side . bottom)
-       (slot . 0)))
 
 (nvmap :keymaps 'override :prefix "SPC"
        "w"     '(:which-key "windows")
@@ -759,3 +661,6 @@
 
 ;;; emacs.el ends here
 
+
+(use-package markdown-mode
+  :ensure t)

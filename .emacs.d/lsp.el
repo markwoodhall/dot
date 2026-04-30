@@ -1,69 +1,30 @@
-(use-package lsp-mode
-  :ensure t
-  :hook ((clojure-mode . lsp-deferred)
-         (fennel-mode . lsp-deferred)
-         (sql-mode . lsp-deferred))
-  :defines
-  lsp-language-id-configuration
-  lsp-enable-indentation
-  lsp-ui-doc-show-with-mouse
-  lsp-sqls-workspace-config-path
-  lsp-sqls-connections
-  :functions
-  lsp-register-client
-  make-lsp-client
-  lsp-stdio-connection
-  lsp-activate-on
-  :config
-  (add-to-list 'lsp-language-id-configuration '(fennel-mode . "fennel"))
-  (lsp-register-client (make-lsp-client
-                        :new-connection (lsp-stdio-connection "fennel-ls")
-                        :activation-fn (lsp-activate-on "fennel")
-                        :server-id 'fennel-ls))
+;;; lsp.el --- My EMACS config -*- lexical-binding: t -*-
 
-  (setq lsp-sqls-workspace-config-path nil)
-  (put 'lsp-sqls-connections 'safe-local-variable #'listp)
-  (setq lsp-ui-doc-show-with-mouse nil)
-  (setq lsp-enable-indentation nil)
-  :commands (lsp lsp-deferred))
+;; Copyright © 2024-2024 Mark Woodhall and contributors
 
-(use-package lsp-ui
-  :ensure t
-  :after lsp)
+;;; Commentary:
 
-(use-package lsp-treemacs
-  :ensure t
-  :after lsp)
+;; An EMACS config that is ok for me!
 
-(use-package consult-lsp
-  :ensure t
-  :commands (consult-lsp-diagnostics consult-lsp-symbols))
+;;; License:
 
-(nvmap :keymaps '(lsp-mode-map) :prefix ""
-  "K" '(mw/doc-at-point :which-key "Documentation"))
-(nvmap :prefix "SPC"
-  "l"   '(:which-key "lsp")
-  "l f" '(:which-key "find")
-  "l f s" '(consult-lsp-file-symbols :which-key "File symbols")
-  "l f S" '(consult-lsp-symbols :which-key "Symbols")
-  "l r" '(:which-key "refactor")
-  "l r r" '(lsp-rename :which-key "Rename")
-  "l g" '(:which-key "goto")
-  "l g d" '(mw/find-definition-at-point :which-key "Find definition")
-  "l d" '(:which-key "diag")
-  "l d r" '(lsp-find-references :which-key "Find references")
-  "l d a" '(lsp-execute-code-action :which-key "LSP code actions")
-  "l d D" '(consult-lsp-diagnostics :which-key "Diagnotics"))
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License
+;; as published by the Free Software Foundation; either version 3
+;; of the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
-(setq read-process-output-max (* 3 1024 1024))
+;;; Code:
+(add-hook 'clojure-mode-hook 'eglot-ensure)
+(add-hook 'fennel-mode-hook 'eglot-ensure)
 
-(use-package flycheck
-  :ensure t
-  :functions global-flycheck-mode
-  :init (global-flycheck-mode))
-
-(defun mw/lsp-before-save-hook ()
-  (when lsp-mode
-    (lsp-format-buffer)))
-
-(add-hook 'before-save-hook 'mw/lsp-before-save-hook)
+;;; lsp.el ends here
