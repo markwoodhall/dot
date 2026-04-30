@@ -81,17 +81,11 @@
 
 (set-default 'truncate-lines t)
 
-(use-package doom-themes
-  :ensure t
-  :init
-  (load-theme 'doom-moonlight :no-confirm)
-  )
-
-(use-package catppuccin-theme
-  :ensure t)
-
-(use-package ef-themes
-  :ensure t)
+;;(use-package catppuccin-theme
+;;  :ensure t
+;;  :init
+;;  (load-theme 'catppuccin :no-confirm)
+;;  )
 
 ;; This sets $MANPATH, $PATH and exec-path from your shell,
 ;; but only when executed in a GUI frame on OS X and Linux.
