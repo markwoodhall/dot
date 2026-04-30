@@ -67,6 +67,11 @@
 (scroll-bar-mode -1)
 (tooltip-mode -1)
 
+(setq-default inhibit-startup-screen t)
+(setq inhibit-splash-screen t)
+(setq inhibit-startup-message t)
+(setq initial-scratch-message "")
+
 ;; With some window managers you may have to set this to non-nil in order
 ;; to set the size of a frame in pixels, to maximize frames or to make them
 ;; fullscreen.
@@ -118,7 +123,7 @@
   :defines evil-collection-mode-list
   :functions evil-collection-init
   :config
-  (setq evil-collection-mode-list '(dashboard dired ibuffer))
+  (setq evil-collection-mode-list '(dired ibuffer))
   :custom (evil-collection-setup-minibuffer t)
   :init (evil-collection-init))
 
@@ -174,32 +179,6 @@
 
 (use-package all-the-icons
   :ensure t)
-
-(use-package dashboard
-  :ensure t
-  :defines
-  dashboard-set-heading-icons
-  dashboard-set-file-icons
-  dashboard-projects-backend
-  dashboard-icon-type
-  dashboard-banner-logo-title
-  dashboard-startup-banner
-  dashboard-center-content
-  dashboard-vertically-center-content
-  dashboard-items
-  :functions dashboard-setup-startup-hook
-  :init
-  (setq dashboard-set-heading-icons t
-        dashboard-set-file-icons t
-        dashboard-projects-backend 'projectile
-        dashboard-icon-type 'nerd-icons
-        dashboard-banner-logo-title "emacs!"
-        dashboard-startup-banner "~/.emacs.d/emacs.png"
-        dashboard-center-content t
-        dashboard-vertically-center-content t
-        dashboard-items '((recents . 14)
-                          (projects . 9)))
-  (dashboard-setup-startup-hook))
 
 (use-package doom-modeline
   :ensure t
