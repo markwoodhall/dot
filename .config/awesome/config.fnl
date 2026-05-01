@@ -239,10 +239,8 @@
 ;; Change caps lock to control
 (awful.spawn "setxkbmap -option caps:ctrl_modifier")
 
-(when (= (hostname) "minis")
-  (awful.spawn "xrandr --output DisplayPort-0 --set TearFree on")
-  (awful.spawn "xrandr --output DisplayPort-1 --set TearFree on")
-  (awful.spawn "xrandr --output DisplayPort-2 --set TearFree on"))
+(when (= (hostname) "thinking")
+  (awful.spawn "xrandr --output eDP-1 --off --output HDMI-1 --off --output DP-1 --off --output DP-2 --off --output DP-3 --off --output DP-4 --off --output DP-2-1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP-2-2 --mode 2560x1440 --pos 2560x0 --rotate normal --output DP-2-3 --off"))
 
 (awful.spawn "picom")
 
@@ -260,6 +258,5 @@
     (awful.spawn "/opt/lebar/lebardock")
     (awful.spawn "emacs")
     (awful.spawn "slack")
-    (awful.spawn "insync start")
     (awful.spawn "xscreensaver")
     (awful.spawn "google-chrome-stable")))
