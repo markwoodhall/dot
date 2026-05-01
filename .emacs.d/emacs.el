@@ -184,7 +184,13 @@
   :ensure t
   :functions doom-modeline-mode
   :init
-  (doom-modeline-mode 1))
+  (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-battery t)
+  (setq doom-modeline-time t)
+  (setq doom-modeline-project-name t)
+  (display-battery-mode)
+  (display-time-mode))
 
 (setq switch-to-buffer-obey-display-actions t)
 
@@ -638,8 +644,7 @@
   (setq claude-code-ide-prevent-reflow-glitch nil)
   (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
 
-;;; emacs.el ends here
-
-
 (use-package markdown-mode
   :ensure t)
+
+;;; emacs.el ends here

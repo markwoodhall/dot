@@ -16,11 +16,11 @@
        dockerfile-mode doom-modeline doom-themes eat ef-themes
        embark-consult evil-cleverparens evil-collection evil-goggles
        evil-surround exec-path-from-shell fennel-mode flycheck general
-       git-gutter highlight-indent-guides ivy-rich ivy-xref lsp-ivy
-       lsp-treemacs lsp-ui magit marginalia nerd-icons-dired orderless
-       org-bullets projectile rainbow-delimiters smex sudo-edit
-       terraform-mode undo-tree vertico vterm weather-scout ws-butler
-       yaml yasnippet))
+       git-gutter highlight-indent-guides ivy-rich ivy-xref lemon
+       lsp-ivy lsp-treemacs lsp-ui magit marginalia nerd-icons-dired
+       orderless org-bullets projectile rainbow-delimiters smex
+       sudo-edit terraform-mode undo-tree vertico vterm weather-scout
+       ws-butler yaml yasnippet))
  '(safe-local-variable-values
    '((cider-shadow-default-options . "app")
      (cider-default-cljs-repl . shadow))))
