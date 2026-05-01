@@ -36,7 +36,7 @@
 
 ;; Set terminal, editor and modkey
 (global terminal :kitty)
-(global editor (or (os.getenv :EDITOR) :nvim))
+(global editor (or (os.getenv :EDITOR) :emacs))
 (global editor-cmd (.. terminal " -e " editor))
 (global modkey :Mod1)
 
@@ -180,7 +180,7 @@
 
 ;; Send programs to certain tags automatically
 (set awful.rules.rules
-     [{:rule {:class "Kitty"}
+     [{:rule {:class "emacs"}
        :properties {:tag :1}}
       {:rule_any {:type ["dialog"]}
        :properties {:floating true}}
@@ -258,7 +258,7 @@
 (when (not (restart?))
   (do
     (awful.spawn "/opt/lebar/lebardock")
-    (awful.spawn "kitty")
+    (awful.spawn "emacs")
     (awful.spawn "slack")
     (awful.spawn "insync start")
     (awful.spawn "xscreensaver")

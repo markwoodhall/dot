@@ -26,6 +26,8 @@
 ;;; Code:
 (setq vc-follow-symlinks t)
 
+(setq package-native-compile t)
+
 (require 'package)
 (add-to-list 'package-archives
        '("melpa" . "https://melpa.org/packages/"))
@@ -85,11 +87,10 @@
 
 (set-default 'truncate-lines t)
 
-;;(use-package catppuccin-theme
-;;  :ensure t
-;;  :init
-;;  (load-theme 'catppuccin :no-confirm)
-;;  )
+(use-package catppuccin-theme
+  :ensure t
+  :init
+  (load-theme 'catppuccin :no-confirm))
 
 ;; This sets $MANPATH, $PATH and exec-path from your shell,
 ;; but only when executed in a GUI frame on OS X and Linux.
