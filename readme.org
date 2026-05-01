@@ -829,7 +829,7 @@ Programming Languages and associated tools
 
 ** Config
 
-   Kitty is the terminal of choice, configured with JetBrains Mono and Catppuccin colors.
+   Kitty is the terminal of choice, configured with Iosevka and Catppuccin colors.
 
 #+begin_src bash :tangle ~/.config/kitty/kitty.conf :mkdirp yes
 font_family      Iosevka Comfy
