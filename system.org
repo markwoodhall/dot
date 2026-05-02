@@ -182,7 +182,7 @@ DEFAULT_USER="markwoodhall"
 ZSH_THEME="refined"
 SHARE_HISTORY="false"
 
-plugins=(archlinux git postgres tmux lein npm zsh-autosuggestions mercurial aws docker docker-compose terraform)
+plugins=(archlinux git postgres lein npm zsh-autosuggestions mercurial aws docker docker-compose terraform)
 
 source $ZSH/oh-my-zsh.sh
 
