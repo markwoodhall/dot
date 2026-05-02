@@ -782,21 +782,10 @@ Programming Languages and associated tools
     signingkey = 6814C0C7A2E45188
 [color]
     ui = auto
-[merge]
-    tool = fugitive
-    stat = true
-    conflictstyle = diff3
 [push]
     default = current
 [commit]
     ;;gpgsign = true
-[diff]
-    cmd = nvim -f -c \"Gvdiff\" \"$LOCAL\" \"$REMOTE\"
-    colorMoved = default
-[difftool]
-    prompt = false
-[alias]
-    vimdiff = difftool
 [github]
     user = markwoodhall
 [rebase]
