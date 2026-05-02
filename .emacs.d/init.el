@@ -20,8 +20,8 @@
        flycheck general git-gutter highlight-indent-guides ivy-rich
        ivy-xref lemon lsp-ivy lsp-treemacs lsp-ui magit marginalia
        nerd-icons-dired orderless org-bullets projectile
-       rainbow-delimiters smex sudo-edit terraform-mode undo-tree
-       vertico vterm weather-scout ws-butler yaml yasnippet))
+       rainbow-delimiters smex sudo-edit symon terraform-mode
+       undo-tree vertico vterm weather-scout ws-butler yaml yasnippet))
  '(safe-local-variable-values
    '((cider-shadow-default-options . "app")
      (cider-default-cljs-repl . shadow))))

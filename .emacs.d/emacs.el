@@ -647,4 +647,9 @@
 (use-package disk-usage
   :ensure t)
 
+(use-package symon
+  :ensure t
+  :config
+  (symon-mode))
+
 ;;; emacs.el ends here
