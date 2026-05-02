@@ -85,23 +85,6 @@ alias cd='cd -P'
 alias c='cd -P'
 alias mkdir='mkdir -p'
 alias cat='ccat'
-alias feh='feh -F'
-
-alias v='nvim'
-alias vi='nvim'
-alias vmi='nvim'
-alias vim='nvim'
-alias cl='clear'
-alias clean='clear'
-
-alias tmx='tmux'
-alias tmxns='tmx new -s'
-alias tmxls='tmx list-sessions'
-alias tmxrw='tmx rename-window'
-alias tmxd='tmx detach'
-alias tmxa='tmx attach -t'
-alias tmxs='tmx switch -t'
-alias tmxk='tmx kill-session -t'
 #+end_src
 
 *** Setup
@@ -182,7 +165,7 @@ DEFAULT_USER="markwoodhall"
 ZSH_THEME="refined"
 SHARE_HISTORY="false"
 
-plugins=(archlinux git postgres tmux lein npm zsh-autosuggestions mercurial aws docker docker-compose terraform)
+plugins=(archlinux git postgres lein npm zsh-autosuggestions mercurial aws docker docker-compose terraform)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -196,10 +179,7 @@ export PATH="/home/markwoodhall/.local/bin:$PATH"
 eval "$(pyenv init --path)"
 
 vterm_printf() {
-    if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ]); then
-        # Tell tmux to pass the escape sequences through
-        printf "\ePtmux;\e\e]%s\007\e\\" "$1"
-    elif [ "${TERM%%-*}" = "screen" ]; then
+    if [ "${TERM%%-*}" = "screen" ]; then
         # GNU screen (screen, screen-256color, screen-256color-bce)
         printf "\eP\e]%s\007\e\\" "$1"
     else
@@ -211,46 +191,6 @@ if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
     alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
 fi
 
-#+end_src
-
-* TMUX
-
-** Config
-
-#+begin_src tmux :tangle ~/.tmux.conf
-set -g default-terminal "tmux"
-set -g base-index 1
-set -g pane-base-index 1
-set -g set-titles on
-set -g status-keys vi
-set -s escape-time 0
-set -g set-clipboard on
-set -g history-limit 50000
-set -g mode-keys vi
-
-bind h select-pane -L
-bind j select-pane -D
-bind k select-pane -U
-bind l select-pane -R
-bind H split-window -h
-bind V split-window -v
-bind r source-file ~/.tmux.conf
-
-bind -T copy-mode-vi y send-keys -X copy-pipe 'xclip -in -selection clipboard'
-
-set-option -g automatic-rename off
-
-set -g status-position top
-
-set-option -g automatic-rename off
-
-set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'catppuccin/tmux#v0.3.0'
-set -g @catppuccin_flavor 'mocha' # latte,frappe, macchiato or mocha
-set -g @catppuccin_window_default_text "#W" # use "#W" for application instead of directory
-set -g @catppuccin_window_current_text "#W" # use "#W" for application instead of directory
-
-run '~/.tmux/plugins/tpm/tpm'
 #+end_src
 
 * Picom
