@@ -648,4 +648,7 @@
 (use-package markdown-mode
   :ensure t)
 
+(use-package disk-usage
+  :ensure t)
+
 ;;; emacs.el ends here
