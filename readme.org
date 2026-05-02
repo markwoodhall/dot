@@ -806,10 +806,8 @@ Programming Languages and associated tools
 [safe]
     directory = /opt/flutter
 [core]
-    pager = delta
+    pager = less
     excludesfile = ~/.gitignore
-[interactive]
-    diffFilter = delta --color-only
 [init]
     defaultBranch = main
 [filter "lfs"]
