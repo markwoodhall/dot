@@ -113,7 +113,7 @@ set editing-mode vi
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export SHELL=zsh
-export EDITOR='nvim'
+export EDITOR='emacs'
 
 export ANDROID_HOME=/opt/android-sdk
 export NODE_ENV="development"
