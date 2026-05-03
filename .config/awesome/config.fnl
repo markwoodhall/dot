@@ -180,13 +180,13 @@
 
 ;; Send programs to certain tags automatically
 (set awful.rules.rules
-     [{:rule {:class "emacs"}
+     [{:rule {:class "Emacs"}
        :properties {:tag :1}}
       {:rule_any {:type ["dialog"]}
        :properties {:floating true}}
       {:rule {:class :Slack}
        :properties {:tag :4}}
-      {:rule {:class "google-chrome"}
+      {:rule {:class "Google-chrome"}
        :properties {:tag :3}}
       {:properties {:border_color "#11111b"
                     :border_width 1
