@@ -185,13 +185,7 @@
   :ensure t
   :functions doom-modeline-mode
   :init
-  (doom-modeline-mode 1)
-  :config
-  (setq doom-modeline-battery t)
-  (setq doom-modeline-time t)
-  (setq doom-modeline-project-name t)
-  (display-battery-mode)
-  (display-time-mode))
+  (doom-modeline-mode 1))
 
 (setq switch-to-buffer-obey-display-actions t)
 
@@ -646,10 +640,5 @@
 
 (use-package disk-usage
   :ensure t)
-
-(use-package symon
-  :ensure t
-  :config
-  (symon-mode))
 
 ;;; emacs.el ends here
