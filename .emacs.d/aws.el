@@ -28,17 +28,22 @@
 
 (declare-function mw/bash "shell.el")
 
+(defun mw/not-empty (output)
+  (seq-remove (apply-partially #'string-equal "") output))
+
 (defun mw/aws-profiles ()
   "Get a list of configured AWS profiles."
-  (mw/bash
-   "cat ~/.aws/config | grep '\\[profile ' | sed -e 's/\\[//g' -e 's/\\]//g' -e 's/profile //g'"))
+  (mw/not-empty
+   (mw/bash
+    "cat ~/.aws/config | grep '\\[profile ' | sed -e 's/\\[//g' -e 's/\\]//g' -e 's/profile //g'")))
 
 ;; SQS
 
 (defun mw/aws-sqs-queue-urls (profile)
   "Get a list of SQS queue urls for an AWS PROFILE."
-  (mw/bash
-   (concat "aws --profile " profile " sqs list-queues | jq -r '.QueueUrls[]'")))
+  (mw/not-empty
+   (mw/bash
+    (concat "aws --profile " profile " sqs list-queues | jq -r '.QueueUrls[]'"))))
 
 (defun mw/aws-sqs-get-queue-attributes (profile)
   "Get attributes for an SQS queue belonging to PROFILE."
@@ -55,8 +60,9 @@
 
 (defun mw/aws-logs-log-groups (profile)
   "Get a list of CloudWatch log groups for an AWS PROFILE."
-  (mw/bash
-   (concat "aws --profile " profile " logs describe-log-groups | jq  -r '.logGroups[].logGroupName'")))
+  (mw/not-empty
+   (mw/bash
+    (concat "aws --profile " profile " logs describe-log-groups | jq  -r '.logGroups[].logGroupName'"))))
 
 (defun mw/aws-logs-filter-log-events (profile)
   "Get logs for a CLoudWatch log group belonging to PROFILE."
@@ -64,7 +70,7 @@
    (list
     (completing-read "Profile: " (mw/aws-profiles))))
   (let* ((log-group (completing-read "Log group: " (mw/aws-logs-log-groups profile)))
-         (pattern (completing-read "Filter pattern: " '("ERROR" , "INFO")))
+         (pattern (completing-read "Filter pattern: " '("ERROR" "INFO")))
          (start-time (completing-read "Start time: " '("15 minutes ago" "30 minutes ago" "1 hour ago" "2 hours ago")))
          (buffer-name (concat "aws logs filter-log-events " profile " " log-group " " pattern))
          (start-time-val (car (mw/bash (concat "date -d '" start-time  "' +%s000")))))
@@ -75,18 +81,21 @@
 
 (defun mw/aws-ecs-clusters (profile)
   "Get a list of ECS Clusters for an AWS PROFILE."
-  (mw/bash
-   (concat "aws --profile " profile " ecs list-clusters | jq -r '.clusterArns[]'")))
+  (mw/not-empty
+   (mw/bash
+    (concat "aws --profile " profile " ecs list-clusters | jq -r '.clusterArns[]'"))))
 
 (defun mw/aws-ecs-services (profile cluster)
   "Get a list of ECS Services for an ECS CLUSTER and AWS PROFILE."
-  (mw/bash
-   (concat "aws --profile " profile " ecs list-services --cluster " cluster " | jq -r '.serviceArns[]'")))
+  (mw/not-empty
+   (mw/bash
+    (concat "aws --profile " profile " ecs list-services --cluster " cluster " | jq -r '.serviceArns[]'"))))
 
 (defun mw/aws-ecs-tasks (profile cluster)
   "Get a list of ECS Tasks for an ECS CLUSTER and AWS PROFILE."
-  (mw/bash
-   (concat "aws --profile " profile " ecs list-tasks --cluster " cluster " | jq -r '.taskArns[]'")))
+  (mw/not-empty
+   (mw/bash
+    (concat "aws --profile " profile " ecs list-tasks --cluster " cluster " | jq -r '.taskArns[]'"))))
 
 (defun mw/aws-ecs-describe-tasks (profile)
   "Describe an ECS Task belonging to PROFILE."
@@ -103,7 +112,8 @@
 
 (defun mw/aws-rds-instances (profile)
   "Get a list of RDS Instances for an AWS PROFILE."
-  (mw/bash
-   (concat "aws --profile " profile " rds describe-db-instances | jq -r '.DBInstances[].DBInstanceIdentifier'")))
+  (mw/not-empty
+   (mw/bash
+    (concat "aws --profile " profile " rds describe-db-instances | jq -r '.DBInstances[].DBInstanceIdentifier'"))))
 
 ;;; aws.el ends here
