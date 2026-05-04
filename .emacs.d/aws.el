@@ -43,7 +43,7 @@
   "Get a list of SQS queue urls for an AWS PROFILE."
   (mw/not-empty
    (mw/bash
-    (concat "aws --profile " profile " sqs list-queues | jq -r '.QueueUrls[]'"))))
+    (concat "aws --no-cli-pager --profile " profile " sqs list-queues | jq -r '.QueueUrls[]'"))))
 
 (defun mw/aws-sqs-get-queue-attributes (profile)
   "Get attributes for an SQS queue belonging to PROFILE."
@@ -53,7 +53,7 @@
   (let* ((queue-url (completing-read "Queue Url: " (mw/aws-sqs-queue-urls profile)))
          (attributes (completing-read "Attributes: " '("All")))
          (buffer-name (concat "aws sqs get-queue-attributes " profile " " queue-url " " attributes)))
-    (make-comint buffer-name "aws" nil "sqs" "get-queue-attributes" "--profile" profile "--queue-url" queue-url "--attribute-names" attributes)
+    (make-comint buffer-name "aws" nil "sqs" "get-queue-attributes" "--profile" profile "--queue-url" queue-url "--attribute-names" attributes "--no-cli-pager")
     (pop-to-buffer (concat "*" buffer-name "*"))))
 
 ;; LOGS
@@ -62,7 +62,7 @@
   "Get a list of CloudWatch log groups for an AWS PROFILE."
   (mw/not-empty
    (mw/bash
-    (concat "aws --profile " profile " logs describe-log-groups | jq  -r '.logGroups[].logGroupName'"))))
+    (concat "aws --no-cli-pager --profile " profile " logs describe-log-groups | jq  -r '.logGroups[].logGroupName'"))))
 
 (defun mw/aws-logs-filter-log-events (profile)
   "Get logs for a CLoudWatch log group belonging to PROFILE."
@@ -74,7 +74,7 @@
          (start-time (completing-read "Start time: " '("15 minutes ago" "30 minutes ago" "1 hour ago" "2 hours ago")))
          (buffer-name (concat "aws logs filter-log-events " profile " " log-group " " pattern))
          (start-time-val (car (mw/bash (concat "date -d '" start-time  "' +%s000")))))
-    (make-comint buffer-name "aws" nil "logs" "filter-log-events" "--start-time" start-time-val "--profile" profile "--log-group-name" log-group "--filter-pattern" pattern)
+    (make-comint buffer-name "aws" nil "logs" "filter-log-events" "--start-time" start-time-val "--profile" profile "--log-group-name" log-group "--filter-pattern" pattern "--no-cli-pager")
     (pop-to-buffer (concat "*" buffer-name "*"))))
 
 ;; ECS
@@ -83,19 +83,19 @@
   "Get a list of ECS Clusters for an AWS PROFILE."
   (mw/not-empty
    (mw/bash
-    (concat "aws --profile " profile " ecs list-clusters | jq -r '.clusterArns[]'"))))
+    (concat "aws --no-cli-pager --profile " profile " ecs list-clusters | jq -r '.clusterArns[]'"))))
 
 (defun mw/aws-ecs-services (profile cluster)
   "Get a list of ECS Services for an ECS CLUSTER and AWS PROFILE."
   (mw/not-empty
    (mw/bash
-    (concat "aws --profile " profile " ecs list-services --cluster " cluster " | jq -r '.serviceArns[]'"))))
+    (concat "aws --no-cli-pager --profile " profile " ecs list-services --cluster " cluster " | jq -r '.serviceArns[]'"))))
 
 (defun mw/aws-ecs-tasks (profile cluster)
   "Get a list of ECS Tasks for an ECS CLUSTER and AWS PROFILE."
   (mw/not-empty
    (mw/bash
-    (concat "aws --profile " profile " ecs list-tasks --cluster " cluster " | jq -r '.taskArns[]'"))))
+    (concat "aws --no-cli-pager --profile " profile " ecs list-tasks --cluster " cluster " | jq -r '.taskArns[]'"))))
 
 (defun mw/aws-ecs-describe-tasks (profile)
   "Describe an ECS Task belonging to PROFILE."
@@ -105,7 +105,7 @@
   (let* ((cluster (completing-read "Cluster: " (mw/aws-ecs-clusters profile)))
          (task (completing-read "Task: " (mw/aws-ecs-tasks profile cluster)))
          (buffer-name (concat "aws ecs describe-task " profile " " cluster " " task)))
-    (make-comint buffer-name "aws" nil "ecs" "describe-tasks" "--profile" profile "--cluster" cluster "--tasks" task)
+    (make-comint buffer-name "aws" nil "ecs" "describe-tasks" "--profile" profile "--cluster" cluster "--tasks" task "--no-cli-pager")
     (pop-to-buffer (concat "*" buffer-name "*"))))
 
 ;; RDS
@@ -114,6 +114,6 @@
   "Get a list of RDS Instances for an AWS PROFILE."
   (mw/not-empty
    (mw/bash
-    (concat "aws --profile " profile " rds describe-db-instances | jq -r '.DBInstances[].DBInstanceIdentifier'"))))
+    (concat "aws --no-cli-pager --profile " profile " rds describe-db-instances | jq -r '.DBInstances[].DBInstanceIdentifier'"))))
 
 ;;; aws.el ends here
