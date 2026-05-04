@@ -149,47 +149,47 @@ export CHROME_EXECUTABLE=google-chrome-stable
 ** RC
 
 #+begin_src bash :tangle ~/.zshrc
-homedir=~
-eval homedir=$homedir
-# If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-export EVENT_NOKQUEUE=1
+  homedir=~
+  eval homedir=$homedir
+  # If you come from bash you might have to change your $PATH.
+  export PATH=$HOME/bin:/usr/local/bin:$PATH
+  export EVENT_NOKQUEUE=1
 
-# Path to your oh-my-zsh installation.
-export ZSH=~/.oh-my-zsh
-DEFAULT_USER="markwoodhall"
+  # Path to your oh-my-zsh installation.
+  export ZSH=~/.oh-my-zsh
+  DEFAULT_USER="markwoodhall"
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="refined"
-SHARE_HISTORY="false"
+  # Set name of the theme to load. Optionally, if you set this to "random"
+  # it'll load a random theme each time that oh-my-zsh is loaded.
+  # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+  ZSH_THEME="refined"
+  SHARE_HISTORY="false"
 
-plugins=(archlinux git postgres lein npm zsh-autosuggestions mercurial aws docker docker-compose terraform)
+  plugins=(archlinux git postgres lein npm zsh-autosuggestions mercurial aws docker docker-compose terraform)
 
-source $ZSH/oh-my-zsh.sh
+  source $ZSH/oh-my-zsh.sh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source /usr/share/fzf/key-bindings.zsh
-source ~/.zshenv
-source /usr/share/nvm/init-nvm.sh
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+  source /usr/share/fzf/key-bindings.zsh
+  source ~/.zshenv
+  source /usr/share/nvm/init-nvm.sh
 
-# added by pipsi (https://github.com/mitsuhiko/pipsi)
-export PATH="/home/markwoodhall/.local/bin:$PATH"
-eval "$(pyenv init --path)"
+  # added by pipsi (https://github.com/mitsuhiko/pipsi)
+  export PATH="/home/markwoodhall/.local/bin:$PATH"
+  eval "$(pyenv init --path)"
 
-vterm_printf() {
-    if [ "${TERM%%-*}" = "screen" ]; then
-        # GNU screen (screen, screen-256color, screen-256color-bce)
-        printf "\eP\e]%s\007\e\\" "$1"
-    else
-        printf "\e]%s\e\\" "$1"
-    fi
-}
+  vterm_printf() {
+      if [ "${TERM%%-*}" = "screen" ]; then
+          # GNU screen (screen, screen-256color, screen-256color-bce)
+          printf "\eP\e]%s\007\e\\" "$1"
+      else
+          printf "\e]%s\e\\" "$1"
+      fi
+  }
 
-if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
-    alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
-fi
+  if [[ "$INSIDE_EMACS" = 'vterm' ]]; then
+      alias clear='vterm_printf "51;Evterm-clear-scrollback";tput clear'
+  fi
 
 #+end_src
 
