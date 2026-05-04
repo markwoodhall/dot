@@ -649,7 +649,7 @@ Lebar is a system toolbar configured with fennel
               :draw (partial (. blocks.free-disk-space :draw) "/home" "data" "/home ")})
            (when (= (hostname) "thinking")
                    {:load (partial (. blocks.free-disk-space :load) "/" "data")
-                    :draw (partial (. blocks.free-disk-space :draw) "/" "data" "/ ")}
+                    :draw (partial (. blocks.free-disk-space :draw) "/" "data" "/ ")})
            blocks.separator
            blocks.pacman]})
 
