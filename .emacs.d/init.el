@@ -21,7 +21,11 @@
        ivy-xref lemon lsp-ivy lsp-treemacs lsp-ui magit marginalia
        nerd-icons-dired orderless org-bullets projectile
        rainbow-delimiters smex sudo-edit symon terraform-mode
-       undo-tree vertico vterm weather-scout ws-butler yaml yasnippet))
+       undo-tree vertico vterm weather-scout ws-butler xdg-launcher
+       yaml yasnippet))
+ '(package-vc-selected-packages
+   '((xdg-launcher :vc-backend Git :url
+                   "https://github.com/emacs-exwm/xdg-launcher")))
  '(safe-local-variable-values
    '((cider-shadow-default-options . "app")
      (cider-default-cljs-repl . shadow))))

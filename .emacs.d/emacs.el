@@ -87,10 +87,10 @@
 
 (set-default 'truncate-lines t)
 
-(use-package catppuccin-theme
-  :ensure t
-  :init
-  (load-theme 'catppuccin :no-confirm))
+;;(use-package catppuccin-theme
+;;  :ensure t
+;;  :init
+;;  (load-theme 'catppuccin :no-confirm))
 
 ;; This sets $MANPATH, $PATH and exec-path from your shell,
 ;; but only when executed in a GUI frame on OS X and Linux.
@@ -184,6 +184,12 @@
 (use-package doom-modeline
   :ensure t
   :functions doom-modeline-mode
+  :config
+  (setq doom-modeline-battery t)
+  (setq doom-modeline-time t)
+  (setq doom-modeline-project-name t)
+  (display-battery-mode)
+  (display-time-mode)
   :init
   (doom-modeline-mode 1))
 
@@ -638,5 +644,11 @@
   "circleci.el"
   user-emacs-directory))
 
+(require 'symon)
+(symon-mode)
+
+(use-package xdg-launcher
+  :ensure t
+  :vc (:url "https://github.com/emacs-exwm/xdg-launcher"))
 
 ;;; emacs.el ends here
