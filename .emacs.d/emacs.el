@@ -633,4 +633,10 @@
 (use-package disk-usage
   :ensure t)
 
+(load-file
+ (expand-file-name
+  "circleci.el"
+  user-emacs-directory))
+
+
 ;;; emacs.el ends here
