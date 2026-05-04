@@ -12,3 +12,4 @@
 /.emacs.d/transient/
 /.emacs.d/eshell/history
 /.#readme.org
+/.emacs.d/straight/
