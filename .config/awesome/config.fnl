@@ -93,8 +93,8 @@
                {:description "move to screen"
                 :group :client})
     (awful.key [modkey] :Return
-               (fn [] (awful.spawn terminal))
-               {:description "open a terminal"
+               (fn [] (awful.spawn "emacs"))
+               {:description "open emacs"
                 :group :launcher})
     (awful.key [modkey :Shift] :r awesome.restart
                {:description "reload awesome"
@@ -110,6 +110,11 @@
                (fn [] (awful.screen.focus_relative -1))
                {:description "select previous"
                 :group :layout})
+    (awful.key [modkey] :d
+               (fn []
+                 (awful.spawn "rofi -show run"))
+               {:description "run rofi"
+                :group :launcher})
     (awful.key [modkey] :d
                (fn []
                  (awful.spawn "rofi -show run"))
