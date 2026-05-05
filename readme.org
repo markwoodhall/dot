@@ -113,7 +113,7 @@ set editing-mode vi
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export SHELL=zsh
-export EDITOR='emacs'
+export EDITOR='nvim'
 
 export ANDROID_HOME=/opt/android-sdk
 export NODE_ENV="development"
@@ -688,9 +688,21 @@ Lebar is a system toolbar configured with fennel
                blocks.separator
                blocks.cpu
                blocks.separator
+              (when (= (hostname) "minis")
+                 {:load (partial (. blocks.free-disk-space :load) "/" "root")
+                  :draw (partial (. blocks.free-disk-space :draw) "/" "root" "/ ")})
+              (when (= (hostname) "minis")
+                 {:load (partial (. blocks.free-disk-space :load) "/home" "home")
+                  :draw (partial (. blocks.free-disk-space :draw) "/home" "home" "/home ")})
+              (when (= (hostname) "minis")
+                 {:load (partial (. blocks.free-disk-space :load) "/mnt/data" "data")
+                  :draw (partial (. blocks.free-disk-space :draw) "/mnt/data" "data" "DATA ")})
                (when (= (hostname) "thinker")
                  {:load (partial (. blocks.free-disk-space :load) "/home" "data")
                   :draw (partial (. blocks.free-disk-space :draw) "/home" "data" "/home ")})
+               (when (= (hostname) "archy")
+                 {:load (partial (. blocks.free-disk-space :load) "/mnt/data" "data")
+                  :draw (partial (. blocks.free-disk-space :draw) "/mnt/data" "data" "DATA ")})
                blocks.separator
                blocks.pacman]})
 
@@ -741,6 +753,14 @@ Programming Languages and associated tools
                                         clova.core/not-exists?]}}}
 #+end_src
 
+** shadow
+#+begin_src clojure :tangle ~/.shadow-cljs/config.edn :mkdirp yes
+;; shadow-cljs configuration
+{;; ADD - CIDER-nREPL middleware required by Fireplace.vim
+ :dependencies
+ [[cider/cider-nrepl "0.22.4"]]}
+ #+end_src
+
 * Git
 
 ** Config
@@ -752,10 +772,21 @@ Programming Languages and associated tools
     signingkey = 6814C0C7A2E45188
 [color]
     ui = auto
+[merge]
+    tool = fugitive
+    stat = true
+    conflictstyle = diff3
 [push]
     default = current
 [commit]
     ;;gpgsign = true
+[diff]
+    cmd = nvim -f -c \"Gvdiff\" \"$LOCAL\" \"$REMOTE\"
+    colorMoved = default
+[difftool]
+    prompt = false
+[alias]
+    vimdiff = difftool
 [github]
     user = markwoodhall
 [rebase]
@@ -765,8 +796,16 @@ Programming Languages and associated tools
 [safe]
     directory = /opt/flutter
 [core]
-    pager = less
+    pager = delta
     excludesfile = ~/.gitignore
+[interactive]
+    diffFilter = delta --color-only
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+    line-numbers = true
+    minus-style =  "#f38ba8" bold dim "#2f343f"
+    plus-style = "#a6e3a1" bold dim  "#2f343f"
 [init]
     defaultBranch = main
 [filter "lfs"]
@@ -780,14 +819,14 @@ Programming Languages and associated tools
 
 ** Config
 
-   Kitty is the terminal of choice, configured with Iosevka and Catppuccin colors.
+   Kitty is the terminal of choice, configured with JetBrains Mono and Catppuccin colors.
 
 #+begin_src bash :tangle ~/.config/kitty/kitty.conf :mkdirp yes
-font_family      Iosevka Comfy
-bold_font        Iosevka Comfy Bold
-italic_font      Iosevka Comfy Italic
-bold_italic_font Iosevka Comfy Bold Italic
-font_size 10.6
+font_family      JetBrains Mono Nerd Font
+bold_font        JetBrains Mono Bold Nerd Font Complete
+italic_font      JetBrains Mono Italic Nerd Font Complete
+bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
+font_size 9.0
 
 placement_strategy left
 
@@ -872,6 +911,19 @@ repaint_delay 5
 input_delay 1
 #+end_src
 
+* Wezterm
+
+** Config
+
+Fennel is used to configure wezterm, this lua is used to bootstrap that. The fennel can be found in .config/.wezterm.
+
+#+begin_src fennel :tangle ~/.config/wezterm/wezterm.lua :mkdirp yes
+debug = {traceback = function() end}
+local fennel = require("./fennel").install()
+fennel.path = fennel.path .. ";.config/wezterm/?.fnl"
+return require("config")
+#+end_src
+
 * Postgres
 
 ** Config
@@ -889,34 +941,62 @@ input_delay 1
 
 #+begin_src ini :tangle ~/.config/mimeapps.list
 [Default Applications]
-[Default Applications]
 text/html=google-chrome.desktop
 x-scheme-handler/http=google-chrome.desktop
 x-scheme-handler/https=google-chrome.desktop
 x-scheme-handler/about=google-chrome.desktop
 x-scheme-handler/unknown=google-chrome.desktop
-x-scheme-handler/chrome=google=chrome.desktop
-application/x-extension-htm=google=chrome.desktop
-application/x-extension-html=google=chrome.desktop
-application/x-extension-shtml=google=chrome.desktop
-application/xhtml+xml=google=chrome.desktop
-application/x-extension-xhtml=google=chrome.desktop
-application/x-extension-xht=google=chrome.desktop
-x-scheme-handler/mailto=google-chrome.desktop
-x-scheme-handler/webcal=google-chrome.desktop
-x-scheme-handler/slack=slack.desktop
-x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+x-scheme-handler/chrome=google-chrome.desktop
+application/x-extension-htm=google-chrome.desktop
+application/x-extension-html=google-chrome.desktop
+application/x-extension-shtml=google-chrome.desktop
+application/xhtml+xml=google-chrome.desktop
+application/x-extension-xhtml=google-chrome.desktop
+application/x-extension-xht=google-chrome.desktop
+
 
 [Added Associations]
-x-scheme-handler/http=vivaldi.desktop;google=chrome.desktop;
-x-scheme-handler/https=vivaldi.desktop;google=chrome.desktop;
-text/html=vivaldi.desktop;google=chrome.desktop;
-application/pdf=vivaldi.desktop;
-x-scheme-handler/chrome=google=chrome.desktop;
-application/x-extension-htm=google=chrome.desktop;
-application/x-extension-html=google=chrome.desktop;
-application/x-extension-shtml=google=chrome.desktop;
-application/xhtml+xml=google=chrome.desktop;
-application/x-extension-xhtml=google=chrome.desktop;
-application/x-extension-xht=google=chrome.desktop;
+x-scheme-handler/http=google-chrome.desktop;
+x-scheme-handler/https=google-chrome.desktop;
+text/html=google-chrome.desktop;
+application/pdf=google-chrome.desktop;
 #+end_src
+
+#+begin_src javascript :tangle ~/.claude/settings.json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "clj-paren-repair-claude-hook --cljfmt"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "clj-paren-repair-claude-hook --cljfmt"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "clj-paren-repair-claude-hook --cljfmt"
+          }
+        ]
+      }
+    ]
+  }
+}
+  #+end_src
