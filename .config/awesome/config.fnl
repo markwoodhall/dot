@@ -260,7 +260,6 @@
 
 (when (not (restart?))
   (do
-    (awful.spawn "/opt/lebar/lebardock")
     (awful.spawn "emacs")
     (awful.spawn "slack")
     (awful.spawn "xscreensaver")
