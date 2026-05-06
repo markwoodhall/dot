@@ -59,7 +59,7 @@
 ;; to skip the mtime checks on every *.elc file.
 (setq load-prefer-newer noninteractive)
 
-(setq history-length 50)
+(setq history-length 500)
 (savehist-mode 1)
 (recentf-mode 1)
 
@@ -87,10 +87,7 @@
 
 (set-default 'truncate-lines t)
 
-;;(use-package catppuccin-theme
-;;  :ensure t
-;;  :init
-;;  (load-theme 'catppuccin :no-confirm))
+(load-theme 'modus-operandi)
 
 ;; This sets $MANPATH, $PATH and exec-path from your shell,
 ;; but only when executed in a GUI frame on OS X and Linux.
@@ -363,7 +360,7 @@
   :init
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(use-package yaml
+(use-package yaml-mode
   :ensure t
   :mode "\\.yml\\'")
 
@@ -644,11 +641,15 @@
   "circleci.el"
   user-emacs-directory))
 
-(require 'symon)
-(symon-mode)
-
-(use-package xdg-launcher
+(use-package symon
   :ensure t
-  :vc (:url "https://github.com/emacs-exwm/xdg-launcher"))
+  :config
+(setq symon-delay 10)
+  (symon-mode))
+
+(load-file
+ (expand-file-name
+  "xdg-launcher.el"
+  user-emacs-directory))
 
 ;;; emacs.el ends here

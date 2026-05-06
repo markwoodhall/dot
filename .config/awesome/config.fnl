@@ -35,9 +35,7 @@
 (beautiful.init (.. (gears.filesystem.get_themes_dir) :default/theme.lua))
 
 ;; Set terminal, editor and modkey
-(global terminal :kitty)
 (global editor (or (os.getenv :EDITOR) :emacs))
-(global editor-cmd (.. terminal " -e " editor))
 (global modkey :Mod1)
 
 ;; Tiling preferences
@@ -93,7 +91,7 @@
                {:description "move to screen"
                 :group :client})
     (awful.key [modkey] :Return
-               (fn [] (awful.spawn "emacs"))
+               (fn [] (awful.spawn "emacs --maximized"))
                {:description "open emacs"
                 :group :launcher})
     (awful.key [modkey :Shift] :r awesome.restart
@@ -193,6 +191,8 @@
        :properties {:tag :4}}
       {:rule {:class "Google-chrome"}
        :properties {:tag :3}}
+      {:rule {:class "org.remmina.Remmina"}
+       :properties {:tag :6}}
       {:properties {:border_color "#11111b"
                     :border_width 1
                     :focus awful.client.focus.filter
@@ -234,8 +234,8 @@
 (set naughty.config.defaults.max_height 130)
 (set naughty.config.defaults.position "top_middle")
 (set naughty.config.defaults.font "System-ui 11")
-(set naughty.config.defaults.bg "#1e1e2e")
-(set naughty.config.defaults.fg "#CDD6f4")
+;;(set naughty.config.defaults.bg "#1e1e2e")
+;;(set naughty.config.defaults.fg "#CDD6f4")
 
 (set naughty.config.padding (dpi 38))
 (set naughty.config.spacing (dpi 8))
@@ -260,7 +260,7 @@
 
 (when (not (restart?))
   (do
-    (awful.spawn "emacs")
+    (awful.spawn "emacs --maximized")
     (awful.spawn "slack")
     (awful.spawn "xscreensaver")
     (awful.spawn "google-chrome-stable")))

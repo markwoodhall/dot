@@ -26,14 +26,14 @@
 ;;; Code:
 
 ;; Major mode for editing JavaScript
-(use-package js
+(use-package js-mode
   :ensure nil
   :defer t
-  :mode "\\.jsx?\\'")
+  :mode ("\\.jsx\\'" "\\.js\\'"))
 
 (use-package typescript-ts-mode
   :ensure nil
   :defer t
-  :mode "\\.tsx?\\'")
+  :mode "\\.tsx\\'")
 
 ;;; javascript.el ends here

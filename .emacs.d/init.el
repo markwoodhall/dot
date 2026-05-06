@@ -14,17 +14,16 @@
      "4594d6b9753691142f02e67b8eb0fda7d12f6cc9f1299a49b819312d6addad1d"
      default))
  '(package-selected-packages
-   '(@ all-the-icons catppuccin-theme cider claude-code-ide claudemacs
-       company consult-lsp copilot counsel dashboard diff-hl
-       disk-usage docker dockerfile-mode doom-modeline doom-themes eat
-       ef-themes embark-consult evil-cleverparens evil-collection
-       evil-goggles evil-surround exec-path-from-shell fennel-mode
-       flycheck general git-gutter highlight-indent-guides ivy-rich
-       ivy-xref lemon lsp-ivy lsp-treemacs lsp-ui magit marginalia
-       nerd-icons-dired orderless org-bullets projectile
-       rainbow-delimiters smex sudo-edit symon terraform-mode
-       undo-tree vertico vterm weather-scout ws-butler xdg-launcher
-       yaml yasnippet))
+   '(all-the-icons cider company diff-hl disk-usage docker
+                   dockerfile-mode doom-modeline embark-consult
+                   evil-cleverparens evil-collection evil-goggles
+                   evil-surround exec-path-from-shell fennel-mode
+                   general highlight-indent-guides magit marginalia
+                   markdown-mode nerd-icons-dired orderless
+                   org-bullets projectile rainbow-delimiters slack
+                   sudo-edit symon terraform-mode undo-tree vertico
+                   vterm ws-butler xdg-launcher yaml yaml-mode
+                   yasnippet))
  '(package-vc-selected-packages
    '((xdg-launcher :vc-backend Git :url
                    "https://github.com/emacs-exwm/xdg-launcher")))
