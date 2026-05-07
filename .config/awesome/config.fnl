@@ -36,7 +36,7 @@
 
 ;; Set terminal, editor and modkey
 (global terminal :kitty)
-(global editor (or (os.getenv :EDITOR) :emacs))
+(global editor (or (os.getenv :EDITOR) :nvim))
 (global editor-cmd (.. terminal " -e " editor))
 (global modkey :Mod1)
 
@@ -180,14 +180,14 @@
 
 ;; Send programs to certain tags automatically
 (set awful.rules.rules
-     [{:rule {:class "emacs"}
+     [{:rule {:class "kitty"}
        :properties {:tag :1}}
       {:rule_any {:type ["dialog"]}
        :properties {:floating true}}
       {:rule {:class :Slack}
-       :properties {:tag :4}}
-      {:rule {:class "google-chrome"}
-       :properties {:tag :3}}
+       :properties {:tag :4 :screen 1}}
+      {:rule {:class "firefox"}
+       :properties {:tag :3 :screen 1}}
       {:properties {:border_color "#11111b"
                     :border_width 1
                     :focus awful.client.focus.filter
@@ -202,8 +202,8 @@
 
 (client.connect_signal :manage
                        (fn [c]
-                         (when (and (and awesome.startup
-                                         (not c.size_hints.user_position))
+                         (when (and awesome.startup
+                                    (not c.size_hints.user_position)
                                     (not c.size_hints.program_position))
                            (awful.placement.no_offscreen c))))
 
@@ -214,7 +214,7 @@
 (set beautiful.font "System-ui 12")
 
 ;; Gaps
-(set beautiful.useless_gap 0)
+(set beautiful.useless_gap 4)
 
 ;; Notifications settings
 (set naughty.config.defaults.ontop true)
@@ -256,7 +256,7 @@
 (when (not (restart?))
   (do
     (awful.spawn "/opt/lebar/lebardock")
-    (awful.spawn "emacs")
+    (awful.spawn terminal)
     (awful.spawn "slack")
     (awful.spawn "xscreensaver")
-    (awful.spawn "google-chrome-stable")))
+    (awful.spawn "firefox")))

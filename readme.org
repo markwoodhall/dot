@@ -350,9 +350,9 @@ log-level = "warn";
 #window-shader-fg-rule = [
 #    "/home/markwoodhall/dotfiles/lebarshader.frag:window_type = 'dock'"
 #]
-rounded-corners-exclude = [
-  "window_type = 'dock'"
-;
+# rounded-corners-exclude = [
+#   "window_type = 'dock'"
+#   ];
 wintypes:
 {
   tooltip = { fade = true; shadow = true; opacity = 0.75; focus = true; full-shadow = false; };
@@ -592,7 +592,7 @@ Lebar is a system toolbar configured with fennel
         ; set the window position and margins
         (set config.window {})
         (set config.window.position :top)
-        (set config.window.margin 0)
+        (set config.window.margin 4)
         (set config.window.height 27)
 
         ; set the theme
@@ -817,7 +817,7 @@ font_family      JetBrains Mono Nerd Font
 bold_font        JetBrains Mono Bold Nerd Font Complete
 italic_font      JetBrains Mono Italic Nerd Font Complete
 bold_italic_font JetBrains Mono Bold Italic Nerd Font Complete
-font_size 9.0
+font_size 10.0
 
 placement_strategy left
 
@@ -895,8 +895,8 @@ color14 #94E2D5
 color7  #BAC2DE
 color15 #A6ADC8
 
-window_padding_width 0 0 0 4
-window_margin_width 1 0 0 3
+window_padding_width 0 0 0 0
+window_margin_width 4 8 4 8
 linux_display_server x11
 repaint_delay 5
 input_delay 1
