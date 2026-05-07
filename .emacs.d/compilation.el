@@ -40,6 +40,14 @@ READ-ENV will product a command prefixed with environment variables."
   (mw/build-command
    cmd target options change-dir (projectile-project-root) read-env))
 
+(defun mw/comint-pop (buffer)
+  (with-current-buffer buffer
+    (compilation-shell-minor-mode 1)
+    (highlight-regexp "ERROR" 'hi-red-b)
+    (highlight-regexp "WARN" 'hi-yellow)
+    (evil-local-set-key 'normal (kbd "q") #'quit-window))
+  (pop-to-buffer buffer))
+
 (defun mw/docker-compose (file)
   "Run docker compose using FILE."
   (interactive
@@ -47,9 +55,9 @@ READ-ENV will product a command prefixed with environment variables."
     (read-file-name "Compose File: " (projectile-project-root) "docker-compose.yml" t "docker-compose.yml")))
   (let* ((file (expand-file-name file))
          (command (completing-read "Option: " '("up" "down" file)))
-         (buffer-name (concat "docker compose " command)))
-    (make-comint buffer-name "docker" nil "compose" "-f" file command)
-    (pop-to-buffer (concat "*" buffer-name "*"))))
+         (buffer-name (concat "docker compose " command))
+         (buffer (make-comint buffer-name "docker" nil "compose" "-f" file command)))
+    (mw/comint-pop buffer)))
 
 (defun mw/docker-logs (container)
   "Run docker logs for CONTAINER."
@@ -57,8 +65,7 @@ READ-ENV will product a command prefixed with environment variables."
    (list
     (completing-read "Container: " (mw/bash "docker ps --format '{{json .}}' | jq -r .Names"))))
   (let ((buffer-name (concat "docker logs " container)))
-    (make-comint buffer-name "docker" nil "logs" container "--follow")
-    (pop-to-buffer (concat "*" buffer-name "*"))))
+    (mw/comint-pop (make-comint buffer-name "docker" nil "logs" container "--follow"))))
 
 ;; docker
 (defun mw/docker (command)
@@ -106,9 +113,4 @@ READ-ENV will product a command prefixed with environment variables."
   (let* ((file (expand-file-name file))
          (buffer-name (concat "tail " file))
          (buffer (make-comint buffer-name "tail" nil "-f" file)))
-    (with-current-buffer buffer
-      (compilation-shell-minor-mode 1)
-      (highlight-regexp "ERROR" 'hi-red-b)
-      (highlight-regexp "WARN" 'hi-yellow)
-      (evil-local-set-key 'normal (kbd "q") #'quit-window))
-    (pop-to-buffer buffer)))
+    (mw/comint-pop buffer)))

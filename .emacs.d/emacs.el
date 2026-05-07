@@ -62,6 +62,7 @@
 (setq history-length 500)
 (savehist-mode 1)
 (recentf-mode 1)
+(setq recentf-max-saved-items 150)
 
 ;; Make a range of UI change to get rid of various toolbars
 (menu-bar-mode -1)
@@ -187,8 +188,18 @@
   (setq doom-modeline-project-name t)
   (display-battery-mode)
   (display-time-mode)
+
+
+  (doom-modeline-def-segment free-disk-segment
+    "A segment that will show the free diskspace"
+    (get-free-disk-space "/"))
+
+  (doom-modeline-remove-segment 'free-disk-segment)
+  (doom-modeline-add-segment 'free-disk-segment 'battery :before)
+
   :init
-  (doom-modeline-mode 1))
+  (doom-modeline-mode 1)
+  )
 
 (setq switch-to-buffer-obey-display-actions t)
 

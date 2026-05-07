@@ -191,6 +191,8 @@
        :properties {:tag :4}}
       {:rule {:class "Google-chrome"}
        :properties {:tag :3}}
+      {:rule {:class "firefox"}
+       :properties {:tag :3}}
       {:rule {:class "org.remmina.Remmina"}
        :properties {:tag :6}}
       {:properties {:border_color "#11111b"
@@ -207,8 +209,8 @@
 
 (client.connect_signal :manage
                        (fn [c]
-                         (when (and (and awesome.startup
-                                         (not c.size_hints.user_position))
+                         (when (and awesome.startup
+                                    (not c.size_hints.user_position)
                                     (not c.size_hints.program_position))
                            (awful.placement.no_offscreen c))))
 
@@ -263,4 +265,4 @@
     (awful.spawn "emacs --maximized")
     (awful.spawn "slack")
     (awful.spawn "xscreensaver")
-    (awful.spawn "google-chrome-stable")))
+    (awful.spawn "firefox")))

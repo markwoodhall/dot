@@ -27,4 +27,16 @@
 (add-hook 'clojure-mode-hook 'eglot-ensure)
 (add-hook 'fennel-mode-hook 'eglot-ensure)
 
+(nvmap :keymaps 'eglot-mode-map :prefix "SPC"
+  "l"   '(:which-key "lsp")
+  "l d" '(:which-key "diagnostics")
+
+  "l g" '(:which-key "goto")
+  "l g d" '(xref-find-definitions :which-key "Find definitions")
+
+  "l d a" '(eglot-code-actions :which-key "Code actions")
+  "l d r" '(xref-find-references :which-key "Find references")
+  "l d d" '(flymake-show-buffer-diagnostics :which-key "Buffer diagnostics")
+  "l d D" '(flymake-show-diagnostic :which-key "Project diagnostics"))
+
 ;;; lsp.el ends here
