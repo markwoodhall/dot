@@ -79,7 +79,7 @@ export EVENT_NOKQUEUE=1
 *** Aliases
 
 #+begin_src bash :tangle ~/.zshenv
-alias ls='ls -lGfh'
+alias ls='ls -lGfh --color=always'
 alias l='ls'
 alias cd='cd -P'
 alias c='cd -P'
@@ -182,7 +182,7 @@ DEFAULT_USER="markwoodhall"
 ZSH_THEME="refined"
 SHARE_HISTORY="false"
 
-plugins=(archlinux git postgres tmux lein npm zsh-autosuggestions mercurial aws docker docker-compose terraform)
+plugins=(archlinux git postgres tmux lein npm zsh-autosuggestions mercurial aws docker docker-compose terraform zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
