@@ -186,10 +186,8 @@
        :properties {:floating true}}
       {:rule {:class :Slack}
        :properties {:tag :4 :screen 1}}
-      {:rule {:class "firefox"}
+      {:rule {:class "vivaldi-stable"}
        :properties {:tag :3 :screen 1}}
-      {:rule {:class "org.mozilla.Thunderbird"}
-       :properties {:tag :5 :screen 1}}
       {:properties {:border_color "#11111b"
                     :border_width 1
                     :focus awful.client.focus.filter
@@ -262,4 +260,4 @@
     (awful.spawn "slack")
     (awful.spawn "xscreensaver")
     (awful.spawn "thunderbird")
-    (awful.spawn "firefox")))
+    (awful.spawn "vivaldi")))
