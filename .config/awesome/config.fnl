@@ -255,7 +255,7 @@
 
 (when (not (restart?))
   (do
-    (awful.spawn "/opt/lebar/lebardock")
+    (awful.spawn "~/.local/bin/lebardock")
     (awful.spawn terminal)
     (awful.spawn "slack")
     (awful.spawn "xscreensaver")
