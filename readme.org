@@ -218,7 +218,7 @@ fi
 ** Config
 
 #+begin_src tmux :tangle ~/.tmux.conf
-set -g default-terminal "tmux"
+set -g default-terminal "tmux-direct"
 set -g base-index 1
 set -g pane-base-index 1
 set -g set-titles on
@@ -238,11 +238,11 @@ bind r source-file ~/.tmux.conf
 
 bind -T copy-mode-vi y send-keys -X copy-pipe 'xclip -in -selection clipboard'
 
+set-option -g focus-events on
 set-option -g automatic-rename off
+set-option -g default-terminal "screen-256color"
 
 set -g status-position top
-
-set-option -g automatic-rename off
 
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'catppuccin/tmux#v0.3.0'
@@ -751,12 +751,12 @@ Programming Languages and associated tools
 
    Kitty is the terminal of choice, configured with JetBrains Mono and Catppuccin colors.
 
-#+begin_src bash :tangle ~/.config/kitty/kitty.conf :mkdirp yes
+#+begin_src conf :tangle ~/.config/kitty/kitty.conf :mkdirp yes
 font_family      Iosevka Comfy
 bold_font        Iosevka Comfy Bold
 italic_font      Iosevka Comfy Italic
 bold_italic_font Iosevka Comfy Bold Italic
-font_size 14.0
+font_size 11.0
 
 placement_strategy left
 
