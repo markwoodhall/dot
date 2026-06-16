@@ -1,4 +1,5 @@
-/.config/nvim/
+/bb/.lsp
+/bb/.clj-kondo
 
 # Emacs generated state
 /.emacs.d/.lsp-session-v1
