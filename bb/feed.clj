@@ -1,25 +1,118 @@
 #!/usr/bin/env bb
 (ns feed
   (:require 
-    [babashka.http-client :as http]
-    [clojure.data.xml :as xml]))
+    [babashka.http-client]
+    [babashka.process]
+    [babashka.fs]
+    [clojure.string :as string]
+    [clojure.data.xml :as xml])
+  (:import 
+    [java.time OffsetDateTime]
+    [java.time.format DateTimeFormatter]))
+
+(defn ->ymd [s]
+  (-> (try (OffsetDateTime/parse s)
+           (catch Exception _
+             (OffsetDateTime/parse s DateTimeFormatter/RFC_1123_DATE_TIME)))
+      .toLocalDate
+      str))
 
 (def config 
-  {:feeds [{:url "http://nullprogram.com/feed/" :tags [:blog :emacs]}
-           {:url "https://rossabaker.com/index.xml" :tags [:blog :emacs]}]})
+  {:feeddir "/home/markwoodhall/feed"
+   :feeds [{:url "https://echasnovski.com/blog.xml" :type :rss :slug "echasnovski" :tags [:blog :neovim :vim]}
+           {:url "http://nullprogram.com/feed/" :type :atom :slug "nullprogram" :tags [:blog :emacs]}]})
 
 (defn eprintln 
   [& args]
   (binding [*out* *err*] (apply println args)))
 
-(defn get-feed [url]
-  (let [feed (->
-               (babashka.http-client/get url)
-               :body
-               (xml/parse-str)
-               :content)
-        entries (flatten (map :content (filter (fn [n] (= (:tag n) :xmlns.http%3A%2F%2Fwww.w3.org%2F2005%2FAtom/entry)) feed)))
-        contents (map :content (filter (fn [e] (= (:tag e) :xmlns.http%3A%2F%2Fwww.w3.org%2F2005%2FAtom/content)) entries))]
-    contents))
+(defn ->sha256 [data]
+  (apply 
+    str 
+    (take 10 
+          (-> (babashka.process/shell {:in data :out :string} "sha256sum" )
+              :out))))
 
-(get-feed "https://rossabaker.com/index.xml")
+(defn html->org [html]
+  (-> (babashka.process/shell {:in html :out :string}
+               "pandoc" "-f" "html" "-t" "org")
+      :out))
+
+(defn elems [el t]
+  (filter #(and (map? %) (= (name (:tag %)) (name t)))
+          (:content el)))
+
+(defn text [el]
+  (apply str (filter string? (:content el))))
+
+(defn atom-entries [{:keys [url slug]}]
+  (let [feed-str (->
+                   (babashka.http-client/get url)
+                   :body)
+        feed (-> feed-str xml/parse-str)]
+    (for [entry (elems feed :entry)]
+      (let [title (text (first (elems entry :title)))
+            link (get-in (first (elems entry :link)) [:attrs :href])
+            id (text (first (elems entry :id)))
+            date (text (first (elems entry :updated)))
+            safe-id (->sha256 (str title link id))]
+        {:file (str (->ymd date) "-" slug "-" safe-id ".org")
+         :title title
+         :link link
+         :content (text (first (elems entry :content)))
+         :id id
+         :date date}))))
+
+(defn rss-items [{:keys [url slug]}]
+  (let [feed-str (->
+                   (babashka.http-client/get url)
+                   :body)
+        channel (-> feed-str xml/parse-str (elems :channel) first)]
+    (for [item (elems channel :item)]
+      (let [title (text (first (elems item :title)))
+            link (text (first (elems item :link)))
+            id (text (first (elems item :guid)))
+            date (text (first (elems item :pubDate)))
+            safe-id (->sha256 (str title link id))]
+        {:file (str (->ymd date) "-" slug "-" safe-id ".org")
+         :title title
+         :link link
+         :content (text (first (elems item :description)))
+         :id id
+         :date date}))))
+
+(defn ->org-header [m feed]
+  [(str "* " (:title m) "    " (string/join "" (:tags feed)))
+   ":PROPERTIES:"
+   (str ":ID: " (:id m))
+   (str ":FEED: " (:slug feed))
+   (str ":LINK: " (:link m))
+   (str ":DATE: [" (:date m) "]")
+   ":END:"])
+
+(defn add-org [c feed]
+  (map (fn [e]
+         (assoc 
+           e 
+           :org 
+           (str (string/join "\n" (->org-header e feed)) 
+                "\n\n" 
+                (html->org (:content e))))) c))
+
+(defn feed-entries [feed]
+  (if (= (:type feed) :atom)
+    (atom-entries feed)
+    (rss-items feed)))
+
+(println "Processing feeds")
+(doseq [feed (:feeds config)]
+  (println (str "Processing feed" feed))
+  (let [entries (-> (feed-entries feed)
+                    (add-org feed))]
+    (doseq [e entries]
+      (when-not (or (babashka.fs/exists? (str (:feeddir config) "/read/" (:file e)))
+                    (babashka.fs/exists? (str (:feeddir config) "/unread/" (:file e)))) 
+        (println "Processing new entry" (:id e))
+        (spit 
+          (str (:feeddir config) "/unread/" (:file e))
+          (:org e))))))
