@@ -891,3 +891,14 @@ x-scheme-handler/https=google-chrome.desktop;
 text/html=google-chrome.desktop;
 application/pdf=google-chrome.desktop;
 #+end_src
+
+* Feed
+
+#+begin_src edn :tangle ~/.config/feedbb.edn
+{:feeddir "/home/markwoodhall/feed"
+   :feeds [{:url "https://echasnovski.com/blog.xml" :type :rss :slug "echasnovski" :tags [:blog :neovim :vim]}
+           {:url "https://martintrojer.github.io/index.xml" :type :rss :slug "martintrojer" :fetch-each? true :tags [:blog :software :vim :ai]}
+           {:url "https://feeds.feedburner.com/ThePragmaticEngineer" :type :rss :slug "thepragmaticengineer" :fetch-each? true :tags [:blog :software :engineering]}
+           {:url "https://planet.emacslife.com/atom.xml" :type :atom :slug "planetemacs" :tags [:emacs :aggregation]} 
+           {:url "http://nullprogram.com/feed/" :type :atom :slug "nullprogram" :tags [:blog :emacs]}]}
+#+end_src

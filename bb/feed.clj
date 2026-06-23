@@ -5,10 +5,15 @@
     [babashka.process]
     [babashka.fs]
     [clojure.string :as string]
+    [clojure.edn :as edn]
     [clojure.data.xml :as xml])
   (:import 
     [java.time OffsetDateTime]
     [java.time.format DateTimeFormatter]))
+
+(def config 
+  (edn/read-string 
+    (slurp (str (System/getenv "HOME") "/.config/feedbb.edn"))))
 
 (defn ->ymd [s]
   (-> (try (OffsetDateTime/parse s)
@@ -16,11 +21,6 @@
              (OffsetDateTime/parse s DateTimeFormatter/RFC_1123_DATE_TIME)))
       .toLocalDate
       str))
-
-(def config 
-  {:feeddir "/home/markwoodhall/feed"
-   :feeds [{:url "https://echasnovski.com/blog.xml" :type :rss :slug "echasnovski" :tags [:blog :neovim :vim]}
-           {:url "http://nullprogram.com/feed/" :type :atom :slug "nullprogram" :tags [:blog :emacs]}]})
 
 (defn eprintln 
   [& args]
@@ -90,29 +90,39 @@
    (str ":DATE: [" (:date m) "]")
    ":END:"])
 
-(defn add-org [c feed]
-  (map (fn [e]
-         (assoc 
-           e 
-           :org 
-           (str (string/join "\n" (->org-header e feed)) 
-                "\n\n" 
-                (html->org (:content e))))) c))
-
 (defn feed-entries [feed]
   (if (= (:type feed) :atom)
     (atom-entries feed)
     (rss-items feed)))
 
+(defn drop-page-title [org]
+  ;; pandoc emits the page <h1> as the first headline + :CUSTOM_ID: drawer;
+  ;; it duplicates our entry headline, so drop it. Sections are already level-2.
+  (string/replace-first org #"(?s)\A\*+ [^\n]*\n:PROPERTIES:\n.*?:END:\n" ""))
+
+(defn ->org
+  [m feed]
+  (let [header (string/join "\n" (->org-header m feed))
+        html (if (:fetch-each? feed) 
+              (-> (babashka.http-client/get (:link m))
+                  :body)
+              (:content m))
+        org (html->org html)
+        org (if (:fetch-each? feed)
+              (drop-page-title org)
+              org)]
+    (str header 
+         "\n\n" 
+         org)))
+
 (println "Processing feeds")
 (doseq [feed (:feeds config)]
   (println (str "Processing feed" feed))
-  (let [entries (-> (feed-entries feed)
-                    (add-org feed))]
+  (let [entries (feed-entries feed)]
     (doseq [e entries]
       (when-not (or (babashka.fs/exists? (str (:feeddir config) "/read/" (:file e)))
                     (babashka.fs/exists? (str (:feeddir config) "/unread/" (:file e)))) 
         (println "Processing new entry" (:id e))
         (spit 
           (str (:feeddir config) "/unread/" (:file e))
-          (:org e))))))
+          (->org e feed))))))
