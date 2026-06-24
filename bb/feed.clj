@@ -116,13 +116,24 @@
          org)))
 
 (println "Processing feeds")
+
+(babashka.process/shell
+ {:out :string}
+ (str "mkdir -p " (:feeddir config) "/unread"))
+
+(babashka.process/shell
+ {:out :string}
+ (str "mkdir -p " (:feeddir config) "/read"))
+
 (doseq [feed (:feeds config)]
   (println (str "Processing feed" feed))
   (let [entries (feed-entries feed)]
     (doseq [e entries]
-      (when-not (or (babashka.fs/exists? (str (:feeddir config) "/read/" (:file e)))
-                    (babashka.fs/exists? (str (:feeddir config) "/unread/" (:file e)))) 
-        (println "Processing new entry" (:id e))
-        (spit 
-          (str (:feeddir config) "/unread/" (:file e))
-          (->org e feed))))))
+      (let [unread (str (:feeddir config) "/unread/" (:file e))
+            read (str (:feeddir config) "/read/" (:file e))]
+        (when-not (or (babashka.fs/exists? read)
+                      (babashka.fs/exists? unread))
+          (println "Processing new entry" (:id e))
+          (spit
+           (str (:feeddir config) "/unread/" (:file e))
+           (->org e feed)))))))
