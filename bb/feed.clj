@@ -22,10 +22,6 @@
       .toLocalDate
       str))
 
-(defn eprintln 
-  [& args]
-  (binding [*out* *err*] (apply println args)))
-
 (defn ->sha256 [data]
   (apply 
     str 
@@ -115,25 +111,31 @@
          "\n\n" 
          org)))
 
+(defn unread-path [f]
+  (str (:feeddir config) "/unread/" (when f f)))
+
+(defn read-path [f]
+  (str (:feeddir config) "/read/" (when f f)))
+
+(defn mkdirp [dir]
+  (str "mkdir -p " dir))
+
+(babashka.process/shell
+ {:out :string}
+ (mkdirp (unread-path nil)))
+
+(babashka.process/shell
+ {:out :string}
+ (mkdirp (read-path nil)))
+
 (println "Processing feeds")
-
-(babashka.process/shell
- {:out :string}
- (str "mkdir -p " (:feeddir config) "/unread"))
-
-(babashka.process/shell
- {:out :string}
- (str "mkdir -p " (:feeddir config) "/read"))
-
 (doseq [feed (:feeds config)]
   (println (str "Processing feed" feed))
   (let [entries (feed-entries feed)]
     (doseq [e entries]
-      (let [unread (str (:feeddir config) "/unread/" (:file e))
-            read (str (:feeddir config) "/read/" (:file e))]
-        (when-not (or (babashka.fs/exists? read)
-                      (babashka.fs/exists? unread))
+      (when-not (or (babashka.fs/exists? (read-path (:file e)))
+                      (babashka.fs/exists? (unread-path (:file e))))
           (println "Processing new entry" (:id e))
           (spit
-           (str (:feeddir config) "/unread/" (:file e))
-           (->org e feed)))))))
+           (unread-path (:file e))
+           (->org e feed))))))
