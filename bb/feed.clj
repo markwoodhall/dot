@@ -77,6 +77,33 @@
          :id id
          :date date}))))
 
+(defn sitemap-entries [{:keys [url slug sitemap-query non-parseable-date?]}]
+  (let [sitemap-xml (->
+                     (babashka.http-client/get url)
+                     :body)
+        entries (->> (xml/parse-str sitemap-xml)
+       (#(elems % :url))
+       (keep (fn [url]
+               (let [loc (text (first (elems url :loc)))]
+                 (when (and loc (re-find (re-pattern sitemap-query) loc))
+                   {:loc loc
+                    :lastmod (text (first (elems url :lastmod)))}))))
+       (sort-by :loc))]
+    (for [item entries]
+      (let [title (:loc item)
+            link (:loc item)
+            id (:loc item)
+            date (:lastmod item)
+            safe-id (->sha256 (str title link id))
+            date (if non-parseable-date?
+                   date
+                   (->ymd date))]
+        {:file (str date "-" slug "-" safe-id ".org")
+         :title title
+         :link link
+         :id id
+         :date date}))))
+
 (defn ->org-header [m feed]
   [(str "* " (:title m) "    " (string/join "" (:tags feed)))
    ":PROPERTIES:"
@@ -87,9 +114,11 @@
    ":END:"])
 
 (defn feed-entries [feed]
-  (if (= (:type feed) :atom)
-    (atom-entries feed)
-    (rss-items feed)))
+  (case (:type feed)
+    :atom (atom-entries feed)
+    :rss (rss-items feed)
+    :sitemap (sitemap-entries feed)
+    (atom-entries feed)))
 
 (defn drop-page-title [org]
   ;; pandoc emits the page <h1> as the first headline + :CUSTOM_ID: drawer;
