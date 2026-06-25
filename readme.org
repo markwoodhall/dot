@@ -645,7 +645,7 @@ Programming Languages and associated tools
 
 ** Kondo
 
-#+begin_src clojure :tangle ~/.config/clj-kondo/config.edn :mkdirp yes
+#+begin_src edn :tangle ~/.config/clj-kondo/config.edn :mkdirp yes
   {:lint-as {day8.re-frame.tracing/fn-traced clojure.core/fn
              clova.core/defvalidator clj-kondo.lint-as/def-catch-all}
    :linters {:clojure-lsp/unused-public-var {:level :warning
@@ -684,7 +684,7 @@ Programming Languages and associated tools
 #+end_src
 
 ** shadow
-#+begin_src clojure :tangle ~/.shadow-cljs/config.edn :mkdirp yes
+#+begin_src edn :tangle ~/.shadow-cljs/config.edn :mkdirp yes
 ;; shadow-cljs configuration
 {;; ADD - CIDER-nREPL middleware required by Fireplace.vim
  :dependencies
@@ -895,10 +895,12 @@ application/pdf=google-chrome.desktop;
 * Feed
 
 #+begin_src edn :tangle ~/.config/feedbb.edn
-{:feeddir "/home/markwoodhall/feed"
+  {:feeddir "/home/markwoodhall/feed"
    :feeds [{:url "https://echasnovski.com/blog.xml" :type :rss :slug "echasnovski" :tags [:blog :neovim :vim]}
            {:url "https://martintrojer.github.io/index.xml" :type :rss :slug "martintrojer" :fetch-each? true :tags [:blog :software :vim :ai]}
            {:url "https://feeds.feedburner.com/ThePragmaticEngineer" :type :rss :slug "thepragmaticengineer" :fetch-each? true :tags [:blog :software :engineering]}
            {:url "https://planet.emacslife.com/atom.xml" :type :atom :slug "planetemacs" :tags [:emacs :aggregation]} 
+           {:url "https://hgrsd.nl/sitemap.xml" :type :sitemap :slug "hgrsd.nl" :fetch-each? true :sitemap-query "/blog/[^/]+/?$" :non-parseable-date? true :tags [:blog :emacs :vim]}
+           {:url "https://lpar.ath0.com/sitemap.xml" :type :sitemap :slug "lpar" :fetch-each? true :sitemap-query "/posts/[^/].*" :tags [:blog :vim]}
            {:url "http://nullprogram.com/feed/" :type :atom :slug "nullprogram" :tags [:blog :emacs]}]}
 #+end_src
