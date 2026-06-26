@@ -902,5 +902,6 @@ application/pdf=google-chrome.desktop;
            {:url "https://planet.emacslife.com/atom.xml" :type :atom :slug "planetemacs" :tags [:emacs :aggregation]} 
            {:url "https://hgrsd.nl/sitemap.xml" :type :sitemap :slug "hgrsd.nl" :fetch-each? true :sitemap-query "/blog/[^/]+/?$" :non-parseable-date? true :tags [:blog :emacs :vim]}
            {:url "https://lpar.ath0.com/sitemap.xml" :type :sitemap :slug "lpar" :fetch-each? true :sitemap-query "/posts/[^/].*" :tags [:blog :vim]}
+           {:url "https://www-gem.codeberg.page/feed.xml" :type :atom :slug "wwwgem" :tags [:blog :neovim]}
            {:url "http://nullprogram.com/feed/" :type :atom :slug "nullprogram" :tags [:blog :emacs]}]}
 #+end_src
