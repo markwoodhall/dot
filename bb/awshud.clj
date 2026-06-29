@@ -62,6 +62,42 @@
                    ;; 15 minutes
                    (- (System/currentTimeMillis) 900000)
                    " --log-group-name "))
+(def sqs-list-cmd (str aws " sqs list-queues"))
+(def sqs-queue-attributes-cmd (str aws " sqs get-queue-attributes --attribute-names All --queue-url "))
+
+;; SQS Queues
+(defn ->sqs [m]
+  {:arn (:QueueArn m)
+   :messages (:ApproximateNumberOfMessages m)})
+
+(defn print-queue [{:keys [arn messages]}]
+  (let [messages-text (if (pos? (Integer/parseInt messages))
+                        (colorize red (str "messages: " messages))
+                        (colorize green (str "messages: " messages)))]
+    (println 
+      (str 
+        (space-pad arn 80)
+        (left-space-pad messages-text 51)))))
+
+(defn print-queues [c]
+  (if json
+    (print c)
+    (doseq [q c]
+      (print-queue q))))
+
+(defn sqs-queues []
+  (let [cmd sqs-list-cmd
+        out (json/parse-string 
+              (-> (babashka.process/shell {:out :string} cmd) :out)
+              true)
+        queue-urls (:QueueUrls out)
+        attributes (map (fn [u]
+                          (->sqs 
+                            (:Attributes 
+                              (json/parse-string 
+                                (-> (babashka.process/shell {:out :string} (str sqs-queue-attributes-cmd " " u)) :out)
+                                true)))) queue-urls)]
+    (print-queues attributes)))
 
 ;; ECS Tasks
 (defn ->task [m]
@@ -73,11 +109,13 @@
 (defn print-task [{:keys [group desired-status status started-at]}]
   (let [group (clojure.string/replace group "service:" "")
         errors (count (:events
-                    (json/parse-string
-                     (-> (babashka.process/shell
-                          {:out :string}
-                          (str logs-cmd " " group)) :out)
-                     true)))
+                        (json/parse-string
+                          (-> (babashka.process/shell
+                                {:out :string}
+                                (str logs-cmd " " group)) :out)
+                          true)))
+        status (clojure.string/lower-case status)
+        desired-status (clojure.string/lower-case desired-status)
         status-text (if (= desired-status status)
                       (colorize green (str "status: " status))
                       (colorize red (str "status: " status)))
@@ -200,9 +238,15 @@
 (ec2)
 (println "")
 (let [clusters (ecs-clusters)]
-(println "")
-(println (rule 120))
-(println "ECS Tasks")
-(println (rule 120))
+  (println "")
+  (println (rule 120))
+  (println "ECS Tasks")
+  (println (rule 120))
   (doseq [c clusters]
     (ecs-tasks (:arn c))))
+
+(println "")
+(println (rule 120))
+(println "SQS Queues")
+(println (rule 120))
+(sqs-queues)
