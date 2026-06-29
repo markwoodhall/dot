@@ -105,7 +105,9 @@
          :date date}))))
 
 (defn ->org-header [m feed]
-  [(str "* " (:title m) "    " (string/join "" (:tags feed)))
+  [(if-not (-> feed :org-header :no-title?) 
+     (str "* " (:title m) "    " (string/join "" (:tags feed)))
+     "")
    ":PROPERTIES:"
    (str ":ID: " (:id m))
    (str ":FEED: " (:slug feed))
@@ -140,31 +142,45 @@
          "\n\n" 
          org)))
 
-(defn unread-path [f]
-  (str (:feeddir config) "/unread/" (when f f)))
-
-(defn read-path [f]
-  (str (:feeddir config) "/read/" (when f f)))
-
 (defn mkdirp [dir]
   (str "mkdir -p " dir))
 
-(babashka.process/shell
- {:out :string}
- (mkdirp (unread-path nil)))
+(defn path [dir f]
+  (let [dir (str (:feeddir config) "/" dir "/")
+        path (str  dir (when f f))]
+    (babashka.process/shell
+      {:out :string}
+      (mkdirp dir))
+    path))
 
-(babashka.process/shell
- {:out :string}
- (mkdirp (read-path nil)))
+(defn unread-path [f]
+  (path "unread" f))
+
+(defn read-path [f]
+  (path "read" f))
 
 (println "Processing feeds")
 (doseq [feed (:feeds config)]
   (println (str "Processing feed" feed))
   (let [entries (feed-entries feed)]
     (doseq [e entries]
-      (when-not (or (babashka.fs/exists? (read-path (:file e)))
+      (if (:dir feed)
+        (when-not (babashka.fs/exists? (path (:dir feed) (:file e)))
+          (println "Processing new entry" (:id e))
+          (spit
+            (path (:dir feed) (:file e))
+            "")
+          (spit
+            (path (:dir feed) (str (:slug feed) ".org"))
+            (->org e feed)
+            :append true)
+          (spit
+            (path (:dir feed) (str (:dir feed) ".org"))
+            (->org e feed)
+            :append true))
+        (when-not (or (babashka.fs/exists? (read-path (:file e)))
                       (babashka.fs/exists? (unread-path (:file e))))
           (println "Processing new entry" (:id e))
           (spit
-           (unread-path (:file e))
-           (->org e feed))))))
+            (unread-path (:file e))
+            (->org e feed)))))))

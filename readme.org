@@ -903,5 +903,7 @@ application/pdf=google-chrome.desktop;
            {:url "https://hgrsd.nl/sitemap.xml" :type :sitemap :slug "hgrsd.nl" :fetch-each? true :sitemap-query "/blog/[^/]+/?$" :non-parseable-date? true :tags [:blog :emacs :vim]}
            {:url "https://lpar.ath0.com/sitemap.xml" :type :sitemap :slug "lpar" :fetch-each? true :sitemap-query "/posts/[^/].*" :tags [:blog :vim]}
            {:url "https://www-gem.codeberg.page/feed.xml" :type :atom :slug "wwwgem" :fetch-each? true :tags [:blog :neovim]}
-           {:url "http://nullprogram.com/feed/" :type :atom :slug "nullprogram" :tags [:blog :emacs]}]}
+           {:url "https://mastodon.social/tags/emacs.rss" :type :rss :slug "mastodon-emacs" :dir "mastodon" :org-header {:no-title? true} :tags [:mastodon :emacs]}
+           {:url "https://mastodon.social/tags/vim.rss" :type :rss :slug "mastodon-vim" :dir "mastodon" :org-header {:no-title? true} :tags [:mastodon :vim]}
+           {:url "https://mastodon.social/tags/neovim.rss" :type :rss :slug "mastodon-neovim" :dir "mastodon" :org-header {:no-title? true} :tags [:mastodon :vim :neovim]}]}
 #+end_src
