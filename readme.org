@@ -745,6 +745,23 @@ Programming Languages and associated tools
     required = true
 #+end_src
 
+* Ghostty
+
+#+begin_src conf :tangle ~/.config/ghostty/config :mkdirp yes
+theme = Catppuccin Mocha
+
+font-family = Iosevka Comfy
+font-family-bold = Iosevka Comfy Bold
+font-family-italic = Iosevka Comfy Italic
+font-family-bold-italic = Iosevka Comfy Bold Italic
+font-size = 13
+
+window-decoration = false
+window-padding-x = 8
+window-padding-y = 4
+window-padding-balance = true
+#+end_src
+
 * Kitty
 
 ** Config
