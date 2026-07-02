@@ -219,12 +219,14 @@
 (defn print-instances [c]
   (if json
     (print c)
-    (do
+    (when (seq c)
       (println (rule 120))
       (println "EC2 Instances")
       (println (rule 120))
       (doseq [i c]
-        (print-instance i)))))
+        (print-instance i))
+      (println ""))))
+
 
 (defn ec2 []
   (let [out (json/parse-string 
@@ -236,7 +238,6 @@
     (print-instances instances)))
 
 (ec2)
-(println "")
 (let [clusters (ecs-clusters)]
   (println "")
   (println (rule 120))
