@@ -103,10 +103,12 @@
 (defn ->task [m]
   {:group (:group m)
    :desired-status (:desiredStatus m)
+   :cpu (:cpu m)
+   :memory (:memory m)
    :status (:lastStatus m)
    :started-at (:startedAt m)})
 
-(defn print-task [{:keys [group desired-status status started-at]}]
+(defn print-task [{:keys [group desired-status status started-at memory cpu]}]
   (let [group (clojure.string/replace group "service:" "")
         errors (count (:events
                         (json/parse-string
@@ -116,6 +118,8 @@
                           true)))
         status (clojure.string/lower-case status)
         desired-status (clojure.string/lower-case desired-status)
+        cpu (str "CPU: " cpu)
+        memory (str "MEM: " memory)
         status-text (if (= desired-status status)
                       (colorize green (str "status: " status))
                       (colorize red (str "status: " status)))
@@ -124,7 +128,9 @@
                       (colorize green (str "errors: " errors)))]
     (println 
       (str 
-        (space-pad group 30)
+        (space-pad group 35)
+        (space-pad memory 15)
+        (space-pad cpu 15)
         (space-pad errors-text 30)
         (space-pad status-text 38)
         (left-space-pad started-at 44)))))
@@ -163,9 +169,8 @@
   (println 
     (str 
       (space-pad cluster-name 30)
-      (space-pad (colorize green (str "running: " running)) 30)))
-  (println 
-    (left-space-pad (colorize yellow (str "pending: " pending)) 51)))
+      (space-pad (colorize green (str "running: " running)) 30)
+      (space-pad (colorize green (str "pending: " pending)) 30))))
 
 (defn print-clusters [c]
   (if json
@@ -227,11 +232,10 @@
         (print-instance i))
       (println ""))))
 
-
 (defn ec2 []
   (let [out (json/parse-string 
-              (-> (babashka.process/shell {:out :string} ec2-cmd) :out)
-              true)
+             (-> (babashka.process/shell {:out :string} ec2-cmd) :out)
+             true)
         reservations (:Reservations out)
         instances (flatten (map :Instances reservations))
         instances (map ->instance instances)]
