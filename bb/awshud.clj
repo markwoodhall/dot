@@ -15,24 +15,30 @@
 ;; Command line arguments and parsing
 (def cli-options {:profile {:coerse :string}
                   :json {:default false :coerce :boolean}
+                  :inspect-logs {:default true :coerce :boolean}
                   :no-color {:default false :coerce :boolean}})
+
+(def parsed-options 
+  (babashka.cli/parse-opts *command-line-args* 
+                           {:spec cli-options}))
+
 (def colour?
-  (not (:no-color 
-         (babashka.cli/parse-opts *command-line-args* {:spec cli-options}))))
+  (not (:no-color parsed-options)))
+
+(def inspect-logs?
+  (:inspect-logs parsed-options))
+
+(def profile
+  (:profile parsed-options))
+
+(def json
+  (:json parsed-options))
 
 (defn colorize
   [color data]
   (if colour? 
     (str color data reset)
     data))
-
-(def profile
-  (:profile 
-    (babashka.cli/parse-opts *command-line-args* {:spec cli-options})))
-
-(def json
-  (:json 
-    (babashka.cli/parse-opts *command-line-args* {:spec cli-options})))
 
 ;; Display helper functions
 (defn rule [width]
@@ -73,7 +79,8 @@
 (defn print-queue [{:keys [arn messages]}]
   (let [messages-text (if (pos? (Integer/parseInt messages))
                         (colorize red (str "messages: " messages))
-                        (colorize green (str "messages: " messages)))]
+                        (colorize green (str "messages: " messages)))
+        arn (last (clojure.string/split arn #":"))]
     (println 
       (str 
         (space-pad arn 80)
@@ -110,28 +117,35 @@
 
 (defn print-task [{:keys [group desired-status status started-at memory cpu]}]
   (let [group (clojure.string/replace group "service:" "")
-        errors (count (:events
-                        (json/parse-string
-                          (-> (babashka.process/shell
-                                {:out :string}
-                                (str logs-cmd " " group)) :out)
-                          true)))
+        errors (when inspect-logs? 
+                 (count (:events
+                          (json/parse-string
+                            (-> (babashka.process/shell
+                                  {:out :string}
+                                  (str logs-cmd " " group)) :out)
+                            true))))
         status (clojure.string/lower-case status)
         desired-status (clojure.string/lower-case desired-status)
-        cpu (str "CPU: " cpu)
-        memory (str "MEM: " memory)
+        cpu (Integer/parseInt cpu)
+        memory (Integer/parseInt memory)
+        cpu (if (> cpu 1024) 
+              (colorize yellow (str "CPU: " cpu))
+              (colorize green (str "CPU: " cpu)))
+        memory (if (> memory 2048) 
+                 (colorize yellow (str "MEM: " memory))
+                 (colorize green (str "MEM: " memory)))
         status-text (if (= desired-status status)
                       (colorize green (str "status: " status))
                       (colorize red (str "status: " status)))
-        errors-text (if (pos? errors)
+        errors-text (if (and errors (pos? errors))
                       (colorize red (str "errors: " errors))
                       (colorize green (str "errors: " errors)))]
     (println 
       (str 
         (space-pad group 35)
-        (space-pad memory 15)
-        (space-pad cpu 15)
-        (space-pad errors-text 30)
+        (space-pad memory 22)
+        (space-pad cpu 22)
+        (when errors (space-pad errors-text 30))
         (space-pad status-text 38)
         (left-space-pad started-at 44)))))
 
@@ -142,7 +156,7 @@
       (print-task t))))
 
 (defn ecs-tasks [cluster]
-  (let [cmd (str ecs-tasks-cmd " --cluster "cluster)
+  (let [cmd (str ecs-tasks-cmd " --cluster " cluster)
         out (json/parse-string 
               (-> (babashka.process/shell {:out :string} cmd) :out)
               true)
@@ -162,15 +176,17 @@
   {:arn (:clusterArn m)
    :cluster-name (:clusterName m)
    :running (:runningTasksCount m)
+   :services (:activeServicesCount m)
    :pending (:pendingTasksCount m)})
 
 (defn print-cluster 
-  [{:keys [cluster-name running pending]}]
+  [{:keys [cluster-name running pending services]}]
   (println 
     (str 
       (space-pad cluster-name 30)
       (space-pad (colorize green (str "running: " running)) 30)
-      (space-pad (colorize green (str "pending: " pending)) 30))))
+      (space-pad (colorize green (str "pending: " pending)) 30)
+      (space-pad (colorize green (str "services: " services)) 30))))
 
 (defn print-clusters [c]
   (if json
