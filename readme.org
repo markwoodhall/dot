@@ -120,32 +120,20 @@ export NODE_ENV="development"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-ssh-add -A &> /dev/null
-
-SSH_ENV="$HOME/.ssh/environment"
-function start_agent {
-   echo "Initialising new SSH agent..."
-   /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-   echo succeeded
-   chmod 600 "${SSH_ENV}"
-   . "${SSH_ENV}" > /dev/null
-   /usr/bin/ssh-add -t 999999  ~/.ssh/id_rsa;
-}
-
-if [ -f "${SSH_ENV}" ]; then
-   . "${SSH_ENV}" > /dev/null
-   ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-      start_agent;
-   }
-else
-   start_agent;
-fi 
+# ssh-agent is provided by systemd 262+ via socket activation
+# (ssh-agent.socket / ssh-agent.service user units).
+# The agent runs under the user manager, NOT inside a tmux pane's
+# systemd scope, so it survives pane/terminal exit.
+# Enable it once with:
+#   systemctl --user enable --now ssh-agent.socket
+[ -n "${XDG_RUNTIME_DIR:-}" ] && export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 
 export FZF_DEFAULT_OPTS=" \
---color=bg+:#1e1e2e,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
---color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
---color=marker:#b4befe,fg+:#89b4fa,prompt:#cba6f7,hl+:#f38ba8 \
---color=selected-bg:#45475a \
+--color=bg+:#CCD0DA,bg:#EFF1F5,spinner:#DC8A78,hl:#D20F39 \
+--color=fg:#4C4F69,header:#D20F39,info:#8839EF,pointer:#DC8A78 \
+--color=marker:#7287FD,fg+:#4C4F69,prompt:#8839EF,hl+:#D20F39 \
+--color=selected-bg:#BCC0CC \
+--color=border:#9CA0B0,label:#4C4F69 \
 --multi"
 #+end_src
 
@@ -190,6 +178,11 @@ source $ZSH/oh-my-zsh.sh
 source /usr/share/fzf/key-bindings.zsh
 source ~/.zshenv
 source /usr/share/nvm/init-nvm.sh
+
+# Load the default key into the systemd-managed agent if it's empty
+# (e.g. after a reboot). The systemd socket unit starts the agent on
+# first use, so there is nothing to maintain here.
+ssh-add -l &> /dev/null || ssh-add -t 999999 ~/.ssh/id_rsa
 
 # added by pipsi (https://github.com/mitsuhiko/pipsi)
 export PATH="/home/markwoodhall/.local/bin:$PATH"
@@ -246,7 +239,7 @@ set -g status-position top
 
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'catppuccin/tmux#v0.3.0'
-set -g @catppuccin_flavor 'mocha' # latte,frappe, macchiato or mocha
+set -g @catppuccin_flavor 'latte' # latte,frappe, macchiato or mocha
 set -g @catppuccin_window_default_text "#W" # use "#W" for application instead of directory
 set -g @catppuccin_window_current_text "#W" # use "#W" for application instead of directory
 
@@ -778,78 +771,79 @@ font_size 13.0
 placement_strategy left
 
 # The basic colors
-foreground              #CDD6F4
-background              #1e1e2e
-selection_foreground    #1e1e2e
-selection_background    #F5E0DC
+foreground              #4c4f69
+background              #eff1f5
+selection_foreground    #eff1f5
+selection_background    #dc8a78
 
 # Cursor colors
-cursor                  #F5E0DC
-cursor_text_color       #1e1e2e
+cursor                  #dc8a78
+cursor_text_color       #eff1f5
 
-# URL underline color when hovering with mouse
-url_color               #F5E0DC
+# Scrollbar colors
+scrollbar_handle_color  #7c7f93
+scrollbar_track_color   #bcc0cc
+
+# URL color when hovering with mouse
+url_color               #dc8a78
 
 # Kitty window border colors
-active_border_color     #B4BEFE
-inactive_border_color   #6C7086
-bell_border_color       #F9E2AF
+active_border_color     #7287fd
+inactive_border_color   #9ca0b0
+bell_border_color       #df8e1d
 
 # OS Window titlebar colors
 wayland_titlebar_color system
 macos_titlebar_color system
-hide_window_decoration yes
-hide_titlebar yes
-x11_hide_window_decorations yes
 
 # Tab bar colors
-active_tab_foreground   #1e1e2e
-active_tab_background   #CBA6F7
-inactive_tab_foreground #CDD6F4
-inactive_tab_background #181825
-tab_bar_background      #11111B
+active_tab_foreground   #eff1f5
+active_tab_background   #8839ef
+inactive_tab_foreground #4c4f69
+inactive_tab_background #9ca0b0
+tab_bar_background      #bcc0cc
 
 # Colors for marks (marked text in the terminal)
-mark1_foreground #1e1e2e
-mark1_background #B4BEFE
-mark2_foreground #1e1e2e
-mark2_background #CBA6F7
-mark3_foreground #1e1e2e
-mark3_background #74C7EC
+mark1_foreground #eff1f5
+mark1_background #7287fd
+mark2_foreground #eff1f5
+mark2_background #8839ef
+mark3_foreground #eff1f5
+mark3_background #209fb5
 
 # The 16 terminal colors
 
 # black
-color0 #45475A
-color8 #585B70
+color0 #5c5f77
+color8 #6c6f85
 
 # red
-color1 #F38BA8
-color9 #F38BA8
+color1 #d20f39
+color9 #d20f39
 
 # green
-color2  #A6E3A1
-color10 #A6E3A1
+color2  #40a02b
+color10 #40a02b
 
 # yellow
-color3  #F9E2AF
-color11 #F9E2AF
+color3  #df8e1d
+color11 #df8e1d
 
 # blue
-color4  #89B4FA
-color12 #89B4FA
+color4  #1e66f5
+color12 #1e66f5
 
 # magenta
-color5  #F5C2E7
-color13 #F5C2E7
+color5  #ea76cb
+color13 #ea76cb
 
 # cyan
-color6  #94E2D5
-color14 #94E2D5
+color6  #179299
+color14 #179299
 
 # white
-color7  #BAC2DE
-color15 #A6ADC8
+color7  #acb0be
+color15 #bcc0cc
 
 window_padding_width 0 0 0 0
 window_margin_width 4 8 4 8

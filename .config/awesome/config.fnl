@@ -186,7 +186,7 @@
        :properties {:floating true}}
       {:rule {:class :Slack}
        :properties {:tag :4 :screen 1}}
-      {:rule {:class "firefox"}
+      {:rule {:class "google-chrome"}
        :properties {:tag :3 :screen 1}}
       {:rule {:class "org.mozilla.Thunderbird"}
        :properties {:tag :5 :screen 1}}
@@ -242,7 +242,7 @@
 (awful.spawn "setxkbmap -option caps:ctrl_modifier")
 
 (when (= (hostname) "thinking")
-  (awful.spawn "xrandr --output eDP-1 --off --output HDMI-1 --off --output DP-1 --off --output DP-2 --off --output DP-3 --off --output DP-4 --off --output DP-2-1 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DP-2-2 --mode 2560x1440 --pos 2560x0 --rotate normal --output DP-2-3 --off"))
+  (awful.spawn "xrandr --output eDP-1 --off --output HDMI-1 --off --output DP-1 --off --output DP-2 --off --output DP-3 --primary --mode 2560x1440 --refresh 144 --pos 0x0 --rotate normal --output DP-4 --off"))
 
 (awful.spawn "picom")
 
@@ -262,4 +262,4 @@
     (awful.spawn "slack")
     (awful.spawn "xscreensaver")
     (awful.spawn "thunderbird")
-    (awful.spawn "firefox")))
+    (awful.spawn "google-chrome-stable")))
