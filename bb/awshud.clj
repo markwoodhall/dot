@@ -1,11 +1,11 @@
 #!/usr/bin/env bb
 (ns awshud
-  (:require 
-    [babashka.cli]
-    [babashka.process]
-    [babashka.fs]
-    [cheshire.core :as json]
-    [clojure.string]))
+  (:require
+   [babashka.cli]
+   [babashka.process]
+   [babashka.fs]
+   [cheshire.core :as json]
+   [clojure.string]))
 
 (def green "\u001b[0;32m")
 (def yellow "\u001b[0;33m")
@@ -18,8 +18,8 @@
                   :inspect-logs {:default true :coerce :boolean}
                   :no-color {:default false :coerce :boolean}})
 
-(def parsed-options 
-  (babashka.cli/parse-opts *command-line-args* 
+(def parsed-options
+  (babashka.cli/parse-opts *command-line-args*
                            {:spec cli-options}))
 
 (def colour?
@@ -36,13 +36,13 @@
 
 (defn colorize
   [color data]
-  (if colour? 
+  (if colour?
     (str color data reset)
     data))
 
 ;; Display helper functions
 (defn rule [width]
-  (apply str (map (constantly "─") (range 0 width)))) 
+  (apply str (map (constantly "─") (range 0 width))))
 
 (defn pad [c s n]
   (let [padded (reduce (fn [acc _]
@@ -51,7 +51,7 @@
 
 (defn pad-left [c s n]
   (let [padded (reduce (fn [acc _]
-                         (str c acc )) s (range 0 n))]
+                         (str c acc)) s (range 0 n))]
     (apply str (take-last n padded))))
 
 (def space-pad (partial pad " "))
@@ -81,10 +81,10 @@
                         (colorize red (str "messages: " messages))
                         (colorize green (str "messages: " messages)))
         arn (last (clojure.string/split arn #":"))]
-    (println 
-      (str 
-        (space-pad arn 80)
-        (left-space-pad messages-text 51)))))
+    (println
+     (str
+      (space-pad arn 80)
+      (left-space-pad messages-text 51)))))
 
 (defn print-queues [c]
   (if json
@@ -94,16 +94,16 @@
 
 (defn sqs-queues []
   (let [cmd sqs-list-cmd
-        out (json/parse-string 
-              (-> (babashka.process/shell {:out :string} cmd) :out)
-              true)
+        out (json/parse-string
+             (-> (babashka.process/shell {:out :string} cmd) :out)
+             true)
         queue-urls (:QueueUrls out)
         attributes (map (fn [u]
-                          (->sqs 
-                            (:Attributes 
-                              (json/parse-string 
-                                (-> (babashka.process/shell {:out :string} (str sqs-queue-attributes-cmd " " u)) :out)
-                                true)))) queue-urls)]
+                          (->sqs
+                           (:Attributes
+                            (json/parse-string
+                             (-> (babashka.process/shell {:out :string} (str sqs-queue-attributes-cmd " " u)) :out)
+                             true)))) queue-urls)]
     (print-queues attributes)))
 
 ;; ECS Tasks
@@ -117,21 +117,21 @@
 
 (defn print-task [{:keys [group desired-status status started-at memory cpu]}]
   (let [group (clojure.string/replace group "service:" "")
-        errors (when inspect-logs? 
+        errors (when inspect-logs?
                  (count (:events
-                          (json/parse-string
-                            (-> (babashka.process/shell
-                                  {:out :string}
-                                  (str logs-cmd " " group)) :out)
-                            true))))
+                         (json/parse-string
+                          (-> (babashka.process/shell
+                               {:out :string}
+                               (str logs-cmd " " group)) :out)
+                          true))))
         status (clojure.string/lower-case status)
         desired-status (clojure.string/lower-case desired-status)
         cpu (Integer/parseInt cpu)
         memory (Integer/parseInt memory)
-        cpu (if (> cpu 1024) 
+        cpu (if (> cpu 1024)
               (colorize yellow (str "CPU: " cpu))
               (colorize green (str "CPU: " cpu)))
-        memory (if (> memory 2048) 
+        memory (if (> memory 2048)
                  (colorize yellow (str "MEM: " memory))
                  (colorize green (str "MEM: " memory)))
         status-text (if (= desired-status status)
@@ -140,14 +140,14 @@
         errors-text (if (and errors (pos? errors))
                       (colorize red (str "errors: " errors))
                       (colorize green (str "errors: " errors)))]
-    (println 
-      (str 
-        (space-pad group 35)
-        (space-pad memory 22)
-        (space-pad cpu 22)
-        (when errors (space-pad errors-text 30))
-        (space-pad status-text 38)
-        (left-space-pad started-at 44)))))
+    (println
+     (str
+      (space-pad group 45)
+      (space-pad memory 22)
+      (space-pad cpu 22)
+      (when errors (space-pad errors-text 30))
+      (space-pad status-text 38)
+      (left-space-pad started-at 44)))))
 
 (defn print-tasks [c]
   (if json
@@ -157,18 +157,18 @@
 
 (defn ecs-tasks [cluster]
   (let [cmd (str ecs-tasks-cmd " --cluster " cluster)
-        out (json/parse-string 
-              (-> (babashka.process/shell {:out :string} cmd) :out)
-              true)
+        out (json/parse-string
+             (-> (babashka.process/shell {:out :string} cmd) :out)
+             true)
         task-arns (:taskArns out)
         describe-cmd (str ecs-describe-tasks-cmd " --cluster " cluster " --task ")
         described-tasks (reduce (fn [acc i]
-                                  (concat 
-                                    acc 
-                                    (map ->task (:tasks 
-                                                  (json/parse-string 
-                                                    (-> (babashka.process/shell {:out :string} (str describe-cmd " " i)) :out)
-                                                    true)))))  [] task-arns)]
+                                  (concat
+                                   acc
+                                   (map ->task (:tasks
+                                                (json/parse-string
+                                                 (-> (babashka.process/shell {:out :string} (str describe-cmd " " i)) :out)
+                                                 true)))))  [] task-arns)]
     (print-tasks described-tasks)))
 
 ;; ECS Clusters
@@ -179,34 +179,34 @@
    :services (:activeServicesCount m)
    :pending (:pendingTasksCount m)})
 
-(defn print-cluster 
+(defn print-cluster
   [{:keys [cluster-name running pending services]}]
-  (println 
-    (str 
-      (space-pad cluster-name 30)
-      (space-pad (colorize green (str "running: " running)) 30)
-      (space-pad (colorize green (str "pending: " pending)) 30)
-      (space-pad (colorize green (str "services: " services)) 30))))
+  (println
+   (str
+    (space-pad cluster-name 45)
+    (space-pad (colorize green (str "running: " running)) 30)
+    (space-pad (colorize green (str "pending: " pending)) 30)
+    (space-pad (colorize green (str "services: " services)) 30))))
 
 (defn print-clusters [c]
   (if json
     (print c)
     (do
-      (println (rule 120))
+      (println (rule 160))
       (println "ECS Clusters")
-      (println (rule 120))
+      (println (rule 160))
       (doseq [i c]
         (print-cluster i)))))
 
 (defn ecs-clusters []
-  (let [out (json/parse-string 
-              (-> (babashka.process/shell {:out :string} ecs-cmd) :out)
-              true)
+  (let [out (json/parse-string
+             (-> (babashka.process/shell {:out :string} ecs-cmd) :out)
+             true)
         cluster-arns (:clusterArns out)
         describe-cmd (str ecs-describe-cmd " --clusters " (clojure.string/join " " cluster-arns))
-        described-clusters (json/parse-string 
-                             (-> (babashka.process/shell {:out :string} describe-cmd) :out)
-                             true)
+        described-clusters (json/parse-string
+                            (-> (babashka.process/shell {:out :string} describe-cmd) :out)
+                            true)
         clusters (:clusters described-clusters)
         clusters (map ->cluster clusters)]
     (print-clusters clusters)
@@ -226,30 +226,30 @@
      :public-dns (:PublicDnsName m)
      :state (-> m :State :Name)}))
 
-(defn print-instance 
+(defn print-instance
   [{:keys [instance-name state public-dns]}]
   (let [status (if (= state "running")
                  (colorize green (space-pad state 10))
                  (colorize red (space-pad state 10)))]
-    (println 
-      (str 
-        (space-pad instance-name 30)
-        status
-        (left-space-pad public-dns 80)))))
+    (println
+     (str
+      (space-pad instance-name 45)
+      status
+      (left-space-pad public-dns 80)))))
 
 (defn print-instances [c]
   (if json
     (print c)
     (when (seq c)
-      (println (rule 120))
+      (println (rule 160))
       (println "EC2 Instances")
-      (println (rule 120))
+      (println (rule 160))
       (doseq [i c]
         (print-instance i))
       (println ""))))
 
 (defn ec2 []
-  (let [out (json/parse-string 
+  (let [out (json/parse-string
              (-> (babashka.process/shell {:out :string} ec2-cmd) :out)
              true)
         reservations (:Reservations out)
@@ -260,14 +260,14 @@
 (ec2)
 (let [clusters (ecs-clusters)]
   (println "")
-  (println (rule 120))
+  (println (rule 160))
   (println "ECS Tasks")
-  (println (rule 120))
+  (println (rule 160))
   (doseq [c clusters]
     (ecs-tasks (:arn c))))
 
 (println "")
-(println (rule 120))
+(println (rule 160))
 (println "SQS Queues")
-(println (rule 120))
+(println (rule 160))
 (sqs-queues)

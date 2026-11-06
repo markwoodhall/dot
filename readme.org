@@ -740,7 +740,7 @@ Programming Languages and associated tools
 * Ghostty
 
 #+begin_src conf :tangle ~/.config/ghostty/config :mkdirp yes
-theme = Catppuccin Mocha
+theme = Catppuccin Macchiato
 
 font-family = JetBrains Mono Regular
 font-family-bold = JetBrains Mono Bold
@@ -748,7 +748,7 @@ font-family-italic = JetBrains Mono Italic
 font-family-bold-italic = JetBrains Mono Bold Italic
 font-size = 13
 
-window-decoration = false
+window-decoration = true
 window-padding-x = 8
 window-padding-y = 4
 window-padding-balance = true
